@@ -1,0 +1,43 @@
+\documentclass[a4paper,11pt]{book}
+
+% Load Configuration
+\input{config/packages.tex}
+\input{config/commands.tex}
+\input{config/data.tex}
+
+\begin{document}
+
+\pagestyle{empty}
+
+% Cover
+\input{structure/cover.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Index
+\newpage
+\selectlanguage{english}
+\pagenumbering{roman} \setcounter{page}{0}
+\tableofcontents
+\newpage \thispagestyle{empty}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Abstract
+\input{structure/abstract.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Main Content
+\mainmatter
+\include{chapters/01_chapter1}
+\include{chapters/02_chapter2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\backmatter
+\selectlanguage{english}
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{amsplain}
+\bibliography{bibliography}
+
+
+\end{document}
