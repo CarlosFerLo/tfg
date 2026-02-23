@@ -1,0 +1,123 @@
+\chapter[Generalized Algebraic Theories]{Generalized Algebraic Theories}
+\section{Definition}
+
+We assume we have a set $V$ of countably many distinct variables.
+Let $W$ be an \textbf{alphabet}, and its elements be \textbf{symbols}.
+
+\begin{definition}
+    The set of \textbf{expressions} is defined inductively such that they are finite
+    sequences of elements of $W \cup V \cup \{ ( \} \cup \{ ) \} \cup \{ , \}$
+    by the clauses
+    \begin{enumerate}
+        \item if $x \in V$, then $x$ is an expression;
+        \item if $L \in W$, then $L$ is an expression;
+        \item if $L \in W$ and $e_1, \dots, e_n$ are expressions,
+        then $L(e_1, \dots, e_n)$ is an expression.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    A \textbf{premise} is defined to be a sequence of $V \times \text{set of expressions}$,
+    the empty sequence is allowed and is called the \textbf{empty premise}.
+    A premise $((x_1, \Delta_1), \dots, (x_n, \Delta_n))$ is written as
+    $x_1 : \Delta_1, \dots, x_n : \Delta_n$.
+\end{definition}
+
+\begin{definition}
+    A \textbf{conclusion} is one of the following:
+    \begin{enumerate}
+        \item \textbf{$T$-conclusion} consists a single expression $\Delta$ 
+            and is written as "$\Delta$ is a type";
+        \item \textbf{$\in$-conclusion} consists of pair of expressions $(t, \Delta)$
+            and is written as "$t : \Delta$";
+        \item \textbf{$T=$conclusion} consists of a pair of expressions $(\Delta_1, \Delta_2)$
+            and is written as "$\Delta_1 = \Delta_2$";
+        \item \textbf{$\in=$conclusion} consists of a triple of expressions $(t_1, t_2, \Delta)$
+            and is written as "$t_1 = t_2 \in \Delta$".
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    A \textbf{rule} is determined by a premise $P$ and a conclusion $C$, and is written as
+    \begin{prooftree}
+        \AxiomC{P}
+        \UnaryInfC{C}
+    \end{prooftree}
+\end{definition}
+
+If $\Delta, t_1, \dots, t_n$ expressions and $x_1, \dots, x_n$, then the expression 
+$\Delta[t_1 \vert x_1, \dots, t_n \vert x_n]$ is the result of simultaneous replacement 
+of $x_1, \dots, x_n$ in $\Delta$ by $t_1, \dots, t_n$.
+
+\begin{definition}
+    A \textbf{pretheory} consists of
+    \begin{enumerate}
+        \item a set $S$, of sort symbols;
+        \item a set $Z$, of operator symbols;
+        \item for each sort symbol $A$, an associated rule of the alphabet $S \cup Z$, 
+            called \textbf{introductory rule} for $A$, of the form
+            \begin{prooftree}
+                \AxiomC{$x_1 : \Delta_1, \dots, x_n : \Delta_n$}
+                \UnaryInfC{$A(x_1, \dots, x_n)$ is a type}
+            \end{prooftree}
+            for some $n \geq 0$;
+        \item for each operator symbol $F$, an associated rule of the alphabet $S \cup Z$,
+            called \textbf{introductory rule} for $F$, of the form
+            \begin{prooftree}
+                \AxiomC{$x_1 : \Delta_1, \dots, x_n : \Delta_n$}
+                \UnaryInfC{$F(x_1, \dots, x_n) \in \Delta$}
+            \end{prooftree}
+            for each $n \geq 0$;
+        \item a set of axioms, each axiom is either a $T=$rule or a $\in$-rule of
+            the alphabet $S \cup Z$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    If $U$ is a pretheory, then
+    \begin{enumerate}
+        \item a \textbf{context} is a premise $x_1 : \Delta_1, \dots, x_n : \Delta_n$ such that the rule
+            \begin{equation*}
+                \dfrac{x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1}}{\Delta_n \text{is a type}}
+            \end{equation*}
+            is a derived rule such that $x_n$ is distinct from all of $x_1, \dots, x_{n-1}$.
+        \item TODO
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    The set of \textbf{derived rules} of $U$ is the set of rules derivable by 
+    the following principles of derivation
+    \begin{itemize}
+        \item[LI1] From $\dfrac{P}{\Delta \text{ is a type}}$ derive $\dfrac{P}{\Delta = \Delta}$.
+        \item[LI2] From $\dfrac{P}{t : \Delta}$ derive $\dfrac{P}{t = t : \Delta}$.
+        \item[LI3] From $\dfrac{P}{\Delta_1 = \Delta_2}$ derive $\dfrac{P}{\Delta_2 = \Delta_1}$.
+        \item[LI4] From $\dfrac{P}{t_1 = t_2 : \Delta}$ derive $\dfrac{P}{t_2 = t_1 : \Delta}$.
+        \item[LI5] From $\dfrac{P}{\Delta_1 = \Delta_2}$ and $\dfrac{P}{\Delta_2 = \Delta_3}$ derive $\dfrac{P}{\Delta_1 = \Delta_3}$.
+        \item[LI6] From $\dfrac{P}{t_1 = t_2 : \Delta}$ and $\dfrac{P}{t_2 = t_3 : \Delta}$ derive $\dfrac{P}{t_1 = t_3 : \Delta}$.
+        \item[LI7] From $\dfrac{P}{t_1 = t_2 : \Delta_1}$ and $\dfrac{P}{\Delta_1 = \Delta_2}$ derive $\dfrac{P}{t_1 = t_2 : \Delta_2}$.
+        \item[T1] From $\dfrac{P}{\Delta_1 = \Delta_2}$ and $\dfrac{P}{t : \Delta_1}$ derive $\dfrac{P}{t : \Delta_2}$.
+        \item[CF1] For $n \geq 0$, $1 \leq i \leq n + 1$: \\
+            From $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta_{n+1} \text{is a type}}$ derive 
+            $\dfrac{x_1 : \Delta_1, \dots, x_{n+1} : \Delta_{n+1}}{x_i : \Delta_i}$. \\
+            providing that $x_{n+1}$ is a variable distinct from all of $x_1, \dots, x_n$.
+        \item[CF2(a)] For every sort symbol $A$ with well-formed introductory rule \\
+            $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{A(x_1, \dots, x_n) \text{is a type}}$, for every context $P$, \\
+            from $\dfrac{P}{t_1 : \Delta_1}, \dfrac{P}{t_2 : \Delta[t_1 \vert x_1]}, \dots, \dfrac{P}{t_n : \Delta_n[t_1 \vert x_1, \dots, t_{n-1} \vert x_{n-1}]}$ \\
+            derive $\dfrac{P}{A(t_1, \dots, t_n) \text{is a type}}$.
+        \item[CF2(b)] For every operator symbol $F$ with well-formed introductory rule \\
+            $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{F(x_1, \dots, x_n) : \Delta}$, for every context $P$, \\
+            from $\dfrac{P}{t_1 : \Delta_1}, \dfrac{P}{t_2 : \Delta_2[t_1 \vert x_1]}, \dots, \dfrac{P}{t_n : \Delta_n[t_1 \vert x_1, \dots, t_{n-1} \vert x_{n-1}]}$ \\
+            derive $\dfrac{P}{F(t_1, \dots, t_n) : \Delta[t_1 \vert x_1, \dots, t_n \vert x_n]}$.
+        \item[SI1] If $Q$ is a context, then from $\dfrac{y_1 : \Omega_1, \dots, y_n : \Omega_n}{\Omega = \Omega'}$ and from \\
+            $\dfrac{Q}{s_1 = s_2 : \Omega_1}, \dfrac{Q}{s_2 = s'_2 : \Omega_2[s_1 \vert y_1]}, \dots, \dfrac{Q}{s_m = s'_m : \Omega_m[s_1 \vert y_1, \dots, s_{m-1} \vert y_{m-1}]}$ \\
+            derive $\dfrac{Q}{\Omega[s_1 \vert y_1, \dots, s_m \vert y_m]} = \Omega'[s'_1 \vert y_1, \dots, s'_m \vert y_m]$.
+        \item[SI2] If $Q$ is a context, then from $\dfrac{y_1 : \Omega_1, \dots, y_m : \Omega_m}{s = s' : \Omega}$ and from \\
+            $\dfrac{Q}{s_1 = s'_1 : \Omega_1}, \dfrac{Q}{s_2 = s'_2 : \Omega_2[s_1 \vert y_1]}, \dots, \dfrac{Q}{s_m = s'_m : \Omega_m[s_1 \vert y_1, \dots, s_{m-1} \vert y_{m-1}]}$ \\
+            derive $\dfrac{Q}{s[s_1 \vert y_1, \dots, s_m \vert y_m] = s'[s'_1 \vert y_1, \dots, s'_m \vert y_m] : \Omega[s_1 \vert y_1, \dots, s_m \vert y_m]}$.
+        \item[A1] If $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta = \Delta'}$ is an axiom then from \\
+            $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta \text{is a type}}$ and $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta' }$.
+        \item[A2] If $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t = t' : \Delta}$ is an axiom, then from \\
+            $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t : \Delta}$ and $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t' : \Delta}$ derive $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t = t' : \Delta}$
+    \end{itemize}
+\end{definition}
