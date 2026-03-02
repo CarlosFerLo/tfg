@@ -121,3 +121,69 @@ of $x_1, \dots, x_n$ in $\Delta$ by $t_1, \dots, t_n$.
             $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t : \Delta}$ and $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t' : \Delta}$ derive $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t = t' : \Delta}$
     \end{itemize}
 \end{definition}
+
+\begin{definition}
+    A pretheory is \textbf{well-formed} if all of its introductory rules and axioms are well-formed.
+    We define a \textbf{Generalized Algebraic Theory} as a well-formed pretheory.
+\end{definition}
+
+\section{The Substitution Lemma}
+
+TODO: Write this section
+
+\section{Models and Homomorphisms}
+
+For now on, we will consider trees to be trees with a unique least element. 
+If $\Theta$ is a tree, and $A$ is a node of $\Theta$, then we will write $A \in \Theta$. 
+Also, if $B$ is a node of $\Theta$ and $B$ succeeds $A$, then we write \textit{$A \vartriangleleft B$ in $\Theta$}.
+The least node of a tree will be denoted as $1$.
+For any node $A$ of a tree $\Theta$, such that $A \neq 1$,
+there exists a unique $n \geq 0$, and a unique sequence $A_1, \dots, A_n \in \Theta$ such that
+$1 \vartriangleleft A_1 \vartriangleleft A_2 \vartriangleleft \dots \vartriangleleft A_n \vartriangleleft A$ in $\Theta$.
+
+The set of contexts of a theory is structured as a tree
+where the least element is the empty context and for all $n \geq 1$
+the predecessor of $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
+is $\langle x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1} \rangle$.
+
+The \textbf{tree of families} has as nodes the collection of sets, families of sets, families of families of sets, \dots
+Consider $1 \vartriangleleft A_1 \vartriangleleft A_n \vartriangleleft A$ in the tree of families,
+then for all $a_1 \in A_1$, \dots, and for all $a_n \in A_n(a_1, \dots, a_{n-1})$, $A(a_1, \dots, a_n)$ is a set,
+and we define an \textbf{operator} at $A$ as a mapping $\lambda a_1 \in A_1. \dots \lambda a_n \in A_n. f(a_1, \dots, a_n)$
+such that $\forall a_1 \in A_1, \dots, \forall a_n \in A_n(a_1, \dots, a_{n-1}), f(a_1, \dots, a_n) \in A(a_1, \dots, a_n)$.
+We will write $g(a_1, \dots, a_n)$ for the value of the operator $g$ with arguments $a_1, \dots, a_n$.
+
+When we consider a model $M$ of some theory $U$, the derived rules
+are interpreted in $M$, not the expressions.
+The interpretation of a rule in a model $M$ is written as that rule superscripted by $M$.
+
+Consider $U$ a theory with a model $M$, and $R$ a derived $T$-rule of such theory $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta \text{ is a type}}$
+Let $R_i$ be the rule $\dfrac{x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}}{\Delta_i \text{ is a type}}$ for $1 \leq i \leq n$.
+Then $R_1^M$ is a set, $R_2^M$ is a $R_1^M$ indexed family of sets, \dots 
+and we have $1 \vartriangleleft R_1^M \vartriangleleft R_2^M \vartriangleleft \dots \vartriangleleft R_n^M \vartriangleleft R^M$.
+If instead we take $R_t$, a derived rule of $U$ of the form $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t : \Delta}$, 
+we would have that $R_t^M$ would be an operator at $R^M$.
+
+Let $M, M'$ models of $U$, we define a \textbf{model homomorphism} as a mapping $f: M \to M'$
+such that 
+\begin{enumerate}
+    \item for all derived rules $R$ of $U$ of the form $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta \text{is a type}}$,
+          there is an operator $f_R$ that for all $a_1 \in R_1^M, \dots, a_n \in R_n^M(a_1, \dots, a_{n-1}), a \in R^M(a_1, \dots, a_n)$,
+          $f_R(a_1, \dots, a_n, a) \in R^{M'}(f_{R_1}(a_1), \dots, f_{R_n}(a_1, \dots, a_n))$;
+    \item for all derived rules $R_t$ of the form $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t : \Delta}$,
+          $\forall a_1 \in R_1^M, \dots, a_n \in R_n^M(a_1, \dots, a_n)$, 
+          \begin{equation*}
+            f_R(a_1, \dots, R_t^M(a_1, \dots, a_n)) = R_t^{M'}(f_{R_1}(a_1), \dots, f_{R_n}(a_1, \dots, a_n))
+          \end{equation*}
+    \item for all derived rules of the form $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta = \Delta'}$
+          then $f_R = f_{R'}$ 
+          where $R$ is $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta \text{is a type}}$
+          and $R'$ is $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta' \text{is a type}}$.
+\end{enumerate} 
+
+Let $S$ be the set of sort symbols of $U$, to define a homomorphism 
+we must ask for a family $\lambda A \in S. f_A$ of operators of correct types,
+then for every $T$-rule $R$ of $U$, the operator $f_R$ is defined by induction.
+
+We define the category of models and homomorphisms of a theory $U$ as $U-alg$.
+
