@@ -187,3 +187,88 @@ then for every $T$-rule $R$ of $U$, the operator $f_R$ is defined by induction.
 
 We define the category of models and homomorphisms of a theory $U$ as $U-alg$.
 
+\section{The Category $GAT$}
+
+Let $A_U$ be the alphabet of a theory $U$ and $v_1, v_2, \dots$ a set of variables $V$.
+
+\begin{definition}
+    a \textbf{preinterpretation} $I$ of $U$ in $U'$ consists of a function
+    \begin{equation*}
+        I: A_U \mapsto Expressions \ U'
+    \end{equation*}
+\end{definition}
+
+If $I$ is a preinterpretation of $U$ in $U'$, then we define a function
+\begin{equation*}
+    \dot{I}: Expressions \ U \mapsto Expressions \ U'
+\end{equation*}
+by induction on the following clauses:
+\begin{enumerate}
+    \item if $x \in V$, then $\dot{I}(x) = x$;
+    \item if $L \in A_U$, then $\dot{I}(L) = I(L)$;
+    \item if $L \in A_U$ and $e_1, \dots, e_n$ are expressions in $U$, then
+        \begin{equation*}
+            \dot{I}(L(e_1, \dots, e_n)) = I(L)[\dot{I}(e_1) | v_1, \dots, \dot{I}(e_n) | v_n]
+        \end{equation*}
+\end{enumerate}
+
+Then, we can define a function
+\begin{equation*}
+    \hat{I}: Rules \ U \mapsto Rules \ U'
+\end{equation*}
+by 
+\begin{enumerate}
+    \item $\hat{I}\Big( \dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta \text{ is a type}}\Big) = \dfrac{x_1 : \dot{I}(\Delta_1), \dots, x_n : \dot{I}(\Delta_n)}{\dot{I}(\Delta) \text{ is a type}}$,
+    \item $\hat{I}\Big( \dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t : \Delta}\Big) = \dfrac{x_1 : \dot{I}(\Delta_1), \dots, x_n : \dot{I}(\Delta_n)}{\dot{I}(t) : \dot{I}(\Delta)}$,
+    \item $\hat{I}\Big( \dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta = \Delta'}\Big) = \dfrac{x_1 : \dot{I}(\Delta_1), \dots, x_n : \dot{I}(\Delta_n)}{\dot{I}(\Delta) = \dot{I}(\Delta')}$,
+    \item $\hat{I}\Big( \dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t = t' : \Delta}\Big) = \dfrac{x_1 : \dot{I}(\Delta_1), \dots, x_n : \dot{I}(\Delta_n)}{ \dot{I}(t) = \dot{I}(t') : \dot{I}(\Delta)}$.
+\end{enumerate}
+
+\begin{definition}
+    An \textbf{interpretation} $I$ of $U$ in $U'$ is a preinterpretation $I$ of $U$ in $U'$
+    such that for all introductory rules and axioms $R$ of $U$, $\hat{I}(R)$ is a derived rule of $U'$.
+\end{definition}
+It can be shown that if $I$ is an interpretation, then for any derived rule $R$ of $U$,
+$\hat{I}(R)$ is a derived rule of $U'$.
+
+
+Now we want to create an equivalence relation on the derived $T$-rules and $\in$-rules of a theory $U$
+which we call the \textbf{equivalence relation of identity of denotation}
+such that if $R \equiv R'$ by this relation, any model $U$ should interpret
+$R$ and $R'$ as identical objects.
+
+Semantically we should not distinguish between the rules
+$\dfrac{x_1 : \Delta_1, \dots, x_n: \Delta_n}{\Delta \text{ is a type}}$
+and $\dfrac{x_1' : \Delta, \dots, x_n' : \Delta[x_1' | x_1, \dots, x_{n-1}' | x_{n-1}]}{\Delta[x_1' | x_1, \dots, x_n' | x_n] \text{ is a type}}$
+as they only differ on the variable names.
+Similarly, we should not distinguish between 
+$\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta \text{ is a type}}$
+and $\dfrac{x_1 : \Delta_1', \dots, x_n : \Delta_n'}{\Delta' \text{ is a type}}$,
+if for each $i$, $1 \leq i \leq n$,
+$\dfrac{x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}}{\Delta_i = \Delta_i'}$
+and $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta = \Delta'}$
+are both derived rules.
+
+We define the relation $\equiv$:
+\begin{itemize}
+    \item between $T$-rules of a theory $U$ by
+        \begin{equation*}
+            \dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta_{n+1} \text{ is a type}}
+            \equiv \dfrac{y_1 : \Omega_1, \dots, y_m : \Omega_m}{\Omega_{m+1} \text{ is a type}}
+        \end{equation*}
+        if, and only if, $n = m$ and for each $1 \leq i \leq n + 1$
+        $\dfrac{x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}}{\Delta_i = \Omega_i[x_1 | y_1, \dots, x_{i-1} | y_{i-1}]}$
+        is a derived rule of $U$.
+    \item between $\in$-rules of a theory $U$ by
+        \begin{equation*}
+            \dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t : \Delta}
+            \equiv \dfrac{y_1 : \Omega_1, \dots, y_m : \Omega_m}{s : \Omega}
+        \end{equation*}
+        if, and only if 
+        \begin{equation*}
+            \dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta_{n+1} \text{ is a type}} 
+            \equiv \dfrac{y_1 : \Omega_1, \dots, y_m : \Omega_m}{\Omega_{m+1} \text{ is a type}}
+        \end{equation*}
+        and $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t = s[x_1 | y_1, \dots, x_n | y_n] : \Delta}$
+        is a derived rule of $U$.
+\end{itemize}
