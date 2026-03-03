@@ -272,3 +272,78 @@ We define the relation $\equiv$:
         and $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t = s[x_1 | y_1, \dots, x_n | y_n] : \Delta}$
         is a derived rule of $U$.
 \end{itemize}
+
+If $I$ and $J$ are both interpretations of a theory $U$ in a theory $U'$
+then we say $I \equiv J$ if, and only if, 
+for all derived $T$-rules and $\in$-rules $R$ on $U$,
+$\hat{I}(R) \equiv \hat{J}(R)$.
+Then we define $GAT$ as the category of Generalized Algebraic Theories
+and equivalence classes of interpretations.
+
+\section{Contexts and Realizations}
+
+\begin{definition}
+    If $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
+    and $\langle y_1 : \Omega_1, \dots, y_n : \Omega_m \rangle$
+    are contexts of a theory $U$, then a \textbf{realization} 
+    of $\langle y_1 : \Omega_1, \dots, y_n : \Omega_m \rangle$
+    with regard to $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
+    is an $m$-tuple $\langle t_1, \dots, t_m \rangle$ 
+    such that for each $j$, $1 \leq j \leq m$, the rule
+    \begin{equation*}
+        \dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t_j : \Omega_j[t_1 | y_1, \dots, t_{j-1} | y_{j - 1}]}
+    \end{equation*}
+    is a derived rule of $U$.
+\end{definition}
+
+Let $U$ be a GAT, then the category $R(U)$ of contexts
+and realizations of $U$ we have the morphism
+$\langle t_1, \dots, t_m \rangle : \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle \to \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
+if, and only if, $\langle t_1, \dots, t_m \rangle$ is a realization of 
+$\langle y_1 : \Omega_1, \dots, y_n : \Omega_m \rangle$
+with regard to $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$.
+The identity of an object $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
+is the realization $\langle x_1, \dots, x_n \rangle$.
+And composition is defined as 
+\begin{equation*}
+    \langle t_1, \dots, t_m \rangle \circ \langle s_1, \dots s_w \rangle 
+     = \langle s_1[t_1 | y_1, \dots, t_m | y_m], \dots, s_w[t_1 | y_1, \dots, t_m | y_m] \rangle
+\end{equation*}
+when $\langle t_1, \dots, t_m \rangle : \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle \to \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
+and $\langle s_1, \dots, s_w \rangle : \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle \to \langle z_1 : \Lambda_1, \dots, z_w : \Lambda_w \rangle$.
+
+The set of objects of $R(U)$ is structured as a tree 
+with the empty context $\langle \rangle$ as the least element
+and with any context $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
+is preceded by $\langle x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1} \rangle$.
+
+For any context $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n, x_{n+1} : \Delta_{n+1}, \dots, x_{n+m} : \Delta_{n+m} \rangle$
+of $U$,  $\langle x_1, \dots, x_n \rangle$ is a realization of $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
+with regard to $\langle x_1 : \Delta_1, \dots, x_{n+m} : \Delta_{n+m} \rangle$.
+We denote this morphism as $p(\langle x_1 : \Delta_1, \dots, x_{n+m} : \Delta_{n+m} \rangle, \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle)$.
+So for all $A, B \in Ob(R(U))$ such that $A \leq B$, 
+$p(B, A)$ is defined and $p(B, A): B \to A$ in $R(U)$.
+
+\begin{lemma}
+    Let $A = \langle x_1: \Delta_1, \dots, x_n : \Delta_n \rangle$
+    and $A' = \langle y_1 : \Omega_1, \dots, y_m: \Omega_m \rangle$,
+    if $B = \langle y_1 : \Omega_1, \dots, y_{m+w} : \Omega_{m+w} \rangle$
+    and $f = \langle t_1, \dots, t_m \rangle$ 
+    is a realization of $A'$ with regard to $A$, then
+    \[
+    \begin{tikzcd}
+        f^*B \arrow[r, "q(f{,} B)"] \arrow[d, "p(f^*B{,} A)"'] & B \arrow[d, "p(B{,} A')"]\\
+        A \arrow[r, "f"'] & A'
+    \end{tikzcd}
+    \]
+    is a pullback in $R(U)$, where
+    \begin{multline*}
+        f*B = \langle x_1 : \Delta_1, \dots, x_n : \Delta_n, y_{m+1} : \Omega_{m+1}[t_1 | y_1, \dots, t_m | y_m], \\ 
+            \dots, y_{m+w} : \Omega_{m+w}[t_1 | y_1, \dots, t_m | y_m] \rangle
+    \end{multline*}
+    \begin{equation*}
+         q(f, B) = \langle t_1, \dots, t_m, y_{m+1}, \dots, y_{m+w} \rangle
+    \end{equation*}
+\end{lemma}
+
+This motivates the following definition.
