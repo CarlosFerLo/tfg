@@ -464,3 +464,19 @@ then we define $\langle f_1, \dots, f_m \rangle^*B$ is defined as
 \end{multline*} 
 and $q(\langle f_1, \dots, f_m \rangle, B) = \langle f_1, \dots, f_m, \gamma \rangle$
 where $\gamma$ is the operator defined as $\gamma(a_1, \dots, a_n, b) = b$.
+
+\begin{definition}
+    If $C$ and $C'$ are contextual categories, 
+    then a functor $F: C \to C'$ is a \textbf{contextual functor} if
+    \begin{enumerate}
+        \item $F(1_C) = 1_{C'}$ and if $A \vartriangleleft B$ in $C$, then $F(A) \vartriangleleft F(B)$ in $C'$;
+        \item for all $A \in Ob C$, $F(p(A)) = p(F(A))$;
+        \item for all $f$ and $B$ such that $f^*B$ is defined in $C$,
+              $F(f^*B) = F(f)^*F(B)$ and \\ $F(q(f, B)) = q(F(f), F(B))$. 
+    \end{enumerate}
+\end{definition}
+
+$Con$ is the category of contextual categories and contextual functors.
+The construction $C(U)$ for a theory $U$ extends to a functor $C: GAT \to Con$.
+{ \color{red} There is a functor $U: Con \to GAT$ such that $U \circ C \simeq id_{GAT}$ \cite{cartmell1978} }
+
