@@ -415,3 +415,52 @@ equivalence classes of realizations
             \dfrac{x'_1 : \Delta'_1, \dots, x'_n : \Delta'_n}{s_j : \Omega'_j[s_1 | y'_1, \dots, s_{j-1} | y'_{j-1}]}
           \end{equation*}
 \end{itemize}
+
+Here $Fam$ takes the same role among contextual categories
+as $Set$ with categories. We will give $Fam$ the structure of a context category:
+
+First, we should give it the structure of category. 
+To do that we shall introduce its morphisms, the identities and composition.
+Given $n, m \geq 0$, 
+$1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n$
+and $1 \vartriangleleft B_1 \vartriangleleft \dots \vartriangleleft B_m$
+in $Fam$, then 
+\begin{multline*}
+Hom_{Fam}(A_n, B_m) \coloneq \{ \langle f_1, \dots, f_m \rangle | f_1, \dots, f_m
+\text{ are operators such that for all } j, \\ 
+1 \leq j \leq m, \text{ for } a_1 \in A_1, \dots, a_n \in A_n(a_1, \dots, a_{n-1}),  \\
+f_j(a_1, \dots, a_n) \in B_j(f_1(a_1, \dots, a_n), \dots, f_{j-1}(a_1, \dots, a_n)) \}    
+\end{multline*}
+For $n = 0$, then $Hom_{Fam}(1, B_m) = \{ \langle b_1, \dots, b_m \rangle | b_1 \in B_1, \dots, b_m \in B_m(b_1, \dots, b_{m-1})\}$, 
+and $1$ is the terminal object of $Fam$ because
+$Hom_{Fam}(A_n, 1) = \{ \langle \rangle \}$.
+For the composition in $Fam$ consider 
+$1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n$,
+$1 \vartriangleleft B_1 \vartriangleleft \dots \vartriangleleft B_m$,
+$1 \vartriangleleft C_1 \vartriangleleft \dots \vartriangleleft C_w$,
+$\langle f_1, \dots, f_m \rangle : A_n \to B_m$ and 
+$\langle g_1, \dots, g_w \rangle : B_m \to C_w$. 
+Then we define $\langle g_1, \dots, g_w \langle \circ \langle f_1, \dots, f_m \rangle = \langle h_1, \dots, h_w \rangle$
+where for all $k$, $1 \leq k \leq w$, $h_k$ is defined as
+\begin{equation*}
+    h_k(a_1, \dots, a_n) = g_k(f_1(a_1, \dots, a_n), \dots, f_m(a_1, \dots, a_n))
+\end{equation*}
+
+Now we should define the projection morphisms, 
+let $1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n \vartriangleleft A$,
+then we define $p(A): A \to A_n$ in $Fam$ as
+\begin{equation*}
+    p(A) = \langle h_1, \dots, h_n \rangle ; h_i(a_1, \dots, a_n, a) = a_i
+\end{equation*}
+
+Finally, we should define $f*\cdot$ and $q$ such that they meet the pullback condition. 
+Given $1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n$
+and $1 \vartriangleleft B_1 \vartriangleleft \dots \vartriangleleft B_m \vartriangleleft B$
+and $\langle f_1, \dots, f_m \rangle : A_n \to B_m$ in $Fam$,
+then we define $\langle f_1, \dots, f_m \rangle^*B$ is defined as
+\begin{multline*}
+    \lambda a_1 \in A_1. \lambda a_2 \in A_2 (a_1). \dots \lambda a_n \in A_n(a_1, \dots, a_{n-1}). \\
+    B(f_1(a_1, \dots, a_n), \dots, f_m(a_1, \dots, a_n))
+\end{multline*} 
+and $q(\langle f_1, \dots, f_m \rangle, B) = \langle f_1, \dots, f_m, \gamma \rangle$
+where $\gamma$ is the operator defined as $\gamma(a_1, \dots, a_n, b) = b$.
