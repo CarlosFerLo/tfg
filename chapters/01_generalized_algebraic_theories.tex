@@ -194,13 +194,13 @@ Let $A_U$ be the alphabet of a theory $U$ and $v_1, v_2, \dots$ a set of variabl
 \begin{definition}
     a \textbf{preinterpretation} $I$ of $U$ in $U'$ consists of a function
     \begin{equation*}
-        I: A_U \mapsto Expressions \ U'
+        I: A_U \longrightarrow Expressions \ U'
     \end{equation*}
 \end{definition}
 
 If $I$ is a preinterpretation of $U$ in $U'$, then we define a function
 \begin{equation*}
-    \dot{I}: Expressions \ U \mapsto Expressions \ U'
+    \dot{I}: Expressions \ U \longrightarrow Expressions \ U'
 \end{equation*}
 by induction on the following clauses:
 \begin{enumerate}
@@ -214,7 +214,7 @@ by induction on the following clauses:
 
 Then, we can define a function
 \begin{equation*}
-    \hat{I}: Rules \ U \mapsto Rules \ U'
+    \hat{I}: Rules \ U \longrightarrow Rules \ U'
 \end{equation*}
 by 
 \begin{enumerate}
@@ -306,7 +306,7 @@ The identity of an object $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle
 is the realization $\langle x_1, \dots, x_n \rangle$.
 And composition is defined as 
 \begin{equation*}
-    \langle t_1, \dots, t_m \rangle \circ \langle s_1, \dots s_w \rangle 
+    \langle s_1, \dots s_w \rangle \circ \langle t_1, \dots, t_m \rangle
      = \langle s_1[t_1 | y_1, \dots, t_m | y_m], \dots, s_w[t_1 | y_1, \dots, t_m | y_m] \rangle
 \end{equation*}
 when $\langle t_1, \dots, t_m \rangle : \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle \to \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
@@ -338,7 +338,7 @@ $p(B, A)$ is defined and $p(B, A): B \to A$ in $R(U)$.
     \]
     is a pullback in $R(U)$, where
     \begin{multline*}
-        f*B = \langle x_1 : \Delta_1, \dots, x_n : \Delta_n, y_{m+1} : \Omega_{m+1}[t_1 | y_1, \dots, t_m | y_m], \\ 
+        f^*B = \langle x_1 : \Delta_1, \dots, x_n : \Delta_n, y_{m+1} : \Omega_{m+1}[t_1 | y_1, \dots, t_m | y_m], \\ 
             \dots, y_{m+w} : \Omega_{m+w}[t_1 | y_1, \dots, t_m | y_m] \rangle
     \end{multline*}
     \begin{equation*}
@@ -347,3 +347,71 @@ $p(B, A)$ is defined and $p(B, A): B \to A$ in $R(U)$.
 \end{lemma}
 
 This motivates the following definition.
+
+\section{Contextual Categories}
+
+\begin{definition}
+    A \textbf{contextual category} consists of
+    \begin{enumerate}
+        \item a category $C$ wih a terminal object $1$,
+        \item a tree structured on the objects of $C$
+              such that the terminal object $1$ is the unique
+              least element of the tree,
+        \item for all $A, B \in Ob C$ such that $A \vartriangleleft B$
+              a morphism $p(B): B \to A$, it will be written as $B \openrightarrow A$,
+        \item for all $A, A' \in Ob C$, for all $f: A \to A'$ in $C$, 
+              for all $B \in Ob C$ such that $A' \vartriangleleft B$,
+              an object $f*B$ of $C$ and a morphism $q(f, B): f^*B \to B$ 
+              such that the diagram
+              \[
+                \begin{tikzcd}
+                    f^*B \arrow[r, "q(f {,} B)"] \arrow[d, "", open] & B \arrow[d, "", open] \\
+                    A \arrow[r, "f"] & A'
+                \end{tikzcd}
+              \]
+              is a pullback in $C$ such that
+              \begin{enumerate}
+                \item for all $A, B \in Ob C$ such that $A \vartriangleleft B$, 
+                      $id_A^*B = B$ and $q(id_A, B) = id_B$,
+                \item Whenever
+                \[
+                    \begin{tikzcd}
+                        && B \arrow[d, "", open] \\
+                        A \arrow[r, "f"] & A' \arrow[r, "f'"] & A''
+                    \end{tikzcd}
+                \]
+                in $C$, then $(f' \circ f)^*B = f^*(f'^*B)$
+                and $q(f' \circ f, B) =  q(f', B) \circ q(f, f'^*B)$.
+              \end{enumerate}
+    \end{enumerate}
+\end{definition}
+
+\begin{remark}
+    The category $R(U)$ is structured as a contextual category
+    by the tree structure and pullbacks mentioned above.
+\end{remark}
+
+The context category $R(U)$ has a homomorphic image $C(U)$ induced by
+the equivalence relation of intended equivalence of denotation.
+$C(U)$ is the category of equivalence classes of contexts and 
+equivalence classes of realizations
+\begin{itemize}
+    \item $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle \equiv \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
+          if, and only if, 
+          \begin{equation*}
+                \dfrac{x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1}}{\Delta_n \text{ is a type}} \equiv \dfrac{y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}}{\Omega_m \text{ is a type}}
+          \end{equation*}
+    \item let $\langle t_1, \dots, t_m \rangle$ be a realization of 
+          $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$ 
+          with regard to $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$,
+          and let $\langle s_1, \dots, s_m \rangle$ be a realization of
+          $\langle y'_1 : \Omega'_1, \dots, y'_m : \Omega'_m \rangle$ 
+          with regard to $\langle x'_1 : \Delta'_1, \dots, x'_n : \Delta'_n \rangle$,
+          then $\langle t_1, \dots, t_m \rangle \equiv \langle s_1, \dots, s_m \rangle$
+          if, and only if, for each $j$, $1 \leq j \leq m$,
+          \begin{equation*}
+            \dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t_j : \Omega_j[t_1 | y_1, \dots, t_{j-1} | y_{j-1}]}
+            \equiv
+            \dfrac{x'_1 : \Delta'_1, \dots, x'_n : \Delta'_n}{s_j : \Omega'_j[s_1 | y'_1, \dots, s_{j-1} | y'_{j-1}]}
+          \end{equation*}
+\end{itemize}
