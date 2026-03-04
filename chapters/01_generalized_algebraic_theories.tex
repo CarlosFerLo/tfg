@@ -350,7 +350,7 @@ This motivates the following definition.
 
 \section{Contextual Categories}
 
-\begin{definition}
+\begin{definition} \label{def:contextual-category}
     A \textbf{contextual category} consists of
     \begin{enumerate}
         \item a category $C$ wih a terminal object $1$,
@@ -371,9 +371,9 @@ This motivates the following definition.
               \]
               is a pullback in $C$ such that
               \begin{enumerate}
-                \item for all $A, B \in Ob C$ such that $A \vartriangleleft B$, 
+                \item \label{item:axiom-I}for all $A, B \in Ob C$ such that $A \vartriangleleft B$, 
                       $id_A^*B = B$ and $q(id_A, B) = id_B$,
-                \item Whenever
+                \item \label{item:axiom-II} Whenever
                 \[
                     \begin{tikzcd}
                         && B \arrow[d, "", open] \\
@@ -478,5 +478,79 @@ where $\gamma$ is the operator defined as $\gamma(a_1, \dots, a_n, b) = b$.
 
 $Con$ is the category of contextual categories and contextual functors.
 The construction $C(U)$ for a theory $U$ extends to a functor $C: GAT \to Con$.
-{ \color{red} There is a functor $U: Con \to GAT$ such that $U \circ C \simeq id_{GAT}$ \cite{cartmell1978} }
+{ \color{red} There is a functor $U: Con \to GAT$ such that $U \circ C \simeq id_{GAT}$ \cite{cartmell1978}. }
 
+We can extend the projections and pullbacks from pairs of 
+objects related as $\vartriangleleft$ to the more general $\leq$.
+Consider two objects $A$ and $B$ of $C$ a contextual category 
+such that $A \leq B$. Then we have a sequence of objects $X_1, \dots, X_n$ of $C$
+such that $A \vartriangleleft X_1 \vartriangleleft \dots \vartriangleleft X_n \vartriangleleft B$ in $C$.
+We define $p(B, A): B \to A$ in $C$, and write it as { \color{red} $B \to A$ }, as 
+\begin{equation*}
+    p(B, A) = p(X_1) \circ \dots \circ p(X_n) \circ p(B)
+\end{equation*}
+And if $A' \leq B$ in $C$ and $f: A \to A'$ in $C$, we have the following pullback
+\begin{equation*}
+    \begin{tikzcd}[column sep=4cm]
+        q(\dots q(f, X_1) \dots, X_n)^*B \arrow[r, "q(q(\dots q(f{,} X_1) \dots {,} X_n) {,} B)"] \arrow[d, "special"] & B \arrow[d, "special"] \\
+        A \arrow[r, "f"'] & A'
+    \end{tikzcd}
+\end{equation*}
+that can be rewritten in a more concise way using the $^*$ notation:
+\begin{equation*}
+    \begin{tikzcd}
+        f^*B \arrow[r, "q(f {,} B)"] \arrow[d, "p(f^*B {,} A)"'] & B \arrow[d, "p(B {,} A')"] \\
+        A \arrow[r, "f"'] & A
+    \end{tikzcd}
+\end{equation*}
+
+\begin{lemma}
+    If $f: A \to A'$ and $A' \leq X \leq B$ in the contextual category $C$,
+    then $f^*B = q(f, X)^*B$ and $q(f, B) = q(q(f, X), B)$.
+    \[
+    \begin{tikzcd}[column sep=huge]
+        q(f {,} X)^*B \arrow[r, "q(q(f {,} X) {,} B)"] \arrow[d, "special"'] & B \arrow[d, "special"] \\
+        f^*X \arrow[r, "q(f {,} X)"] \arrow[d, "special"'] & X \arrow[d, "special"] \\
+        A \arrow[r, "f"] & A'
+    \end{tikzcd}
+    \]
+\end{lemma}
+
+Fon any contextual category $C$ and for any object $A$ of $C$
+we can define a contextual category $C_A$,
+where the tree of objects is the subset of the tree of objects of $C$
+which appears above $A$. (This idea is similar to $E / A$ for $A \in Ob E$)
+
+\begin{definition}
+    Let $C$ be a context category and $A \in Ob C$, 
+    then $C_A$ is defined as the category whose objects are 
+    the objects $B$ of $C$ such that $A \leq B$,
+    and its morphisms between $B$ and $B'$ in $C_A$ are 
+    those morphisms $g: B \to B'$ in $C$ such that the following diagram commutes:
+    \[
+    \begin{tikzcd}
+        B \arrow[r, "f"] \arrow[dr, "special"'] & B' \arrow[d, "special"] \\
+        & A
+    \end{tikzcd}
+    \]
+\end{definition}
+
+Consider $f: A \to A'$ in $C$, we define the \textbf{contextual functor}
+$C_f: C_{A'} \to C_A$ is a functor that sends an object $B$ of $C_{A'}$ to $f^*B$ in $C_A$,
+and a morphism $g: B \to B'$ in $C_{A'}$ to $f*g$,
+the unique morphism from $f^*B \to f^*B'$ in $C_A$ such that
+\[
+\begin{tikzcd}
+    f^*B \arrow[r, "f^*g"] \arrow[d, "q(f {,} B)"'] & f^*B' \arrow[d, "q(f {,} B')"] \\
+    B \arrow[r, "g"] & B'
+\end{tikzcd}
+\]
+commutes.
+
+From the condition \ref{item:axiom-I} from the definition \ref{def:contextual-category},
+we can see that if $A \in Ob C$, then $C_{id_A} = id_{C_A}$. 
+And from the condition \ref{item:axiom-II} we know that if 
+$f: A \to A'$ and $f': A' \to A''$ in $C$, then $C_{f'} \circ C_f = C_{f' \circ f}$.
+Hence $C_\_ : C^{op} \to Con$ is a functor.
+
+TODO: Continue
