@@ -1,14 +1,13 @@
 % !TEX root = ../main.tex
 \chapter[Generalized Algebraic Theories]{Generalized Algebraic Theories}
 
-Our goal is to generate a term of a specific type in a given theory.
-The goal of this chapter is to give meaning to the concept of 
+The goal of this chapter is give meaning to the concept of 
 term, type and theory, while introducing some tools that we will
 use later when we present the algorithm.
 
 By theories we mean Generalized Algebraic Theories (or GATs), 
-introduced by John Cartmell in his thesis \cite{cartmell1978} \cite{cartmell1986},
-they give us both a very idiomatic way of presenting
+introduced by John Cartmell in his thesis \cite{cartmell1978} \cite{cartmell1986}.
+GATs give us both a very idiomatic way of presenting
 theories and powerful interpretation tools like
 Context Categories, introduced later in this section.
 The notion of generalized algebraic theory is a generalization of
@@ -74,4 +73,86 @@ then $\Delta$ is a type, we can write:
     }
 \end{equation*}
 this assertions are called rules.
+Rules are used to express which expressions are well-formed.
+We will work with this rules as units instead of the base expressions.
+This is because terms and types do not make sense by themselves
+but they need to be thought of in a context. 
 
+Axioms are also written as rules. The conclusion of those rules
+are equalities between types or between terms of the same type.
+We write those rules as:
+\begin{minipage}{0.5\textwidth}
+  \begin{equation*}
+    \dfrac{
+        x_1 : \Delta_1, \dots, x_n : \Delta_n
+    }{
+        \Delta = \Delta'
+    }
+  \end{equation*}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+  \begin{equation*}
+    \dfrac{
+        x_1 : \Delta_1, \dots, x_n : \Delta_n
+    }{
+        t = t' : \Delta
+    }
+  \end{equation*}
+\end{minipage}
+and read as: if $x_1$ is a variable of type $\Delta_1$, \dots and $x_n$ is a variable of type $\Delta_n$,
+then $\Delta = \Delta'$, or $t = t'$ as terms of type $\Delta$, respectively.
+
+% TODO: fix alignment
+To continue with the previous example, we can write the axioms
+of category theory as:
+\begin{alignat*}{2}
+    &x, y : Ob, f : Hom(x, y),  \quad  \circ(id(x), f) = f \\
+    &x, y : Ob, f : Hom(x, y),  \quad  \circ(f, id(y)) = f \\
+    &w, x, y, z : Ob, f : Hom(w, x), g : Hom(x, y), h : Hom(y, z), \\ &\qquad\circ(\circ(f, g), h) = \circ(f, \circ(g, h))
+\end{alignat*}
+
+When presenting a theory's language i.e. the sets of sorts and operators,
+we must present each symbol with a rule specifying the role
+of this symbol, either as a sort symbol or as specifically typed operator symbol. 
+This rules are called introductory rules.
+In the case of a sort symbol $A$ the rule should be like 
+\begin{equation*}
+    \dfrac{
+        x_1 : \Delta_1, \dots, x_n : \Delta_n
+    }{
+        A(x_1, \dots, x_n) \text{ is a type}
+    }
+\end{equation*}
+clearly specifying the types $A$ is dependent on.
+In the case of an operator symbol, a rule of the form
+\begin{equation*}
+    \dfrac{
+        x_1 : \Delta_1, \dots, x_n : \Delta_n
+    }{
+        f(x_1, \dots, x_n) : \Delta
+    }
+\end{equation*}
+suffices to specify the types of the arguments and the value of $f$.
+
+Finally, to present a theory we will give a set os symbols,
+each associated to its introductory rule, and a set of axioms.
+And, of course, everything must be well-formed, {\color{orange} something we 
+will address in the following section.}
+So now we can give a formal presentation of the theory of categories:
+
+\begin{tabular}{ll}
+\textit{Symbol} & \textit{Introductory Rule} \\[6pt]
+Ob  & Ob is a type. \\[4pt]
+Hom & $x, y \in \mathrm{Ob} : \mathrm{Hom}(x, y)$ is a type. \\[4pt]
+$\circ$ & $x, y, z \in \mathrm{Ob},\, f \in \mathrm{Hom}(x, y),\, g \in \mathrm{Hom}(y, z) : \circ(f, g) \in \mathrm{Hom}(x, z).$ \\[4pt]
+id  & $x \in \mathrm{Ob} : \mathrm{id}(x) \in \mathrm{Hom}(x, x).$ \\
+\end{tabular}
+
+\begin{tabular}{ll}
+\textit{Axioms} \\[6pt]
+$\circ(\mathrm{id}(x), f) = f,$ & whenever $x, y \in \mathrm{Ob}$ and $f \in \mathrm{Hom}(x, y).$ \\[4pt]
+$\circ(f, \mathrm{id}(y)) = f,$ & whenever $x, y \in \mathrm{Ob}$ and $f \in \mathrm{Hom}(x, y).$ \\[4pt]
+$\circ(\circ(f, g), h) = \circ(f, \circ(g, h)),$ 
+  & whenever $w, x, y, z \in \mathrm{Ob},\, f \in \mathrm{Hom}(w, x),$ \\
+  & \hspace{4.5em} $g \in \mathrm{Hom}(x, y)$ and $h \in \mathrm{Hom}(y, z).$ \\
+\end{tabular}
