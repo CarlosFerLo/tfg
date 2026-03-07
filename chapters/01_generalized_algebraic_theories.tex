@@ -156,3 +156,138 @@ $\circ(\circ(f, g), h) = \circ(f, \circ(g, h)),$
   & whenever $w, x, y, z \in \mathrm{Ob},\, f \in \mathrm{Hom}(w, x),$ \\
   & \hspace{4.5em} $g \in \mathrm{Hom}(x, y)$ and $h \in \mathrm{Hom}(y, z).$ \\
 \end{tabular}
+
+\section{Formal Definition}
+
+In this section we will formally define all of the concepts 
+we just introduced.
+To give a notion of well-formed introductory rule, we need the concept of drivability,
+which also depends on the introductory rules. 
+To tackle this problem we will leave aside the question of
+well-formedness until we have the complete set of derived rules
+of a theory.
+We will first define a pretheory and then define a theory
+as a well-formed pretheory.
+
+We will assume to have countable set of variables $V$.
+Lets define the notion of rule on an alphabet $W$,
+the elements of $W$ are called symbols.
+
+\begin{definition}
+    The set of \textbf{expressions} is defined inductively
+    such that expressions are finite sequences of elements
+    of $W \cup V \cup \{(\} \cup \{)\} \cup \{,\}$
+    defined by the clauses:
+    \begin{enumerate}
+        \item if $x \in V$, then $x$ is an expression;
+        \item if $L \in W$, then $L$ is an expression;
+        \item if $L \in W$ and $e_1, \dots, e_n$ are expressions,
+              then $L(e_1, \dots, e_n)$ is an expression.
+    \end{enumerate}
+\end{definition}
+
+Now we can define the building blocks of a rule:
+\begin{definition}
+    A \textbf{premise} is defined to be a sequence of $V \times$ the set of expressions.
+    The empty sequence is allowed and we call it an empty premise.
+    If $((x_1, \Delta_1), \dots, (x_n, \Delta_n))$ is a premise,
+    we write it as $x_1 : \Delta_1, \dots, x_n : \Delta_n$.
+\end{definition}
+\begin{definition}
+    We call a \textbf{conclusion} to one of the following:
+    \begin{enumerate}
+        \item $T$-conclusion: defined by a single expression $\Delta$
+              and written as '$\Delta$ is a type'.
+        \item $\in$-conclusion: defined by a pair of expressions $(t, \Delta)$
+              and written as '$t \in \Delta$'.
+        \item $T=$conclusion: defined by a pair of expressions $(\Delta_1, \Delta_2)$
+              and written as '$\Delta_1 = \Delta_2$'.
+        \item $\in=$conclusion: defined by a triple of expressions $(t_1, t_2, \Delta)$
+              and written as '$t_1 = t_2 : \Delta$'
+    \end{enumerate}
+\end{definition}
+Finally a \textbf{rule} is determined by a premise $P$ and a
+conclusion $C$, and is written as $\dfrac{P}{C}$.
+We name the rule as $T$-rule, $\in$-rule, $T=$rule or $\in=$rule
+according to the form of the conclusion.
+
+Now we can define pretheory and later theory.
+
+\begin{definition}
+    A \textbf{pretheory} consists of
+    \begin{enumerate}
+        \item a set of sort symbols $S$;
+        \item a set of operator symbols $Z$;
+        \item for each sort symbol $A$, an associated rule 
+              of the alphabet $S \cup Z$:
+              \begin{equation*}
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n
+                }{
+                    A(x_1, \dots, A_n) \text{ is a type}
+                }
+              \end{equation*}
+              for some $n \geq 0$. It is called the introductory
+              rule of $A$;
+        \item for each operator symbol $F$, an associated rule
+              of the alphabet $S \cup Z$:
+              \begin{equation*}
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n
+                }{
+                    F(x_1, \dots, x_n) : \Delta
+                }
+              \end{equation*}
+              for some $n \geq 0$. It is called the introductory
+              rule of $F$;
+        \item a set of axioms. Each axiom is either a $T=$rule or
+              a $\in=$rule of the alphabet $S \cup Z$.
+
+    \end{enumerate}
+\end{definition}
+
+Now we will tackle the problem of well-formedness of rules.
+
+\begin{definition}
+    If $U$ is a pretheory, then
+    \begin{enumerate}
+        \item a \textbf{context} is a premise $x_1 : \Delta_1, \dots, x_n : \Delta_n$
+            such that the rule
+            \begin{equation*}
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_{n-1}: \Delta_{n-1}
+                }{
+                    \Delta_n \text{ is a type}
+                }
+            \end{equation*}
+            is a derived rule such that $x_n$ is distinct from all of $x_1, \dots, x_n$.
+        \item \begin{enumerate}
+            \item the rule $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta \text{ is a type}}$
+                  is \textbf{well-formed} if the premise $x_1 : \Delta_1, \dots, x_n : \Delta_n$ is a context.
+            \item the rule $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t : \Delta}$
+                  is \textbf{well-formed} if $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta \text{ is a type}}$
+                  is a derived rule of $U$.
+            \item the rule $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta = \Delta'}$
+                  is \textbf{well-formed} if $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta \text{ is a type}}$
+                  and \\ $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{\Delta' \text{ is a type}}$
+                  are derived rules of $U$.
+            \item the rule $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t = t' : \Delta}$
+                  is \textbf{well-formed} if $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t : \Delta}$
+                  and \\ $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{t' : \Delta}$
+                  are derived rules of $U$.
+        \end{enumerate}
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    The set of \textbf{derived rules} of a pretheory $U$ is the
+    set of rules derivable by the following principles of derivation:
+    
+    % TODO: add rules of derivation
+\end{definition}
+
+\begin{definition}
+    A pretheory is \text{well-formed} if all of its introductory
+    rules are well-formed.
+    A \textbf{theory} is a well-formed pretheory.
+\end{definition}
