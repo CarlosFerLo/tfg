@@ -1,1 +1,77 @@
+% !TEX root = ../main.tex
 \chapter[Generalized Algebraic Theories]{Generalized Algebraic Theories}
+
+Our goal is to generate a term of a specific type in a given theory.
+The goal of this chapter is to give meaning to the concept of 
+term, type and theory, while introducing some tools that we will
+use later when we present the algorithm.
+
+By theories we mean Generalized Algebraic Theories (or GATs), 
+introduced by John Cartmell in his thesis \cite{cartmell1978} \cite{cartmell1986},
+they give us both a very idiomatic way of presenting
+theories and powerful interpretation tools like
+Context Categories, introduced later in this section.
+The notion of generalized algebraic theory is a generalization of
+the notion of many-sorted algebraic theory in the following manner:
+while in Martin L{\"o}ff's many-sorted algebraic theories sorts
+are constant types, interpreted as sets, in generalized
+algebraic theories sorts might be constant or variable,
+over a specified range of types, and variable types
+are interpreted as families of sets. So a generalized
+algebraic theory consists of:
+\begin{enumerate}
+    \item a set of sorts, that can be constant or variable;
+    \item a set of operators, with the sort of the arguments and value specified;
+    \item a set of axioms, where each axiom is an identity between similar expressions. 
+\end{enumerate}
+Let's present category theory for example:
+The set of sorts contains two elements $Ob$ and $Hom$.
+$Ob$ is a constant type and $Hom$ is a variable type,
+for a pair of terms of type $Ob$, name them $x, y$, we
+have a type $Hom(x, y)$.
+Here we see a key point in general algebraic theories,
+types vary over terms, no over types.
+The set of operators also has two elements $id$ and $\circ$.
+The $id$ operator has one argument $x$ of type $Ob$,
+and returns a value of type $Hom(x, x)$. This shows
+how the type of value of an operator might vary depending
+on the arguments. 
+The $\circ$ operator (or composition) expects 5 arguments, 
+three of type $Ob$, name them $x, y, z$, one of type $Hom(x, y)$,
+say $f$, and one of type $Hom(y, z)$, named $g$, and it returns
+a value of type $Hom(x, z)$.
+Here we see that the type of an argument might also vary depending
+on a previous argument.
+{\color{red}Informally, instead of writing $\circ(x, y, z, f, g)$ we can
+write $\circ(f, g)$, as the first three arguments might be inferred from the last two.
+This notation will be discussed in a further section.}
+
+Now we will introduce the notation we will be using when talking 
+about terms and types. {\color{orange} This notation will be formally defined
+in a later section.} So consider you have a set of variables $V$,
+we will associate terms to variables as required.
+When asserting that a term $t$ is of type $\Delta$ we will write
+$t : \Delta$, but if $t$ has variables $x_1, \dots, x_n$ occurring in it this assertion
+does not make sense unless we assign some types to $x_1, \dots, x_m$.
+To do this we will write:
+\begin{equation*}
+    \dfrac{
+        x_1 : \Delta_1, \dots, x_n: \Delta_n
+    }{
+        t : \Delta
+    }
+\end{equation*}
+that reads as: if $x_1$ is a variable of type $\Delta_1$, \dots and if $x_n$ is a variable of type $\Delta_n$,
+then $t$ is a term of type $\Delta$. 
+Similarly, if we want to assert that if $x_1$ is a variable of type $\Delta_1$,
+\dots and if $x_n$ is a variable of type $\Delta_n$,
+then $\Delta$ is a type, we can write:
+\begin{equation*}
+    \dfrac{
+        x_1 : \Delta_1, \dots, x_n : \Delta_n 
+    }{
+        t : \Delta
+    }
+\end{equation*}
+this assertions are called rules.
+
