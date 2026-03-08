@@ -458,5 +458,81 @@ is defined as
     \langle s_1, \dots, s_w \rangle \circ \langle t_1, \dots, t_m \rangle =
     \langle s_1[t_1 | y_1, \dots, t_m | y_m], \dots, s_w[t_1 | y_1, \dots, t_m | y_m] \rangle
 \end{equation*}
-
  
+The set of objects of $R(U)$ i.e. the set of contexts of $U$
+is structured as a tree with a single least element $\langle \rangle$,
+the empty context, and where every context $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n$
+is preceded by $x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1}$.
+Moreover, for any context $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n, x_{n+1} : \Delta_{n+1}, \dots, x_{n+m} : \Delta_{n+m} \rangle$
+of $U$, $\langle x_1, \dots, x_n \rangle$ is a realization of
+$\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
+with respect to $\langle x_1 : \Delta_1, \dots, x_{n+m} : \Delta_{n+m} \rangle$.
+We name that morphism as $p(\langle x_1 : \Delta_1, \dots, x_{n+m} : \Delta_{n+m}\rangle, \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle )$.
+
+\begin{lemma}
+    If $A = \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$,
+    $A' = \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$ and
+    $B = \langle y_1 : \Omega_1, \dots, y_{m+w} : \Omega_{m+w}$ 
+    are contexts, and $f = \langle t_1, \dots, t_m \rangle$
+    is a realization of $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
+    with regard to $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$,
+    then 
+    \[
+    \begin{tikzcd}
+        f^*B \arrow[r, "q(f {,} B)"] \arrow[d, "p(f^*B {,} A)"'] & B \arrow[d, "p(B {,} A')"] \\
+        A \arrow[r, "f"'] & A'
+    \end{tikzcd}
+    \]
+    is a pullback diagram in $R(U)$, where
+    \begin{multline*}
+    f^*B = \langle x_1 : \Delta_1, \dots, x_n : \Delta_n, y_{m+1} : \Omega_{m+1}[t_1 | y_1, \dots, t_m | y_m], \\
+    \dots, y_{m+w} : \Omega_{m+w}[t_1 | y_1, \dots, t_m | y_m] \rangle    
+    \end{multline*}
+    \begin{equation*}
+        q(f, B) = \langle t_1, \dots, t_m, y_{m+1}, \dots, y_{m+w} \rangle
+    \end{equation*}
+\end{lemma}
+
+% TODO: should I prove this?
+This properties motivate the following definition:
+
+\begin{definition}
+    A \textbf{contextual category} consists of
+    \begin{enumerate}
+        \item a category $C$ with a terminal object $1$;
+        \item a tree structure on the objects of $C$ such that
+              the terminal object $1$ is the unique least element
+              of the tree;
+        \item for all $A, B \in Ob C$ such that $A \vartriangleleft B$
+              a morphism $p(B) : B \to A$ in $C$ and that will be
+              written as $B \openrightarrow A$;
+        \item for all $A, A' \in Ob C$ and for all $f: A \to A'$ in $C$,
+              for all $B \in Ob C$ such that $A' \vartriangleleft B$,
+              an object $f^*B$ in $C$ and a morphism $q(f, B): f^*B \to B$
+              such that the diagram
+              \[
+                \begin{tikzcd}
+                    f^*B \arrow[r, "q(f {,} B)"] \arrow[d, open] & B \arrow[d, open] \\
+                    A \arrow[r, "f"'] & A'
+                \end{tikzcd}
+              \]
+              is a pullback in $C$ such that
+              \begin{enumerate}
+                \item for all $A, B \in Ob C$ such that $A \vartriangleleft B$,
+                      $id_A^*B = B$ and $q(id_A, B) = id_B$;
+                \item when
+                    \[
+                    \begin{tikzcd}
+                        && B \arrow[d, open] \\
+                        A \arrow[r, "f"] & A' \arrow[r, "f'"] & A''
+                    \end{tikzcd}
+                    \]
+                    in $C$, then $(f' \circ f)^*B = f^*(f'^*B)$
+                    and $q(f' \circ f, B) = q(f', B) \circ q(f, f'^*B)$.
+              \end{enumerate}
+    \end{enumerate}
+\end{definition}
+
+The category $R(U)$ is structured as a contextual category by the 
+tree structure and pullbacks defined earlier.
+
