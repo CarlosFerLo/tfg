@@ -368,6 +368,270 @@ We will see that all derived rules hold this property.
     is a derived rule of $U$.
 \end{corollary}
 
+\section{Models and Homomorphisms}
+
+In this section we will consider the semantics of a theory.
+To do this we will introduce the notion of model model
+homomorphism.
+
+First, we will set some notation and basic concepts. 
+We will consider a \textbf{tree} to be a tree with a unique
+least element, in the case that our tree does not have one
+we will add it. This element will be denoted as $1$.
+Let $\Theta$ be a tree. To denote that $A$ is a node of 
+$\Theta$ we will write $A \in \Theta$, confusing the 
+tree with its set of nodes. To assert that
+$B$ is a node of $\Theta$ and $B$ succeeds $A$, we 
+write $A \vartriangleleft B$ in $\Theta$.
+Also, if $A$ is a node of $\Theta$ and $A \neq 1$,
+there exists a unique $n \geq 0$ and $A_1, \dots, A_n$
+such that $1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n \vartriangleleft A$ in $\Theta$.
+
+The set of contexts of a theory $U$ is structured as a tree.
+Where its least element is the empty context and for any $n \geq 1$
+the predecessor of $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
+is $\langle x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1} \rangle$.
+
+We want to consider the tree of sets, families of sets, families of families of sets, \dots
+Consider the following notation for families:
+given $A$ is a set, if for every element $a \in A$ $B(a)$ is a set,
+then the corresponding $A$-indexed family of sets is denoted as
+$\lambda a \in A . B(a)$ or as $\lambda a . B(a)$;
+If we have a set $C(a, b)$ for every $a \in A$ and $b \in B(a)$,
+then $\lambda a \in A. \lambda b \in B(a). C(a, b)$
+is an $A$-indexed family of families of sets; and so on.
+The collection of sets, families of sets, families of families of sets, and so on,
+is called the \textbf{tree of families}.
+Given $1 \vartriangleleft A_1 \vartriangleleft A_2 \vartriangleleft \dots \vartriangleleft A_n \vartriangleleft A$
+in the tree of families. Then, for all $a_1 \in A_1$, \dots,
+for all $a_n \in A_n(a_1, \dots, a_{n-1})$, $A(a_1, \dots, a_n)$ is a set.
+Finally we should define the concept of \textbf{operator}.
+If we have $1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n \vartriangleleft A$
+in the tree of families. If for all $a_1 \in A_1$, \dots, 
+for all $a_n \in A_n(a_1, \dots, a_{n-1})$,
+$f(a_1, \dots, a_n) \in A(a_1, \dots, a_n)$. 
+We say that $\lambda a_1 \in A_1. \dots \lambda a_n \in A_n(a_1, \dots, a_{n-1}). f(a_1, \dots, a_n)$
+is an operator at $A$.
+
+Now we will introduce the notion of a model of a theory.
+It is important to understand that the derived rules are the ones
+to be interpreted by the model, not expressions. 
+To denote the interpretation of a rule $R$ by a model $M$
+we will use the superscripted $R^M$.
+
+\begin{definition}
+    Let $U$ be a theory. $M$ is a model of $U$ if 
+    \begin{enumerate}
+        \item for each derived $T$-rule $R$ of the form 
+            \(
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n
+                }{
+                    \Delta \text{ is a type}
+                }
+            \), if we consider the rules $R_i$ to be
+            \( 
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}
+                }{
+                    \Delta_i \text{ is a type}
+                }
+            \) for all $1 \leq i \leq n$.
+            Then $M$ assigns those rules to 
+            $1 \vartriangleleft R_1^M \vartriangleleft R_2^M \vartriangleleft \dots \vartriangleleft R_n^M \vartriangleleft R^M$
+            in the tree of families;
+        \item if $R_t$ is a derived $\in$-rule of the form 
+            \(
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n
+                }{
+                    t : \Delta 
+                }
+            \), following the notation of the previous point,
+            $M$ assigns the rule to $R_t^M$ an operator at $R^M$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    If $M$ and $M'$ are models of $U$, $f : M \to M'$
+    is a \textbf{homomorphism} if
+    \begin{enumerate}
+        \item for every derived $T$-rule $R$ of the form \(
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n
+                }{
+                    \Delta \text{ is a type}
+                }
+            \) there is an operator $f_R$ such that
+            for every $a_1 \in R_1^M$, \dots, for every $a_n \in R_n^M(a_1, \dots, a_{n-1})$
+            and for every $a \in R^M(a_1, \dots, a_n)$,
+            \[
+                f_R(a_1, \dots, a_n, R_t^M(a_1, \dots, a_n)) \in
+                R^{M'}(f_{R_1}(a_1), \dots, f_{R_n}(a_1, \dots, a_n))
+            \]
+        \item for all derived $\in$-rules $R_t$ of the form \(
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n
+                }{
+                    t : \Delta
+                }
+            \), for all $a_1 \in R_1^M, \dots, a_n \in R_n^M(a_1, \dots, a_{n-1})$,
+            \begin{equation*}
+                f_R(a_1, \dots, a_n, R_t^M(a_1, \dots, a_n)) =
+                R_t^{M'}(f_{R_1}(a_1), \dots, f_{R_n}(a_1, \dots, a_n))
+            \end{equation*}
+        \item if \(
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n
+                }{
+                    \Delta = \Delta'
+                }
+            \) is a derived rule of $U$, then $f_R = f_{R'}$,
+            where $R$ and $R'$ are the rules \(
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n
+                }{\Delta \text{ is a type}}
+            \) and \(
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n
+                }{\Delta' \text{ is a type}}
+            \) respectively.
+    \end{enumerate}
+\end{definition}
+
+To define a homomorphism it is enough to give a family 
+$\lambda A \in S. f_A$ of correctly typed operators, where
+$S$ is the set of sort symbols of $U$.
+
+The category of models and homomorphisms of a theory $U$ is named $U-alg$.
+
+We want to create an equivalence relation on the derived $T$- and $\in$-rules
+of a theory $U$ which we call the \textbf{equivalence relation of identity of denotation}
+such that $R \equiv R'$ by this relation if any model should 
+interpret $R$ and $R'$ as identical objects.
+
+\begin{example}
+    Semantically we should not distinguish between the rules
+
+    \begin{minipage}{0.4\textwidth} % TODO: fix alignment
+    \begin{equation*}
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_n : \Delta_n
+        }{
+            \Delta \text{ is a type}
+        }
+    \end{equation*}
+    \end{minipage}
+    \begin{minipage}{0.6\textwidth}
+    \begin{equation*}
+        \dfrac{
+            x'_1 : \Delta_1, \dots, x'_n : \Delta_n[x'_1 | x_1, \dots, x'_{n-1} | x_{n-1}]
+        }{
+            \Delta[x'_1 | x_1, \dots, x'_n | x_n] \text{ is a type}
+        }
+    \end{equation*}
+    \end{minipage}
+    that only differ on the choice of the variables.
+\end{example}
+
+\begin{example}
+    We should not distinguish either between 
+
+    \begin{minipage}{0.5\textwidth} % TODO: fix alignment
+    \begin{equation*}
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_n : \Delta_n
+        }{
+            \Delta \text{ is a type}
+        }
+    \end{equation*}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+    \begin{equation*}
+        \dfrac{
+            x_1 : \Delta'_1, \dots, x_n : \Delta'_n
+        }{
+            \Delta' \text{ is a type}
+        }
+    \end{equation*}
+    \end{minipage}
+    if for each $i$, $1 \leq i \leq n$, \(
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}
+        }{
+            \Delta_i = \Delta'_i
+        }
+    \) and \(
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_n : \Delta_n
+        }{
+            \Delta = \Delta'
+        }
+    \).
+\end{example}
+
+We define the relation $\equiv$:
+\begin{itemize}
+    \item between the $T$-rules of a theory $U$ by
+        \begin{equation*}
+            \dfrac{
+                x_1 : \Delta_1, \dots, x_n : \Delta_n
+            }{
+                \Delta_{n+1} \text{ is a type}
+            }
+            \equiv
+            \dfrac{
+                y_1 : \Omega_1, \dots, y_m : \Omega_m
+            }{
+                \Omega_{m+1} \text{ is a type}
+            }
+        \end{equation*}
+        if, and only if, $m = n$ and for each $1 \leq i \leq n + 1$
+        \begin{equation*}
+            \dfrac{
+                x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}
+            }{
+                \Delta_i = \Omega_i[x_1 | y_1, \dots, x_{i-1} | y_{i-1}]
+            }
+        \end{equation*}
+        is a derived rule of $U$.
+    \item between $\in$-rules by 
+        \begin{equation*}
+            \dfrac{
+                x_1 : \Delta_1, \dots, x_n : \Delta_n
+            }{
+                t : \Delta
+            }
+            \equiv
+            \dfrac{
+                y_1 : \Omega_1, \dots, y_m : \Omega_m
+            }{
+                s : \Omega
+            }
+        \end{equation*}
+        if, and only if,
+        \begin{equation*}
+            \dfrac{
+                x_1 : \Delta_1, \dots, x_n : \Delta_n
+            }{
+                \Delta \text{ is a type}
+            }
+            \equiv
+            \dfrac{
+                y_1 : \Omega_1, \dots, y_m : \Omega_m
+            }{
+                \Omega \text{ is a type}
+            }
+        \end{equation*}
+        and \(
+            \dfrac{
+                x_1 : \Delta_1, \dots, x_n : \Delta_n
+            }{
+                t = s[x_1 | y_1, \dots, x_n | y_n] : \Delta
+            }
+        \) is a derived rule of $U$.
+\end{itemize}
+
 \section{Contexts and Realizations}
 
 Now we have all the syntax of our theories, we should 
@@ -375,38 +639,7 @@ introduce it's semantics. As mentioned earlier, one of the main
 benefits of working with GATs is the construction of Context Category,
 that we will give in this section.
 
-% TODO: if only one notion included change this, if too many create a new section 
-First we will start by defining some concepts key to understanding the
-structure of this categories.
-
-Our notion of \textbf{tree} consist of trees with a unique least element.
-Let $\Theta$ be a tree. If $A$ is a node of $\Theta$
-we will write $A \in \Theta$, confusing the tree with its set of nodes.
-Given two nodes $A, B \in \Theta$ such that $B$ succeeds $A$,
-we write $A \vartriangleleft B$ in $\Theta$.
-The least node of a tree will be denoted as $1$.
-If we have a node $A$ of $\Theta$ different from $1$, then 
-there exists a unique $n \geq 0$ and a unique sequence
-$A_1, \dots, A_n$ such that 
-$1 \vartriangleleft A_1 \vartriangleleft A_2 \vartriangleleft \dots \vartriangleleft A_n \vartriangleleft A$
-in $\Theta$.
-
-We call the \textbf{tree of families} to the following tree structure
-over the collection of sets, families of sets, families of families of sets, \dots
-where a set $A$ precedes all families of sets indexed by $A$, 
-a family of sets $B$ precedes all families of families of sets 
-indexed by $B$, \dots % TODO: is this the correct way of writing this?
-If $A_1$ is a set, and $A_2$ is a $A_1$-indexed family of sets
-then for $a_1 \in A_1$ we write $A_2(a_1)$ for the value of
-the family $A_2$ at $a_1$.
-If we have $1 \vartriangleleft A_1 \vartriangleleft A_2 \vartriangleleft \dots \vartriangleleft A_n \vartriangleleft A$
-in the tree of families, then for all $a_1 \in A_1$, \dots
-and for all $a_n \in A_n(a_1, \dots, a_{n-1})$, $A(a_1, \dots, a_n)$
-is a set.
-
-% TODO: continue
-
-Now we will define the category of contexts and realizations of a theory $U$.
+We will define the category of contexts and realizations of a theory $U$.
 
 \begin{definition}
     If $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
@@ -535,4 +768,3 @@ This properties motivate the following definition:
 
 The category $R(U)$ is structured as a contextual category by the 
 tree structure and pullbacks defined earlier.
-
