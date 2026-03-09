@@ -634,12 +634,9 @@ We define the relation $\equiv$:
 
 \section{Contexts and Realizations}
 
-Now we have all the syntax of our theories, we should 
-introduce it's semantics. As mentioned earlier, one of the main
-benefits of working with GATs is the construction of Context Category,
-that we will give in this section.
-
-We will define the category of contexts and realizations of a theory $U$.
+In this section we will introduce context categories, a powerful
+interpretation of general algebraic theories that will be key 
+later on. We will start by defining the category of contexts and realizations of a theory $U$.
 
 \begin{definition}
     If $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
@@ -768,3 +765,82 @@ This properties motivate the following definition:
 
 The category $R(U)$ is structured as a contextual category by the 
 tree structure and pullbacks defined earlier.
+
+The contextual category $R(U)$ has an homomorphic image $C(U)$
+induced by the equivalence relation of intended equivalence of denotation.
+More precisely, $C(U)$ is the category of equivalence classes
+of contexts and realizations under the following relation:
+\begin{itemize}
+    \item Among contexts:
+        \begin{equation*}
+            \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle
+            \equiv
+            \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle
+        \end{equation*}
+        if, and only if,
+        \begin{equation*}
+            \dfrac{
+                x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1}
+            }{
+                \Delta_n \text{ is a type}
+            }
+            \equiv
+            \dfrac{
+                y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}
+            }{
+                \Omega_m \text{ is a type}
+            }
+        \end{equation*}
+    \item If we have two realizations 
+    $\lambda t_1, \dots, t_m \rangle$ of $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
+    with regard to $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$, and
+    $\lambda s_1, \dots, s_m \rangle$ of $\langle y'_1 : \Omega'_1, \dots, y'_m : \Omega'_m \rangle$
+    with regard to $\langle x'_1 : \Delta'_1, \dots, x'_n : \Omega'_n \rangle$,
+    we say that $\langle t_1, \dots, t_m \rangle \equiv \langle s_1, \dots, s_m \rangle$
+    if, and only if, for each $1 \leq j \leq m$,
+    \begin{equation*}
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_n : \Delta_n
+        }{
+            t_j : \Omega_j[t_1 | y_1, \dots, t_{j-1} | y_{j-1}]
+        }
+        \equiv
+        \dfrac{
+            x'_1 : \Delta'_1, \dots, x'_n : \Delta'_n
+        }{
+            s_j : \Omega'_j[s_1 | y'_1, \dots, s_{j-1} | y'_{j-1}]
+        }
+    \end{equation*}
+\end{itemize}
+
+We will define $Fam$, a category that plays the same role
+among contextual categories as $Set$ among categories. 
+The tree of objects of $Fam$ is the tree of sets, families 
+of sets, families of families of sets and so on, with a formally
+adjoined least element $1$.
+For $n, m \geq 0$, 
+if $1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n$
+and $1 \vartriangleleft B_1 \vartriangleleft \dots \vartriangleleft B_m$
+in $Fam$, then the set of morphisms of $A_n$ into $B_n$,
+is the set of $m$-tuples $\langle f_1, \dots, f_m \rangle$
+where $f_1, \dots, f_m$ are operators such that for each $1 \leq j \leq m$,
+for $a_1 : A_1, \dots, a_n : A_n(a_1, \dots, a_{n-1})$,
+$f_j(a_1, \dots, a_n) \in B_j(f_1(a_1, \dots, a_n), \dots, f_{j-1}(a_1, \dots, a_n))$.
+For $n = 0$, $Hom_{Fam}(1, B_m) = \{ 
+    \langle b_1, \dots, b_m \rangle | b_1 \in B_1, \dots, b_m \in B_m(b_1, \dots, b_{m-1})
+\}$. And for $m = 0$, $Hom_{Fam}(A_n, 1) = \{ \langle \rangle \}$,
+hence $1$ is the terminal object of $Fam$.
+To define composition in $Fam$ let 
+$1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n$,
+$1 \vartriangleleft B_1 \vartriangleleft \dots \vartriangleleft B_m$,
+$1 \vartriangleleft C_1 \vartriangleleft \dots \vartriangleleft C_w$,
+$\langle f_1, \dots, f_m \rangle : A_n \to B_m$ and 
+$\langle g_1, \dots, g_w \rangle : B_m \to C_w$, then 
+$\langle g_1, \dots, g_w \rangle 
+\circ \langle f_1, \dots, f_m \rangle 
+= \langle h_1, \dots, h_w \rangle$ where for all
+$1 \leq k \leq w$, $h_k$ is defined as
+\begin{equation*}
+    h_k(a_1, \dots, a_n) = g_k(f_1(a_1, \dots, a_n), \dots, f_m(a_1, \dots, a_n))
+\end{equation*}
+% TODO: Continue
