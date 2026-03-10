@@ -862,3 +862,24 @@ then we define $\langle f_1, \dots, f_m \rangle^*B$ as
 and $q(\langle f_1, \dots, f_m \rangle, B) = \langle f_1, \dots, f_m, \gamma \rangle$
 where $\gamma$ is the operator defined as \\ 
 $\gamma(a_1, \dots, a_n, b) = b$.
+
+Homomorphisms between contextual categories are called contextual functors:
+\begin{definition}
+    If $C$ and $C'$ are contextual categories, then a functor
+    $F: C \to C'$ is a \textbf{contextual functor} if
+    \begin{enumerate}
+        \item $F(1) = 1$ and if $A \vartriangleleft B$ in $C$, 
+              then $F(A) \vartriangleleft F(B)$ in $C'$;
+        \item for all $A \in Ob C$, $F(p(A)) = p(F(A))$;
+        \item for all $f$ and $B$ such that $f^*B$ is defined in $C$,
+              $F(f^*B) = F(f)^*F(B)$ and \\ 
+              $F(q(f, B)) = q(F(f), F(B))$.
+    \end{enumerate}
+\end{definition}
+The category of contextual category and contextual functors is named $Con$.
+
+Now we will introduce some final definitions and results regarding contextual categories.
+Consider $A \leq B$ in a contextual category $C$,
+then we define $p(B, A): B \to A$ in $C$, as
+
+% TODO: continue and use \projectionarrow
