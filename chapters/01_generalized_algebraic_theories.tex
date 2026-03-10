@@ -956,3 +956,23 @@ Hence we have a functor $C_\_ : C^{op} \to Con$.
     \end{tikzcd}
     \]
 \end{definition}
+
+Lastly we will introduce Functorial Semantics,
+first introduced by Lawvere for algebraic theories,
+it gives a way of defining the concept of model of a theory $U$
+using structure preserving functors between some category $C(U)$ 
+and a given canonical category.
+In the case of algebraic theories the canonical category is
+$Set$, but in clasical proposition theories the canonical category
+is the Boolean Algebra $\{ 0, 1\}$.
+In our situation, this category is the contextual category $Fam$.
+If $U$ is a generalized algebraic theory, then the category of 
+models of $U$ is equivalent to the category with
+contextual functors from $C(U)$ to $Fam$ as objects and
+natural transformations as morphisms. Thus we assert
+\begin{equation*}
+    U-alg \equiv ConFunc(C(U), Fam)
+\end{equation*}
+The inductive construction of $C(U)$ from $U$ allows us to replace
+the usual inductive definition of model of $U$ by the 
+definition "a model of $U$ is a contextual functor $M: C(U) \to Fam$".
