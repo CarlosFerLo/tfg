@@ -726,7 +726,7 @@ We name that morphism as $p(\langle x_1 : \Delta_1, \dots, x_{n+m} : \Delta_{n+m
 % TODO: should I prove this?
 This properties motivate the following definition:
 
-\begin{definition}
+\begin{definition} \label{def:contextual-category}
     A \textbf{contextual category} consists of
     \begin{enumerate}
         \item a category $C$ with a terminal object $1$;
@@ -748,9 +748,9 @@ This properties motivate the following definition:
               \]
               is a pullback in $C$ such that
               \begin{enumerate}
-                \item for all $A, B \in Ob C$ such that $A \vartriangleleft B$,
+                \item \label{item:axiom-I} for all $A, B \in Ob C$ such that $A \vartriangleleft B$,
                       $id_A^*B = B$ and $q(id_A, B) = id_B$;
-                \item when
+                \item \label{item:axiom-II} when
                     \[
                     \begin{tikzcd}
                         && B \arrow[d, open] \\
@@ -880,6 +880,79 @@ The category of contextual category and contextual functors is named $Con$.
 
 Now we will introduce some final definitions and results regarding contextual categories.
 Consider $A \leq B$ in a contextual category $C$,
-then we define $p(B, A): B \to A$ in $C$, as
+then we define $p(B, A): B \to A$ in $C$, written as
+$B \projectionarrow A$, by 
+$p(B, A) = p(X_1) \circ \dots \circ p(X_n) \circ p(B)$
+where $A \vartriangleleft X_1 \vartriangleleft \dots \vartriangleleft X_n \vartriangleleft B$
+in $C$.
+Analogously, whenever $A' \leq B$ in $C$ and $f: A \to A'$ in $C$,
+we have the following pullback:
+\[
+\begin{tikzcd}[column sep=4cm]
+    q(\dots q(f, X_1) \dots, X_n)^*B \arrow[r, "q(q(\dots q(f{,} X_1) \dots{,} X_n) {,} B)"] \arrow[d, projection] & B \arrow[d, projection] \\
+    A \arrow[r, "f"'] & A'
+\end{tikzcd}
+\]
+We can write it using the $^*$ notation for shorthand as:
+\[
+\begin{tikzcd}
+    f^*B \arrow[r, "q(f {,} B)"] \arrow[d, "p(f^*B {,} A)"', projection] & B \arrow[d, "p(B {,} A)", projection] \\
+    A \arrow[r, "f"'] & A'
+\end{tikzcd}
+\]
 
-% TODO: continue and use \projectionarrow
+\begin{lemma}
+    If $f: A \to A'$ and $A' \leq X \leq C$ in the contextual category $C$,
+    then $f^*B = q(f, X)^*B$ and $q(f, B) = q(q(f, X), B)$, 
+    .i.e the following diagram commutes:
+    \[
+    \begin{tikzcd}[column sep=huge]
+        q(f, X)^*B \arrow[r, "q(q(f {,} X) {,} B)"] \arrow[d, projection] & B \arrow[d, projection] \\
+        f^*X \arrow[r, "q(f {,} X)"] \arrow[d, projection] & X \arrow[d, projection] \\
+        A \arrow[r, "f"] & A'
+    \end{tikzcd}
+    \]    
+\end{lemma}
+
+For any contextual category $C$ and for $A$ an object of $C$
+we can define a contextual category $C_A$ (similar to $C/A$),
+whose tree of objects consists of the tree of those objects
+which appear above $A$ in $C$.
+More precisely, $Ob C_A = \{ B \in Ob C | A \leq B \}$ and
+for $B, B' \in Ob C_A$ we define $Hom_{C_A}(B, B')$ 
+as the set of morphisms $g: B \to B'$ in $C$ such that 
+the following diagram commutes:
+\[
+\begin{tikzcd}
+    B \arrow[r, "f"] \arrow[dr, projection] & B \arrow[d, projection] \\
+    & A
+\end{tikzcd}
+\]
+If we have a morphism ·$f: A \to A'$ in $C$, we define the 
+contextual functor $C_f: C_{A'} \to C_A$ that maps an object
+$B$ of $C_{A'}$ to $f^*B$ in $C_A$ 
+and a morphism $g: B \to B'$ to $f^*g$, the unique morphism
+from $f^*B$ to $f^*B'$ in $C_A$ such that
+$q(f, B') \circ f^*g = g \circ q(f, B)$.
+By condition \ref{item:axiom-I} of the definition \ref{def:contextual-category}
+we have that if $A \in Ob C$, then $C_{id_A} = id_{C_A}$.
+and by condition \ref{item:axiom-II} we have that if
+$f: A \to A'$ and $f': A' \to A''$ in $C$, then 
+$C_{f'} \circ C_f = C_{f' \circ f}$. 
+Hence we have a functor $C_\_ : C^{op} \to Con$.
+
+\begin{definition}
+    If $F: C \to C'$ is a contextual functor, then if 
+    $A \in Ob C$ let $F_A : C_A \to C'_{F(A)}$ be the restriction
+    of $F$ to $C_A$. 
+    Then $F_A$ is a contextual functor and 
+    $F_\_ : C_\_ \Rightarrow C'_{F(A)}$ is a natural transformation
+    \[
+    \begin{tikzcd}
+        C^{op} \arrow[dr, "C_\_", ""{name=A, pos=0.40}] \arrow[dd, "F"'] & \\
+        & Con \\
+        C'^{op} \arrow[ur, "C'_\_"', ""{name=B, pos=0.45}] &
+        \arrow[Rightarrow, from=A, to=B, "F_\_", shorten <=6pt, shorten >=0pt]
+    \end{tikzcd}
+    \]
+\end{definition}
