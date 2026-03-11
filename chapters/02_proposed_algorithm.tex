@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+\chapter{Proposed Algorithm}
+
+\section{Problem Definition}
+
+Let $U$ be a theory, given a derived rule of the form \(
+    \dfrac{
+        x_1 : \Delta_1, \dots, x_n : \Delta_n
+    }{
+        \Delta \text{ is a type}
+    }
+\) we want to find an expression $t$ of $U$ such that \(
+    \dfrac{
+        x_1 : \Delta_1, \dots, x_n : \Delta_n
+    }{
+        t : \Delta
+    }
+\) is a derived rule of $U$.
+
+We can consider the following equivalent problem: 
+Given an object $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n, x : \Delta \rangle$
+in $C(U)$, we want to find a morphism of the form 
+\begin{equation*}
+    \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle
+    \xrightarrow{\langle x_1, \dots, x_n, t \rangle}
+    \langle x_1 : \Delta_1, \dots, x_n : \Delta_n, x : \Delta \rangle
+\end{equation*}
+in $C(U)$.
