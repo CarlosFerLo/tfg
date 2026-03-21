@@ -132,7 +132,7 @@ of $G_n$.
               }{
                 F(z_1, \dots, z_n) : \Lambda
               }
-              \] ir the following morphisms exist
+              \] if the following morphisms exist
               \begin{align*} % TODO: fix alignment
                 \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A 
                 &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_A}
@@ -299,7 +299,7 @@ it is a subcategory.
     \end{align*}
     To do this, we will use how any of the rules \eqref{eq:underlying-rule-operator}
     are derived.
-    To do it, we must use one of the following derivation rules: T1, CF1 or CF2(a).
+    To do it, we must use one of the following derivation rules: T1, CF1 or CF2(b).
     Hence,
     \begin{itemize}
         \item if derived by T1, we have that both 
@@ -345,7 +345,222 @@ it is a subcategory.
                 \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_A
             \end{equation*}
             is constructible by expansion.
-        
-    \end{itemize}
+        \item if derived by CF1, we have that
+            \begin{equation*}
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}
+                }{
+                    \Omega_m \text{ is a type}
+                }
+            \end{equation*}
+            is a derived rule of $U$, where $y_m$ is a variable 
+            distinct from all $x_1, \dots, x_n$, $y_1, \dots, y_{m-1}$,
+            and that there exists an $i$, $1 \leq i \leq m$, such that
+            \begin{equation*} % TODO: fix overflow
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_{m} : \Omega_{m}
+                }{
+                    t_j : \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] 
+                }
+                \equiv
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_{m} : \Omega_{m}
+                }{
+                    y_i : \Omega_i 
+                }
+            \end{equation*}
+            Then, by induction hypothesis, the context
+            $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
+            is constructible by expansion. By applying the expansion
+            rule \ref{rule:variable-duplication} and an argument of 
+            equivalence similar to the one above, we get that 
+             \begin{equation*} % TODO: fix overflow
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A 
+                \xrightarrow{ \langle y_1, \dots, y_m, t_j \rangle_A }
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_A
+            \end{equation*}
+            is constructible by expansion.
 
+        \item if derived by CF2(b), there exists an operator symbol
+            $F$ with a well-formed introductory rule 
+            \begin{equation*}
+            \dfrac{
+                c_1 : \Gamma_1, \dots, c_v : \Gamma_v
+            }{
+                F(c_1, \dots, c_v) : \Gamma
+            }
+            \end{equation*}
+            and derived rules
+            \begin{align*}
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_m : \Delta_m
+                }{
+                    s_1 : \Gamma_1
+                } \\
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_m : \Delta_m
+                }{
+                    s_2 : \Gamma_2[s_1 | c_1]
+                } \\
+                \vdots \\
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_m : \Delta_m
+                }{
+                    s_v : \Gamma_v[s_1 | c_1, \dots, s_{v-1} | c_{v-1}]
+                }
+            \end{align*}
+            such that 
+            \begin{align*}
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_m : \Delta_m
+                }{
+                    \Gamma[s_1 | c_1, \dots, s_v | c_v] 
+                    = \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
+                } \\
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_m : \Delta_m
+                }{
+                    t_j = F(s_1, \dots, s_v) : \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
+                }
+            \end{align*}
+            are derived rules of $U$.
+            By the equivalence relation of identity of denotation,
+            we have to prove that the morphism
+            \begin{equation*} % TODO: fix overflow
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                \xrightarrow{\langle y_1, \dots, y_m, F(s_1, \dots, s_v) \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Gamma[s_1 | c_1, \dots, s_v | c_v] \rangle_A
+            \end{equation*}
+            is constructible by expansion.
+            By induction we have that the following morphisms are
+            constructible by expansion:
+            \begin{align*} % TODO: fix overflow
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                &\xrightarrow{\langle y_1, \dots, y_m, s_1 \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, c_1 : \Gamma_1 \rangle_A \\ 
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                &\xrightarrow{\langle y_1, \dots, y_m, s_2 \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, c_2 : \Gamma_2[s_1 | c_1] \rangle_A \\
+                &\vdots \\
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                &\xrightarrow{\langle y_1, \dots, y_m, s_v \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, c_v : \Gamma_v[s_1 | c_1, \dots, s_{v-1} | c_{v-1} ] \rangle_A
+            \end{align*}
+            Hence, by applying expansion rule \ref{rule:operator-symbol-intro}, we have that 
+            \begin{equation*} % TODO: fix overflow
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                \xrightarrow{\langle y_1, \dots, y_m, F(s_1, \dots, s_v) \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Gamma[s_1 | c_1, \dots, s_v | c_v] \rangle_A
+            \end{equation*}
+            is constructible by expansion as we wanted.
+    \end{itemize}
+    Now we will show tha the morphism 
+    \begin{equation*} % TODO: fix overflow
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+        \xrightarrow{\langle y_1, \dots, y_m, t_1, \dots, t_w \rangle_A}
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_1 : \Lambda_1, \dots, z_w : \Lambda_w \rangle_A
+    \end{equation*}
+    is constructible by expansion. To do this we will prove that given a $j$, $2 < j \leq n$, if
+    \begin{equation*} % TODO: fix overflow
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+        \xrightarrow{\langle y_1, \dots, y_m,  t_1, \dots, t_{j-1}\rangle_A}
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_1 : \Lambda_1, \dots, z_{j-1} : \Lambda_{j-1} \rangle_A
+    \end{equation*}
+    \begin{equation*} % TODO: fix overflow
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+        \xrightarrow{\langle y_1, \dots, y_m, t_j \rangle_A}
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_A
+    \end{equation*}
+    are constructible by expansion so is 
+    \begin{equation*} % TODO: fix overflow
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+        \xrightarrow{\langle y_1, \dots, y_m,  t_1, \dots, t_j\rangle_A}
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_1 : \Lambda_1, \dots, z_j : \Lambda_j-1 \rangle_A
+    \end{equation*}
+    By expansion rule \ref{rule:pullback}, the following diagram
+    is constructible by expansion:
+    \[
+    \begin{tikzcd} % TODO: fix overflow
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Lambda_j[t_1 | z_1, \dots, t_j | z_j]\rangle_A
+        \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots {,} t_{j-1} {,} z_j \rangle_A"]
+        \arrow[d, open] &
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_1 : \Lambda_1, \dots, z_j : \Lambda_j \rangle_A 
+        \arrow[d, open] \\
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+        \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots{,} t_{j-1} \rangle_A"] &
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_1 : \Lambda_1, \dots, z_{j-1} : \Lambda_{j-1} \rangle_A
+    \end{tikzcd}
+    \]
+    and by composition we get that 
+    \begin{equation*}
+        \langle y_1, \dots, y_m, t_1, \dots, t_{j-1}, z_j \rangle_A
+        \circ
+        \langle y_1, \dots, y_m, t_j \rangle_A
+        = 
+        \langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_A
+    \end{equation*}
+    is constructible by expansion.
+    It remains to see that the morphsim 
+    \begin{equation*}
+        \langle
+            y_1 : \Omega_1, \dots, y_m : \Omega_m,
+            z_1 : \Lambda_1, \dots, z_w : \Lambda_w
+        \rangle_A
+        \xrightarrow{\langle z_1, \dots, z_w \rangle_A}
+        \langle
+            z_1 : \Lambda_1, \dots, z_w : \Lambda_w
+        \rangle
+    \end{equation*}
+    is constructible by expansion. That comes directly from the 
+    fact that $\langle z_1 : \Lambda_1, \dots, z_w : \Lambda_w \rangle_A$
+    is a context and the repeated application of the rule \ref{rule:pullback}
+    as this diagram is constructible by expansion:
+    \[
+    \begin{tikzcd}
+        \langle 
+            y_1 : \Omega_1, \dots, y_m : \Omega_m
+            z_1 : \Lambda_1, \dots, z_w : \Omega_w
+        \rangle_A    
+        \arrow[r, "\langle z_1{,} \dots{,} z_w \rangle_A"]
+        \arrow[d, open] &
+        \langle
+            z_1 : \Lambda_1, \dots, z_w : \Omega_w
+        \rangle_A
+        \arrow[d, open] \\
+        \langle 
+            y_1 : \Omega_1, \dots, y_m : \Omega_m
+            z_1 : \Lambda_1, \dots, z_{w-1} : \Omega_{w-1}
+        \rangle_A    
+        \arrow[r, "\langle z_1{,} \dots{,} z_{w-1} \rangle_A"]
+        \arrow[d, open] &
+        \langle
+            z_1 : \Lambda_1, \dots, z_{w-1} : \Omega_{w-1}
+        \rangle_A
+        \arrow[d, open] \\
+        \vdots \arrow[d, open] & \vdots \arrow[d, open]\\
+        \langle 
+            y_1 : \Omega_1, \dots, y_m : \Omega_m,
+            z_1 : \Lambda_1
+        \rangle_A    
+        \arrow[r, "\langle z_1 \rangle_A"]
+        \arrow[d, open] &
+        \langle
+            z_1 : \Lambda_1
+        \rangle_A
+        \arrow[d, open] \\
+        \langle
+            y_1 : \Omega_1, \dots, y_m : \Omega_m
+        \rangle 
+        \arrow[r, "\langle \rangle_A"] &
+        \langle \rangle_A
+    \end{tikzcd}
+    \]
 \end{proof}
