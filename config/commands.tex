@@ -152,3 +152,14 @@
 % TODO: change this style
 \newcommand{\projectionarrow}{\mathrel{\tikz[baseline=-0.5ex]{\draw[-{Triangle[open]}] (0, 0) -- (1.2em,0);}}}
 \tikzset{projection/.style={-{Triangle[open]}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%% Rule Item %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\newcommand{\ruleitem}[2]{%
+  \item[#1]\def\@currentlabel{#1}\label{rule:#2}%
+}
+\makeatother

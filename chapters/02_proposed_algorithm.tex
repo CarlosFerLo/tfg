@@ -3,26 +3,349 @@
 
 \section{Problem Definition}
 
-Let $U$ be a theory, given a derived rule of the form \(
+In this section we will introduce a formal definition of our 
+problem, proposed at the beginning of the {\color{red} thesis}, % TODO: What do I put here?
+and reformulate it to an equivalent problem easier to solve.
+
+Our problem might be formalized in the following manner:
+given a theory $U$ and a derived rule of $U$ of the form 
+\begin{equation*}
     \dfrac{
         x_1 : \Delta_1, \dots, x_n : \Delta_n
     }{
         \Delta \text{ is a type}
     }
-\) we want to find an expression $t$ of $U$ such that \(
+\end{equation*}
+we want to find an expression of $U$ such that the rule 
+\begin{equation*}
     \dfrac{
         x_1 : \Delta_1, \dots, x_n : \Delta_n
     }{
-        t : \Delta
+        t : \Delta 
     }
-\) is a derived rule of $U$.
+\end{equation*}
+is a derived rule of $U$.
 
-We can consider the following equivalent problem: 
-Given an object $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n, x : \Delta \rangle$
-in $C(U)$, we want to find a morphism of the form 
+This problem is undecidable, in general, as it follows from the undecidability
+of the inhabitation in a $GAT$. This is why we won't try to find
+an algorithm that either finds a term or says that the type is empty.
+We aim to find an algorithm that in the case that the type is 
+inhabited, it will find a term in a finite number of steps.
+In the case that the type is empty, it does not have to give an
+output.
+
+We can consider this problem from the point of view of the 
+context category $C(U)$, where it is rephrased as:
+given a context $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
+in $C(U)$, we want to find a morphism 
 \begin{equation*}
+    \langle x_1, \dots, x_n, t \rangle :
     \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle
-    \xrightarrow{\langle x_1, \dots, x_n, t \rangle}
+    \rightarrow
     \langle x_1 : \Delta_1, \dots, x_n : \Delta_n, x : \Delta \rangle
 \end{equation*}
 in $C(U)$.
+Then if we name $A = \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$,
+this is equivalent to find a morphism $\langle t_1, \dots, t_n, t \rangle : \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle \to \langle x_1 : \Delta_1, \dots, x_n : \Delta_n, x : \Delta \rangle$ 
+in the category $C_A$, as by the following commutative diagram
+\[
+\begin{tikzcd}
+    A \arrow[rr, "\langle t_1 {,} \dots {,} t_n {,} t \rangle"] \arrow[dr, "id_A"'] & & \langle x_1 : \Delta_1, \dots, x_n : \Delta_n, x : \Delta \rangle \arrow[dl, "\langle x_1 {,} \dots {,} x_n \rangle"] \\
+    & A &
+\end{tikzcd}
+\]
+for each $1 \leq i \leq n$, $x_i = t_i$.
+This restriction holds for all morphism $f = \langle t_1, \dots, t_n, t_{n+1}, \dots, t_{n+m} \rangle : B \to B'$
+in $C_A$, by the commutativity of the diagram
+\[
+\begin{tikzcd}
+    B \arrow[rr, "f"] \arrow[dr, projection] & & B' \arrow[dl, projection] \\
+    & A &
+\end{tikzcd}
+\]
+$t_i = x_i$ for all $1 \leq i \leq n$. 
+That's why we will adopt the notation 
+$\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A$
+to represent $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n, y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
+and $f = \langle t_{n+1}, \dots, t_{n+m} \rangle_A$
+to represent $\langle x_1, \dots, x_n, t_{n+1}, \dots, t_{n+m} \rangle$
+in $C_A$.
+
+\section{Expansion algorithm}
+
+In this section we will expose the expansion algorithm,
+that will be responsible of finding the $\langle t \rangle_A$
+in $C_A$.
+
+First consider $G$ a finite subcategory of $C_A$ such that 
+it contains $\langle \rangle_A$, $\langle x: \Delta \rangle_A$
+and $p(\langle x : \Delta \rangle_A) : \langle x : \Delta \rangle_A \to \langle \rangle_A$.
+The process will consist in the construction of a sequence $\{ G_i \}_i$
+of finite subcategories of $C_A$ such that $G_0 = G$ and that 
+$G_{n+1}$ is a finite subcategory of $C_A$ 
+computed via the process described below from $G_n$
+and where $G_n \subseteq G_{n+1}$ for all $n \geq 0$.
+We say that an object/morphism of $C_A$ is \textbf{constructible by expansion}
+if there exists a $n \geq 0$ such that
+the given object/morphism is contained in $G_n$.
+The process of constructing $G_{n+1}$ from $G_n$ is consists on 
+applying the following rules to each context 
+$\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A$
+of $G_n$.
+\begin{itemize}
+    \ruleitem{E1}{sort-symbol-intro} For each sort symbol $A$ with a well-formed
+              introductory rule \[
+              \dfrac{
+                z_1 : \Lambda_1, \dots, z_n : \Lambda_n
+              }{
+                A(z_1, \dots, z_n) \text{ is a type}
+              }
+              \]
+              such that $G_n$ contains morphisms
+
+              \begin{align*} % TODO: fix alignment
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A 
+                &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_1 : \Lambda_1 \rangle_A \\
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_2 : \Lambda_2[t_1 | z_1] \rangle_A \\
+                \vdots \\
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_w : \Lambda_w[t_1 | z_1, \dots, t_{w-1} | z_{w-1}] \rangle_A \\
+              \end{align*}
+
+              then we add the context 
+              $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m, y : A(t_1, \dots, t_w) \rangle_A$
+              and its projection to $G_{n+1}$.
+    \ruleitem{E2}{variable-duplication} add the morphisms \[
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A 
+                \xrightarrow{\langle y_1, \dots, y_m, y_i \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, y: \Omega_i \rangle_A
+              \] and their corresponding projections
+              for each $0 \leq i \leq n$.
+    \ruleitem{E3}{operator-symbol-intro} for every operator symbol $F$ with a well-formed
+              introductory rule \[
+              \dfrac{
+                z_1 : \Lambda_1, \dots, z_n : \Lambda_n
+              }{
+                F(z_1, \dots, z_n) : \Lambda
+              }
+              \] ir the following morphisms exist
+              \begin{align*} % TODO: fix alignment
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A 
+                &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_1 : \Lambda_1 \rangle_A \\
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_2 : \Lambda_2[t_1 | z_1] \rangle_A \\
+                \vdots \\
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_w : \Lambda_w[t_1 | z_1, \dots, t_{w-1} | z_{w-1}] \rangle_A \\
+              \end{align*}
+              then we add the morphism
+              \[ % TODO: fix alignment
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                \xrightarrow{\langle y_1, \dots, y_m, F(t_1, \dots, t_w) \rangle_A}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_w : \Lambda[t_1 | z_1, \dots, t_w | z_w] \rangle_A \\
+              \]
+ 
+    \ruleitem{E4}{pullback} for every morphism 
+              \[
+              \langle t_1, \dots, t_{m-1} \rangle_A
+              : \langle z_1 : \Lambda_1, \dots, z_w : \Lambda_w \rangle_A 
+              \to \langle y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}\rangle_A
+              \]
+              we construct the corresponding pullback % TODO: fix alignment
+              \[
+              \begin{tikzcd}
+                \langle z_1: \Lambda_1, \dots, z_w : \Lambda_w, y_m : \Omega_m[t_1 | y_1, \dots, t_{m-1} | y_{m-1}]\rangle_A
+                \arrow[r, "\langle t_1{,} \dots{,} t_{m-1}{,} y_m \rangle_A"] \arrow[d, open] 
+                & \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+                \arrow[d, open] \\
+                \langle z_1 : \Lambda_1, \dots, z_w : \Lambda_w \rangle_A
+                \arrow[r, "\langle t_1 {,} \dots {,} t_{m-1} \rangle_A"]
+                & \langle y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1} \rangle_A
+              \end{tikzcd}
+              \]
+              in $G_{n+1}$.
+\end{itemize}
+Once we have applied the expansion rules to all of the contexts, 
+we complete $G_{n+1}$ with the composition morphisms to ensure
+it is a subcategory.
+
+\begin{theorem}
+    Every object and every morphism of $C_A$ is constructible by expansion.
+\end{theorem}
+\begin{proof}
+    We will proof this result by structural induction 
+    over the underlying derived rules corresponding to 
+    such object (context) or morphism (operator).
+
+    Consider a context 
+    $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A$
+    of $U$, which is the representative of an object in $C(U)$.
+    This means, by the definition of context, that its underlying rule 
+    \begin{equation}
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_n : \Delta_n, 
+            y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}
+        }{
+            \Omega_m \text{ is a type}
+        } \label{eq:underlying-rule-context}
+    \end{equation}
+    is a derived rule of $U$ and $y_m$ is a variable different to $x_1, \dots, x_n, y_1, \dots, y_{m-1}$.
+    Hence, the premise $\langle y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1} \rangle_A$
+    is a context and by induction it is constructible by
+    expansion, i.e. there exists $n_0 \in \mathbb{N}$ such that
+    $\langle y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1} \rangle_A \in G_{n_0}$.
+    As \eqref{eq:underlying-rule-context} is a derived rule,
+    it must have been derived by the only derivation rule that
+    has a $T$-rule as a conclusion: CF2(a).
+    Hence, there exists a sort symbol $S$ with a well-formed
+    introductory rule \(
+        \dfrac{
+            z_1 : \Lambda_1, \dots, z_w : \Lambda_w
+        }{
+            S(z_1, \dots, z_w) \text{ is a type}
+        }
+    \) and derived rules
+    \begin{align*}
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_n : \Delta_n,
+            y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}
+        }{
+            t_1 : \Lambda_1
+        }, \\
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_n : \Delta_n,
+            y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}
+        }{
+            t_2 : \Lambda_2[t_1 | z_1]
+        }, \\ \vdots \\ % TODO: solve alignment
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_n : \Delta_n,
+            y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}
+        }{
+            t_w : \Lambda_w[t_1 | z_1, \dots, t_{w-1} | z_{w-1}]
+        }
+    \end{align*}
+    By induction hypothesis their corresponding morphisms
+    \begin{multline*}
+        \langle y_1, \dots, y_{m-1}, t_j \rangle_A
+        : \langle y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1} \rangle_A
+        \to \\ 
+        \langle y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}, z_j : \Lambda[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_A
+    \end{multline*}
+    are constructible by expansion, so there exist in $G_{n_j}$
+    for some $n_j \in \mathbb{N}$.
+
+    Take $n = \max \{ n_0, n_1, \dots, n_j \}$. Then, all of
+    the objects, and morphisms mentioned belong to $G_n$ so 
+    by the expansion rule \ref{rule:sort-symbol-intro}, 
+    \[
+    \begin{tikzcd}
+        \langle y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1} \rangle_A
+        & \langle y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}, y_m : S(t_1, \dots, t_w) \rangle_A
+        \arrow[l, open]
+    \end{tikzcd}
+    \]
+    is included in $G_{n+1}$.
+    And by the equivalence of intended equivalence of denotation
+    \[
+        \langle y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}, y_m : S(t_1, \dots, t_w) \rangle_A
+        \equiv
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+    \]
+    so $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A$
+    is constructible by expansion.
+
+    Now consider an operator \[
+    \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+    \xrightarrow{\langle t_1, \dots, t_w \rangle}
+    \langle z_1 : \Lambda_1, \dots, z_w : \Lambda_w \rangle_A
+    \] a representative of a morphism in $C_A$. 
+    By induction hypothesis we know that both 
+    $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A$
+    and $\langle z_1 : \Omega_1, \dots, z_w : \Omega_w \rangle_A$
+    are constructible by expansion.
+
+    Moreover, as $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A$
+    is an operator, for each $1 \leq j \leq w$, the rule
+    \begin{equation}
+        \dfrac{
+            x_1 : \Delta_1, \dots, x_n : \Delta_n,
+            y_1 : \Omega_1, \dots, y_m : \Omega_m
+        }{
+            t_j : \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
+        }
+        \label{eq:underlying-rule-operator}
+    \end{equation}
+    is a derived rule of $U$.
+    Now we will see that the following morphisms are constructible by expansion:
+    \begin{align*} % TODO: solve alignment
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+        &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_A}
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_1 : \Lambda_1 \rangle_A \\
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+        &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_A}
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_2 : \Lambda_2[t_1 | z_1] \rangle_A \\
+        &\vdots \\
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A
+        &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_A}
+        \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_w : \Lambda_w[t_1 | z_1, \dots, t_{w-1} | z_{w-1}] \rangle_A 
+    \end{align*}
+    To do this, we will use how any of the rules \eqref{eq:underlying-rule-operator}
+    are derived.
+    To do it, we must use one of the following derivation rules: T1, CF1 or CF2(a).
+    Hence,
+    \begin{itemize}
+        \item if derived by T1, we have that both 
+            \begin{equation*}
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_m : \Omega_m
+                }{
+                    \Delta = \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
+                }
+            \end{equation*}
+            \begin{equation*}
+                \dfrac{
+                    x_1 : \Delta_1, \dots, x_n : \Delta_n,
+                    y_1 : \Omega_1, \dots, y_m : \Omega_m
+                }{
+                    t_j : \Delta
+                }
+            \end{equation*}
+            are derived rules of $U$.
+            So by the first rule, due to the equivalence realization
+            of identity of denotation, we know that 
+            \begin{multline*}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Delta \rangle_A
+                \equiv \\
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_A
+            \end{multline*}
+            hence they are the same object in $C_A$.
+            And by the second one, applying induction, we have that 
+            \begin{equation*}
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A 
+                \xrightarrow{ \langle y_1, \dots, y_m, t_j \rangle_A }
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Delta \rangle_A
+            \end{equation*}
+            is constructible by expansion, so as 
+            $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Delta \rangle_A$
+            and 
+            $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_A$
+            are the same object in $C_A$, then
+            \begin{equation*} % TODO: fix overflow
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle_A 
+                \xrightarrow{ \langle y_1, \dots, y_m, t_j \rangle_A }
+                \langle y_1 : \Omega_1, \dots, y_m : \Omega_m, z_j : \Lambda_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_A
+            \end{equation*}
+            is constructible by expansion.
+        
+    \end{itemize}
+
+\end{proof}
