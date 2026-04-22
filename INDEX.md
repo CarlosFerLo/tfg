@@ -5,15 +5,13 @@
  - introduction of Curry-Howard Isomorphism 
  - **problem rephrase**: generate a term from a type
 
-### Syntactic Generation
+### Simple Type Theory
  - minimal implicational logic + corresponding type theory
  - S and K are enough to generate everything
  - LLMs seem good way to go to generate SK-strings
  - **results**: almost never generate correct terms
  - **reason**: LLMs generate linearly, commit early to search paths 
     (beam search helps, agentic generation, ... *all fail*)
-
-## Functorial Semantics
  - Simply typed Type Theory
  - Lawvere functorial semantics
 
