@@ -1,17 +1,11 @@
 % !TEX root = ../main.tex
-\chapter[Generalized Algebraic Theories]{Generalized Algebraic Theories}
+\chapter{Generalized Algebraic Theories}
 
-The goal of this chapter is give meaning to the concept of 
-term, type and theory, while introducing some tools that we will
-use later when we present the algorithm.
-
-By theories we mean Generalized Algebraic Theories (or GATs), 
-introduced by John Cartmell in his thesis \cite{cartmell1978} \cite{cartmell1986}.
-GATs give us both a very idiomatic way of presenting
-theories and powerful interpretation tools like
-Context Categories, introduced later in this section.
-The notion of generalized algebraic theory is a generalization of
-the notion of many-sorted algebraic theory in the following manner:
+In this chapter we will present the notion of Generalized Algebraic
+Theory (or GAT), originally presented by J. Cartmell in his thesis \cite{cartmell1978} \cite{cartmell1986},
+abstracted from versions of Martin-L\"of type theory
+and is a generalization of the usual notion of a many-sorted 
+algebraic theory in the following manner:
 while in Martin L{\"o}ff's many-sorted algebraic theories sorts
 are constant types, interpreted as sets, in generalized
 algebraic theories sorts might be constant or variable,
@@ -23,6 +17,7 @@ algebraic theory consists of:
     \item a set of operators, with the sort of the arguments and value specified;
     \item a set of axioms, where each axiom is an identity between similar expressions. 
 \end{enumerate}
+
 Let's present category theory for example:
 The set of sorts contains two elements $Ob$ and $Hom$.
 $Ob$ is a constant type and $Hom$ is a variable type,
@@ -41,9 +36,9 @@ say $f$, and one of type $Hom(y, z)$, named $g$, and it returns
 a value of type $Hom(x, z)$.
 Here we see that the type of an argument might also vary depending
 on a previous argument.
-{\color{red}Informally, instead of writing $\circ(x, y, z, f, g)$ we can
+Informally, instead of writing $\circ(x, y, z, f, g)$ we can
 write $\circ(f, g)$, as the first three arguments might be inferred from the last two.
-This notation will be discussed in a further section.}
+This notation is discussed in the original paper \cite{cartmell1986}. 
 
 Now we will introduce the notation we will be using when talking 
 about terms and types. {\color{orange} This notation will be formally defined
@@ -292,109 +287,56 @@ Now we will tackle the problem of well-formedness of rules.
     A \textbf{theory} is a well-formed pretheory.
 \end{definition}
 
-\section{The Substitution Lemma}
-
+Lastly, we will introduce substitution.
 Given $\Delta, t_1, \dots, t_n$ expressions and $x_1, \dots, x_n$ variables,
 then we define the expression $\Delta[t_1 | x_1, \dots, t_n | x_n]$
 the result of simultaneous replacement of $x_1, \dots, x_n$ in $\Delta$
 by $t_1, \dots, t_n$. We call this the Substitution operation.
-
-The substitution lemma states that the set of derived rules of 
-a theory is closed under the operation of substitution of
-correctly typed terms for variables. 
+Then, as proven in the original paper \cite{cartmell1986}, 
+the set of derived rules of a theory is closed under the 
+operation of substitution of correctly typed terms 
+for variables.
 We could add substitution as one of the derivation rules
 but would make applying induction very messy.
 
-\begin{definition}
-    A derived rule of $\dfrac{y_1 | \Omega_1, \dots, y_n | \Omega_n}{Conclusion}$
-    of a theory $U$ is said to have the \textbf{substitution property}
-    if for all contexts $Q$ of $U$, for all expressions $s_1, \dots, s_m$ of $U$
-    if the rules
-    \begin{equation*}
-        \dfrac{Q}{s_1 : \Omega_1},
-        \dfrac{Q}{s_2 : \Omega_2[s_1 | y_1]},
-        \dots,
-        \dfrac{Q}{s_m : \Omega_m[s_1 | y_1, \dots, s_{m-1} | y_{m-1}]}
-    \end{equation*}
-    are all derived rules of $U$, then the rule 
-    \begin{equation*}
-        \dfrac{Q}{Conclusion[s_1 | y_1, \dots, s_m | y_m]}
-    \end{equation*}
-    is a derived rule of $U$.
-\end{definition}
-
-We will see that all derived rules hold this property.
-
-\begin{lemma}
-    If $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{Conclusion}$
-    is a derived rule of $U$, then any variable appearing in the conclusion
-    occurs among $\{ x_1, \dots, x_n \}$.
-\end{lemma}
-\begin{proof}
-    Easily obtained by applying induction over the derivation rules.
-\end{proof}
-
-\begin{lemma}
-    \begin{enumerate}
-        \item the premise of a derived rule is a context,
-        \item if $x_1 : \Delta_1, \dots, x_n : \Delta_n$ is a context,
-            then for all $1 \leq i \leq n$, then \\ 
-            $\dfrac{x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}}{\Delta_i \text{ is a type}}$
-            is a derived rule.
-    \end{enumerate}
-\end{lemma}
-\begin{proof}
-    % TODO: label derivation rules and complete proof.
-\end{proof}
-
-\begin{lemma}[The Substitution Lemma]
-    Every derived rule of a theory $U$ has the substitution property.
-\end{lemma}
-\begin{proof}
-    % TODO: label derivation rules and complete proof.
-\end{proof}
-
-\begin{corollary}[Change of Variables]
-    If $\dfrac{x_1 : \Delta_1, \dots, x_n : \Delta_n}{Conclusion}$
-    is a derived rule of $U$ and if $y_1, \dots, y_n$ is a sequence of distinct variables,
-    then
-    \begin{equation*}
-        \dfrac{
-            y_1 : \Delta_1, y_2 : \Delta_2[y_1 | x_1], \dots, y_n : \Delta_n[y_1 | x_1, \dots, y_{n-1} | x_{n-1}]
-        }{
-            Conclusion[y_1 | x_1, \dots, y_n | x_n]
-        }
-    \end{equation*}
-    is a derived rule of $U$.
-\end{corollary}
-
 \section{Models and Homomorphisms}
 
-In this section we will consider the semantics of a theory.
-To do this we will introduce the notion of model model
-homomorphism.
+With all the syntax defined, we will consider the semantics of a theory.
+To do this, we will introduce the notions of model and model homomorphism.
 
-First, we will set some notation and basic concepts. 
-We will consider a \textbf{tree} to be a tree with a unique
-least element, in the case that our tree does not have one
-we will add it. This element will be denoted as $1$.
-Let $\Theta$ be a tree. To denote that $A$ is a node of 
-$\Theta$ we will write $A \in \Theta$, confusing the 
-tree with its set of nodes. To assert that
-$B$ is a node of $\Theta$ and $B$ succeeds $A$, we 
-write $A \vartriangleleft B$ in $\Theta$.
-Also, if $A$ is a node of $\Theta$ and $A \neq 1$,
-there exists a unique $n \geq 0$ and $A_1, \dots, A_n$
-such that $1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n \vartriangleleft A$ in $\Theta$.
+First, we will set some notation and basic concepts.
 
-The set of contexts of a theory $U$ is structured as a tree.
-Where its least element is the empty context and for any $n \geq 1$
-the predecessor of $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
-is $\langle x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1} \rangle$.
+\begin{definition}
+    A \text{tree} is a pair $(N, father)$ where 
+    $N$ is a not empty set of nodes and 
+    $father: N \to N$ such that:
+    \begin{enumerate}
+        \item for all $A \in N$ there exists $n \in \omega$
+              such that $father^n(A) = father^{n+1}(A)$;
+        \item \label{item:tree-ii}
+              for all $A, B \in N$, if $A = father(A)$ and
+              $B = father(B)$, then $A = B$.
+    \end{enumerate}
+\end{definition}
+We will write $A \unlhd B$ if $A = father(B)$
+and $A \lhd B$ if $A \unlhd B$ and $A \neq B$.
+By condition \ref{item:tree-ii}, there is a unique
+least element of $N$, call it $1$.
+Finally we will define, for any $A \in N$,
+$level(A)$ to be the least $n \in \omega$ with 
+$father^n(A) = father^{n+1}(A)$.
 
-We want to consider the tree of sets, families of sets, families of families of sets, \dots
+The set of contexts of a theory is structured as a tree.
+Whit the empty context as it's least element and 
+\(
+    father (\langle x_1 : \Delta_1, \dots, x_n : \Delta_n\rangle)
+    = 
+    \langle x_1 : \Delta_1, \dots, \Delta_{n-1} \rangle
+\).
+
+We will also want to consider the tree of sets, families of sets, families of families of sets, \dots
 Consider the following notation for families:
-given $A$ is a set, if for every element $a \in A$ $B(a)$ is a set,
+given a set $A$, if for every element $a \in A$ $B(A)$ is a set,
 then the corresponding $A$-indexed family of sets is denoted as
 $\lambda a \in A . B(a)$ or as $\lambda a . B(a)$;
 If we have a set $C(a, b)$ for every $a \in A$ and $b \in B(a)$,
@@ -412,567 +354,3 @@ for all $a_n \in A_n(a_1, \dots, a_{n-1})$,
 $f(a_1, \dots, a_n) \in A(a_1, \dots, a_n)$. 
 We say that $\lambda a_1 \in A_1. \dots \lambda a_n \in A_n(a_1, \dots, a_{n-1}). f(a_1, \dots, a_n)$
 is an operator at $A$.
-
-Now we will introduce the notion of a model of a theory.
-It is important to understand that the derived rules are the ones
-to be interpreted by the model, not expressions. 
-To denote the interpretation of a rule $R$ by a model $M$
-we will use the superscripted $R^M$.
-
-\begin{definition}
-    Let $U$ be a theory. $M$ is a model of $U$ if 
-    \begin{enumerate}
-        \item for each derived $T$-rule $R$ of the form 
-            \(
-                \dfrac{
-                    x_1 : \Delta_1, \dots, x_n : \Delta_n
-                }{
-                    \Delta \text{ is a type}
-                }
-            \), if we consider the rules $R_i$ to be
-            \( 
-                \dfrac{
-                    x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}
-                }{
-                    \Delta_i \text{ is a type}
-                }
-            \) for all $1 \leq i \leq n$.
-            Then $M$ assigns those rules to 
-            $1 \vartriangleleft R_1^M \vartriangleleft R_2^M \vartriangleleft \dots \vartriangleleft R_n^M \vartriangleleft R^M$
-            in the tree of families;
-        \item if $R_t$ is a derived $\in$-rule of the form 
-            \(
-                \dfrac{
-                    x_1 : \Delta_1, \dots, x_n : \Delta_n
-                }{
-                    t : \Delta 
-                }
-            \), following the notation of the previous point,
-            $M$ assigns the rule to $R_t^M$ an operator at $R^M$.
-    \end{enumerate}
-\end{definition}
-
-\begin{definition}
-    If $M$ and $M'$ are models of $U$, $f : M \to M'$
-    is a \textbf{homomorphism} if
-    \begin{enumerate}
-        \item for every derived $T$-rule $R$ of the form \(
-                \dfrac{
-                    x_1 : \Delta_1, \dots, x_n : \Delta_n
-                }{
-                    \Delta \text{ is a type}
-                }
-            \) there is an operator $f_R$ such that
-            for every $a_1 \in R_1^M$, \dots, for every $a_n \in R_n^M(a_1, \dots, a_{n-1})$
-            and for every $a \in R^M(a_1, \dots, a_n)$,
-            \[
-                f_R(a_1, \dots, a_n, R_t^M(a_1, \dots, a_n)) \in
-                R^{M'}(f_{R_1}(a_1), \dots, f_{R_n}(a_1, \dots, a_n))
-            \]
-        \item for all derived $\in$-rules $R_t$ of the form \(
-                \dfrac{
-                    x_1 : \Delta_1, \dots, x_n : \Delta_n
-                }{
-                    t : \Delta
-                }
-            \), for all $a_1 \in R_1^M, \dots, a_n \in R_n^M(a_1, \dots, a_{n-1})$,
-            \begin{equation*}
-                f_R(a_1, \dots, a_n, R_t^M(a_1, \dots, a_n)) =
-                R_t^{M'}(f_{R_1}(a_1), \dots, f_{R_n}(a_1, \dots, a_n))
-            \end{equation*}
-        \item if \(
-                \dfrac{
-                    x_1 : \Delta_1, \dots, x_n : \Delta_n
-                }{
-                    \Delta = \Delta'
-                }
-            \) is a derived rule of $U$, then $f_R = f_{R'}$,
-            where $R$ and $R'$ are the rules \(
-                \dfrac{
-                    x_1 : \Delta_1, \dots, x_n : \Delta_n
-                }{\Delta \text{ is a type}}
-            \) and \(
-                \dfrac{
-                    x_1 : \Delta_1, \dots, x_n : \Delta_n
-                }{\Delta' \text{ is a type}}
-            \) respectively.
-    \end{enumerate}
-\end{definition}
-
-To define a homomorphism it is enough to give a family 
-$\lambda A \in S. f_A$ of correctly typed operators, where
-$S$ is the set of sort symbols of $U$.
-
-The category of models and homomorphisms of a theory $U$ is named $U-alg$.
-
-We want to create an equivalence relation on the derived $T$- and $\in$-rules
-of a theory $U$ which we call the \textbf{equivalence relation of identity of denotation}
-such that $R \equiv R'$ by this relation if any model should 
-interpret $R$ and $R'$ as identical objects.
-
-\begin{example}
-    Semantically we should not distinguish between the rules
-
-    \begin{minipage}{0.4\textwidth} % TODO: fix alignment
-    \begin{equation*}
-        \dfrac{
-            x_1 : \Delta_1, \dots, x_n : \Delta_n
-        }{
-            \Delta \text{ is a type}
-        }
-    \end{equation*}
-    \end{minipage}
-    \begin{minipage}{0.6\textwidth}
-    \begin{equation*}
-        \dfrac{
-            x'_1 : \Delta_1, \dots, x'_n : \Delta_n[x'_1 | x_1, \dots, x'_{n-1} | x_{n-1}]
-        }{
-            \Delta[x'_1 | x_1, \dots, x'_n | x_n] \text{ is a type}
-        }
-    \end{equation*}
-    \end{minipage}
-    that only differ on the choice of the variables.
-\end{example}
-
-\begin{example}
-    We should not distinguish either between 
-
-    \begin{minipage}{0.5\textwidth} % TODO: fix alignment
-    \begin{equation*}
-        \dfrac{
-            x_1 : \Delta_1, \dots, x_n : \Delta_n
-        }{
-            \Delta \text{ is a type}
-        }
-    \end{equation*}
-    \end{minipage}
-    \begin{minipage}{0.5\textwidth}
-    \begin{equation*}
-        \dfrac{
-            x_1 : \Delta'_1, \dots, x_n : \Delta'_n
-        }{
-            \Delta' \text{ is a type}
-        }
-    \end{equation*}
-    \end{minipage}
-    if for each $i$, $1 \leq i \leq n$, \(
-        \dfrac{
-            x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}
-        }{
-            \Delta_i = \Delta'_i
-        }
-    \) and \(
-        \dfrac{
-            x_1 : \Delta_1, \dots, x_n : \Delta_n
-        }{
-            \Delta = \Delta'
-        }
-    \).
-\end{example}
-
-We define the relation $\equiv$:
-\begin{itemize}
-    \item between the $T$-rules of a theory $U$ by
-        \begin{equation*}
-            \dfrac{
-                x_1 : \Delta_1, \dots, x_n : \Delta_n
-            }{
-                \Delta_{n+1} \text{ is a type}
-            }
-            \equiv
-            \dfrac{
-                y_1 : \Omega_1, \dots, y_m : \Omega_m
-            }{
-                \Omega_{m+1} \text{ is a type}
-            }
-        \end{equation*}
-        if, and only if, $m = n$ and for each $1 \leq i \leq n + 1$
-        \begin{equation*}
-            \dfrac{
-                x_1 : \Delta_1, \dots, x_{i-1} : \Delta_{i-1}
-            }{
-                \Delta_i = \Omega_i[x_1 | y_1, \dots, x_{i-1} | y_{i-1}]
-            }
-        \end{equation*}
-        is a derived rule of $U$.
-    \item between $\in$-rules by 
-        \begin{equation*}
-            \dfrac{
-                x_1 : \Delta_1, \dots, x_n : \Delta_n
-            }{
-                t : \Delta
-            }
-            \equiv
-            \dfrac{
-                y_1 : \Omega_1, \dots, y_m : \Omega_m
-            }{
-                s : \Omega
-            }
-        \end{equation*}
-        if, and only if,
-        \begin{equation*}
-            \dfrac{
-                x_1 : \Delta_1, \dots, x_n : \Delta_n
-            }{
-                \Delta \text{ is a type}
-            }
-            \equiv
-            \dfrac{
-                y_1 : \Omega_1, \dots, y_m : \Omega_m
-            }{
-                \Omega \text{ is a type}
-            }
-        \end{equation*}
-        and \(
-            \dfrac{
-                x_1 : \Delta_1, \dots, x_n : \Delta_n
-            }{
-                t = s[x_1 | y_1, \dots, x_n | y_n] : \Delta
-            }
-        \) is a derived rule of $U$.
-\end{itemize}
-
-\section{Contexts and Realizations}
-
-In this section we will introduce context categories, a powerful
-interpretation of general algebraic theories that will be key 
-later on. We will start by defining the category of contexts and realizations of a theory $U$.
-
-\begin{definition}
-    If $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
-    and $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
-    are contexts of $U$, then a \textbf{realization} of 
-    $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
-    with regard of $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
-    is a $m$-tuple $\langle t_1, \dots, t_m \rangle$
-    such that for each $j$, $1 \leq j \leq m$, the rule
-    \begin{equation*}
-        \dfrac{
-            x_1 : \Delta_1, \dots, x_n : \Delta_n
-        }{
-            t_j : \Omega_j[t_1 | y_1, \dots, t_{j-1} | y_{j-1}]
-        }
-    \end{equation*}
-    is a derived rule of $U$.
-\end{definition}
-
-Then, for a theory $U$, we define the category of contexts and realizations of $U$,
-$R(U)$, as the category whose objects are contexts of $U$,
-and where we have a morphism 
-\begin{equation*}
-    \langle t_1, \dots, t_m \rangle : 
-    \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle 
-    \longrightarrow 
-    \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle
-\end{equation*}
-for each realization $\langle t_1, \dots, t_m \rangle$
-of $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
-with regard of $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$.
-The identity of an object $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
-is the realization $\langle x_1, \dots, x_n \rangle$.
-And the composition of two morphisms
-\begin{equation*}
-    \langle t_1, \dots, t_m \rangle : 
-    \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle 
-    \longrightarrow 
-    \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle
-\end{equation*}
-\begin{equation*}
-    \langle s_1, \dots, s_w \rangle : 
-    \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle
-    \longrightarrow
-    \langle z_1 : \Lambda_1, \dots, z_w : \lambda_w \rangle
-\end{equation*}
-is defined as
-\begin{equation*}
-    \langle s_1, \dots, s_w \rangle \circ \langle t_1, \dots, t_m \rangle =
-    \langle s_1[t_1 | y_1, \dots, t_m | y_m], \dots, s_w[t_1 | y_1, \dots, t_m | y_m] \rangle
-\end{equation*}
- 
-The set of objects of $R(U)$ i.e. the set of contexts of $U$
-is structured as a tree with a single least element $\langle \rangle$,
-the empty context, and where every context $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n$
-is preceded by $x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1}$.
-Moreover, for any context $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n, x_{n+1} : \Delta_{n+1}, \dots, x_{n+m} : \Delta_{n+m} \rangle$
-of $U$, $\langle x_1, \dots, x_n \rangle$ is a realization of
-$\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$
-with respect to $\langle x_1 : \Delta_1, \dots, x_{n+m} : \Delta_{n+m} \rangle$.
-We name that morphism as $p(\langle x_1 : \Delta_1, \dots, x_{n+m} : \Delta_{n+m}\rangle, \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle )$.
-
-\begin{lemma}
-    If $A = \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$,
-    $A' = \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$ and
-    $B = \langle y_1 : \Omega_1, \dots, y_{m+w} : \Omega_{m+w}$ 
-    are contexts, and $f = \langle t_1, \dots, t_m \rangle$
-    is a realization of $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
-    with regard to $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$,
-    then 
-    \[
-    \begin{tikzcd}
-        f^*B \arrow[r, "q(f {,} B)"] \arrow[d, "p(f^*B {,} A)"'] & B \arrow[d, "p(B {,} A')"] \\
-        A \arrow[r, "f"'] & A'
-    \end{tikzcd}
-    \]
-    is a pullback diagram in $R(U)$, where
-    \begin{multline*}
-    f^*B = \langle x_1 : \Delta_1, \dots, x_n : \Delta_n, y_{m+1} : \Omega_{m+1}[t_1 | y_1, \dots, t_m | y_m], \\
-    \dots, y_{m+w} : \Omega_{m+w}[t_1 | y_1, \dots, t_m | y_m] \rangle    
-    \end{multline*}
-    \begin{equation*}
-        q(f, B) = \langle t_1, \dots, t_m, y_{m+1}, \dots, y_{m+w} \rangle
-    \end{equation*}
-\end{lemma}
-
-% TODO: should I prove this?
-This properties motivate the following definition:
-
-\begin{definition} \label{def:contextual-category}
-    A \textbf{contextual category} consists of
-    \begin{enumerate}
-        \item a category $C$ with a terminal object $1$;
-        \item a tree structure on the objects of $C$ such that
-              the terminal object $1$ is the unique least element
-              of the tree;
-        \item for all $A, B \in Ob C$ such that $A \vartriangleleft B$
-              a morphism $p(B) : B \to A$ in $C$ and that will be
-              written as $B \openrightarrow A$;
-        \item for all $A, A' \in Ob C$ and for all $f: A \to A'$ in $C$,
-              for all $B \in Ob C$ such that $A' \vartriangleleft B$,
-              an object $f^*B$ in $C$ and a morphism $q(f, B): f^*B \to B$
-              such that the diagram
-              \[
-                \begin{tikzcd}
-                    f^*B \arrow[r, "q(f {,} B)"] \arrow[d, open] & B \arrow[d, open] \\
-                    A \arrow[r, "f"'] & A'
-                \end{tikzcd}
-              \]
-              is a pullback in $C$ such that
-              \begin{enumerate}
-                \item \label{item:axiom-I} for all $A, B \in Ob C$ such that $A \vartriangleleft B$,
-                      $id_A^*B = B$ and $q(id_A, B) = id_B$;
-                \item \label{item:axiom-II} when
-                    \[
-                    \begin{tikzcd}
-                        && B \arrow[d, open] \\
-                        A \arrow[r, "f"] & A' \arrow[r, "f'"] & A''
-                    \end{tikzcd}
-                    \]
-                    in $C$, then $(f' \circ f)^*B = f^*(f'^*B)$
-                    and $q(f' \circ f, B) = q(f', B) \circ q(f, f'^*B)$.
-              \end{enumerate}
-    \end{enumerate}
-\end{definition}
-
-The category $R(U)$ is structured as a contextual category by the 
-tree structure and pullbacks defined earlier.
-
-The contextual category $R(U)$ has an homomorphic image $C(U)$
-induced by the equivalence relation of intended equivalence of denotation.
-More precisely, $C(U)$ is the category of equivalence classes
-of contexts and realizations under the following relation:
-\begin{itemize}
-    \item Among contexts:
-        \begin{equation*}
-            \langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle
-            \equiv
-            \langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle
-        \end{equation*}
-        if, and only if,
-        \begin{equation*}
-            \dfrac{
-                x_1 : \Delta_1, \dots, x_{n-1} : \Delta_{n-1}
-            }{
-                \Delta_n \text{ is a type}
-            }
-            \equiv
-            \dfrac{
-                y_1 : \Omega_1, \dots, y_{m-1} : \Omega_{m-1}
-            }{
-                \Omega_m \text{ is a type}
-            }
-        \end{equation*}
-    \item If we have two realizations 
-    $\lambda t_1, \dots, t_m \rangle$ of $\langle y_1 : \Omega_1, \dots, y_m : \Omega_m \rangle$
-    with regard to $\langle x_1 : \Delta_1, \dots, x_n : \Delta_n \rangle$, and
-    $\lambda s_1, \dots, s_m \rangle$ of $\langle y'_1 : \Omega'_1, \dots, y'_m : \Omega'_m \rangle$
-    with regard to $\langle x'_1 : \Delta'_1, \dots, x'_n : \Omega'_n \rangle$,
-    we say that $\langle t_1, \dots, t_m \rangle \equiv \langle s_1, \dots, s_m \rangle$
-    if, and only if, for each $1 \leq j \leq m$,
-    \begin{equation*}
-        \dfrac{
-            x_1 : \Delta_1, \dots, x_n : \Delta_n
-        }{
-            t_j : \Omega_j[t_1 | y_1, \dots, t_{j-1} | y_{j-1}]
-        }
-        \equiv
-        \dfrac{
-            x'_1 : \Delta'_1, \dots, x'_n : \Delta'_n
-        }{
-            s_j : \Omega'_j[s_1 | y'_1, \dots, s_{j-1} | y'_{j-1}]
-        }
-    \end{equation*}
-\end{itemize}
-
-We will define $Fam$, a category that plays the same role
-among contextual categories as $Set$ among categories. 
-The tree of objects of $Fam$ is the tree of sets, families 
-of sets, families of families of sets and so on, with a formally
-adjoined least element $1$.
-For $n, m \geq 0$, 
-if $1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n$
-and $1 \vartriangleleft B_1 \vartriangleleft \dots \vartriangleleft B_m$
-in $Fam$, then the set of morphisms of $A_n$ into $B_n$,
-is the set of $m$-tuples $\langle f_1, \dots, f_m \rangle$
-where $f_1, \dots, f_m$ are operators such that for each $1 \leq j \leq m$,
-for $a_1 : A_1, \dots, a_n : A_n(a_1, \dots, a_{n-1})$,
-$f_j(a_1, \dots, a_n) \in B_j(f_1(a_1, \dots, a_n), \dots, f_{j-1}(a_1, \dots, a_n))$.
-For $n = 0$, $Hom_{Fam}(1, B_m) = \{ 
-    \langle b_1, \dots, b_m \rangle | b_1 \in B_1, \dots, b_m \in B_m(b_1, \dots, b_{m-1})
-\}$. And for $m = 0$, $Hom_{Fam}(A_n, 1) = \{ \langle \rangle \}$,
-hence $1$ is the terminal object of $Fam$.
-To define composition in $Fam$ let 
-$1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n$,
-$1 \vartriangleleft B_1 \vartriangleleft \dots \vartriangleleft B_m$,
-$1 \vartriangleleft C_1 \vartriangleleft \dots \vartriangleleft C_w$,
-$\langle f_1, \dots, f_m \rangle : A_n \to B_m$ and 
-$\langle g_1, \dots, g_w \rangle : B_m \to C_w$, then 
-$\langle g_1, \dots, g_w \rangle 
-\circ \langle f_1, \dots, f_m \rangle 
-= \langle h_1, \dots, h_w \rangle$ where for all
-$1 \leq k \leq w$, $h_k$ is defined as
-\begin{equation*}
-    h_k(a_1, \dots, a_n) = g_k(f_1(a_1, \dots, a_n), \dots, f_m(a_1, \dots, a_n))
-\end{equation*}
-And to define the projections, we consider
-$1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n \vartriangleleft A$
-in $Fam$, then we consider $p(A) : A \to A_n$ in $Fam$ given by
-\begin{equation*}
-    p(A) = \langle h_1, \dots, h_n \rangle; \quad h_i(a_1, \dots, a_n, a) = a_i
-\end{equation*}
-Finally, we will define the pullbacks. Let 
-$1 \vartriangleleft A_1 \vartriangleleft \dots \vartriangleleft A_n$,
-$1 \vartriangleleft B_1 \vartriangleleft \dots \vartriangleleft B_m \vartriangleleft B$
-in $Fam$ and $\langle f_1, \dots, f_m \rangle : A_n \to B_m$ in $Fam$,
-then we define $\langle f_1, \dots, f_m \rangle^*B$ as
-\begin{multline*}
-    \lambda a_1 \in A_1. \lambda a_2 \in A_2(a_1).
-    \dots \lambda a_n \in A_n(a_1, \dots, a_{n-1}). \\ 
-    B(f_1(a_1, \dots, a_n), \dots, f_m(a_1, \dots, a_n))
-\end{multline*}
-and $q(\langle f_1, \dots, f_m \rangle, B) = \langle f_1, \dots, f_m, \gamma \rangle$
-where $\gamma$ is the operator defined as \\ 
-$\gamma(a_1, \dots, a_n, b) = b$.
-
-Homomorphisms between contextual categories are called contextual functors:
-\begin{definition}
-    If $C$ and $C'$ are contextual categories, then a functor
-    $F: C \to C'$ is a \textbf{contextual functor} if
-    \begin{enumerate}
-        \item $F(1) = 1$ and if $A \vartriangleleft B$ in $C$, 
-              then $F(A) \vartriangleleft F(B)$ in $C'$;
-        \item for all $A \in Ob C$, $F(p(A)) = p(F(A))$;
-        \item for all $f$ and $B$ such that $f^*B$ is defined in $C$,
-              $F(f^*B) = F(f)^*F(B)$ and \\ 
-              $F(q(f, B)) = q(F(f), F(B))$.
-    \end{enumerate}
-\end{definition}
-The category of contextual category and contextual functors is named $Con$.
-
-Now we will introduce some final definitions and results regarding contextual categories.
-Consider $A \leq B$ in a contextual category $C$,
-then we define $p(B, A): B \to A$ in $C$, written as
-$B \projectionarrow A$, by 
-$p(B, A) = p(X_1) \circ \dots \circ p(X_n) \circ p(B)$
-where $A \vartriangleleft X_1 \vartriangleleft \dots \vartriangleleft X_n \vartriangleleft B$
-in $C$.
-Analogously, whenever $A' \leq B$ in $C$ and $f: A \to A'$ in $C$,
-we have the following pullback:
-\[
-\begin{tikzcd}[column sep=4cm]
-    q(\dots q(f, X_1) \dots, X_n)^*B \arrow[r, "q(q(\dots q(f{,} X_1) \dots{,} X_n) {,} B)"] \arrow[d, projection] & B \arrow[d, projection] \\
-    A \arrow[r, "f"'] & A'
-\end{tikzcd}
-\]
-We can write it using the $^*$ notation for shorthand as:
-\[
-\begin{tikzcd}
-    f^*B \arrow[r, "q(f {,} B)"] \arrow[d, "p(f^*B {,} A)"', projection] & B \arrow[d, "p(B {,} A)", projection] \\
-    A \arrow[r, "f"'] & A'
-\end{tikzcd}
-\]
-
-\begin{lemma}
-    If $f: A \to A'$ and $A' \leq X \leq C$ in the contextual category $C$,
-    then $f^*B = q(f, X)^*B$ and $q(f, B) = q(q(f, X), B)$, 
-    .i.e the following diagram commutes:
-    \[
-    \begin{tikzcd}[column sep=huge]
-        q(f, X)^*B \arrow[r, "q(q(f {,} X) {,} B)"] \arrow[d, projection] & B \arrow[d, projection] \\
-        f^*X \arrow[r, "q(f {,} X)"] \arrow[d, projection] & X \arrow[d, projection] \\
-        A \arrow[r, "f"] & A'
-    \end{tikzcd}
-    \]    
-\end{lemma}
-
-For any contextual category $C$ and for $A$ an object of $C$
-we can define a contextual category $C_A$ (similar to $C/A$),
-whose tree of objects consists of the tree of those objects
-which appear above $A$ in $C$.
-More precisely, $Ob C_A = \{ B \in Ob C | A \leq B \}$ and
-for $B, B' \in Ob C_A$ we define $Hom_{C_A}(B, B')$ 
-as the set of morphisms $g: B \to B'$ in $C$ such that 
-the following diagram commutes:
-\[
-\begin{tikzcd}
-    B \arrow[r, "f"] \arrow[dr, projection] & B \arrow[d, projection] \\
-    & A
-\end{tikzcd}
-\]
-If we have a morphism ·$f: A \to A'$ in $C$, we define the 
-contextual functor $C_f: C_{A'} \to C_A$ that maps an object
-$B$ of $C_{A'}$ to $f^*B$ in $C_A$ 
-and a morphism $g: B \to B'$ to $f^*g$, the unique morphism
-from $f^*B$ to $f^*B'$ in $C_A$ such that
-$q(f, B') \circ f^*g = g \circ q(f, B)$.
-By condition \ref{item:axiom-I} of the definition \ref{def:contextual-category}
-we have that if $A \in Ob C$, then $C_{id_A} = id_{C_A}$.
-and by condition \ref{item:axiom-II} we have that if
-$f: A \to A'$ and $f': A' \to A''$ in $C$, then 
-$C_{f'} \circ C_f = C_{f' \circ f}$. 
-Hence we have a functor $C_\_ : C^{op} \to Con$.
-
-\begin{definition}
-    If $F: C \to C'$ is a contextual functor, then if 
-    $A \in Ob C$ let $F_A : C_A \to C'_{F(A)}$ be the restriction
-    of $F$ to $C_A$. 
-    Then $F_A$ is a contextual functor and 
-    $F_\_ : C_\_ \Rightarrow C'_{F(A)}$ is a natural transformation
-    \[
-    \begin{tikzcd}
-        C^{op} \arrow[dr, "C_\_", ""{name=A, pos=0.40}] \arrow[dd, "F"'] & \\
-        & Con \\
-        C'^{op} \arrow[ur, "C'_\_"', ""{name=B, pos=0.45}] &
-        \arrow[Rightarrow, from=A, to=B, "F_\_", shorten <=6pt, shorten >=0pt]
-    \end{tikzcd}
-    \]
-\end{definition}
-
-Lastly we will introduce Functorial Semantics,
-first introduced by Lawvere for algebraic theories,
-it gives a way of defining the concept of model of a theory $U$
-using structure preserving functors between some category $C(U)$ 
-and a given canonical category.
-In the case of algebraic theories the canonical category is
-$Set$, but in clasical proposition theories the canonical category
-is the Boolean Algebra $\{ 0, 1\}$.
-In our situation, this category is the contextual category $Fam$.
-If $U$ is a generalized algebraic theory, then the category of 
-models of $U$ is equivalent to the category with
-contextual functors from $C(U)$ to $Fam$ as objects and
-natural transformations as morphisms. Thus we assert
-\begin{equation*}
-    U-alg \equiv ConFunc(C(U), Fam)
-\end{equation*}
-The inductive construction of $C(U)$ from $U$ allows us to replace
-the usual inductive definition of model of $U$ by the 
-definition "a model of $U$ is a contextual functor $M: C(U) \to Fam$".
