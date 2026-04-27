@@ -414,3 +414,110 @@ Rules for Propositions
 \end{enumerate}
 
 We will write $\vdash \mathcal{J}$ to say that $\mathcal{J}$ is a derivable judgement.
+
+\section{Doctrines of Constructions}
+
+We will leverage the concept of context categories introduced in the earlier chapter
+to serve as a basic structure for handling dependent types, and add more conditions
+so that it can handle products of families of types and the type of properties, in
+order to develop a categorical structure that captures the interpretation of the
+Calculus of constructions.
+
+First, we will introduce product types into our semantics, but to do so, we need
+the notion of section of an object:
+\begin{definition}
+    Let $\mathcal{C}$ be a contextual category, $A$ and $B$ be objects of $\mathcal{C}$ such that $A \lhd B$,
+    the set of \textbf{sections} of $B$ is defined as 
+    \begin{equation*}
+        \Sections(B) \coloneqq \{ s \colon A \to B  \mid\ p(B) \circ s = \id_A\}
+    \end{equation*}
+\end{definition}
+If $\level(B) = 1$, then 
+\[
+    \Sections(B) = \{ s \mid\ s \colon 1 \to B \}
+\]
+as any morphism $s \colon 1 \to B$ satisfies $p(B) \circ s = \id_1$ as 
+$1$ is a terminal object. In this case, the notion of section
+matches the notion of \textit{global element} of $B$.
+
+\begin{definition}
+    A \textbf{contextual category with products of families of types} is a category $\mathcal{C}$
+    together with two mappings $\prod$ and $\eval$ defined over the collection of objects $B$ of 
+    $\mathcal{C}$ with $level(B) \geq 2$, such that:
+    \begin{enumerate}
+        \item whenever $1 \lhd A \lhd B$, then $1 \lhd \prod(B)$ and $eval_B \colon p(A)^*\prod(B) \to B$
+              is a morphism over $A$
+              \[
+              \begin{tikzcd}
+                p(A)^*\prod(B) \arrow[rr, "\eval_B"] \arrow[dr, "p(p(A)^*\prod(B))"', open]&& B \arrow[dl, "p(B)", open] \\
+                & A &
+              \end{tikzcd}
+              \]
+              such that for all $s \in \Sections(B)$ there is a unique section $t \in \Sections(\prod (B))$
+              with $\eval_B \circ p(A)^*t = s$. This unique section $t$ is called $\curry(s)$.
+              \[
+                \begin{tikzcd}
+                A \arrow[rr, open] \arrow[ddd, "\id_A"', bend right=85] \arrow[d, "p(A)^*t"] \arrow[dd, "s"', bend right=80] &  & 1 \arrow[d, "t"'] \arrow[ddd, "\id_1", bend left=80]   \\
+                p(A)^*\prod(B) \arrow[d, "\eval_B"] \arrow[rr, "{q(p(A), \prod(B))}"']                                       &  & \prod(B) \arrow[dd, open]                              \\
+                B \arrow[d, open]                                                                                                  &  &                                                  \\
+                A \arrow[rr, open]                                                                                                 &  & 1                                               
+                \end{tikzcd}
+              \]
+              \begin{observation}
+                as any section $t$ of $\prod(B)$ gives a section $eval_B \circ p(A)^*t$ of $B$, hence we have a
+                canonical 1-1-correspondence of $\Sections(B)$ and $\Sections(\prod(B))$. 
+              \end{observation}
+        \item and for any object $J$ and any morphism $f : J \to 1$ the following conditions are satisfied
+              \[
+                f^*(\prod(B)) = \prod(f^*B) 
+                \quad \text{and} \quad 
+                f^*(eval_B) = eval_{f^*B}
+              \]
+    \end{enumerate}
+\end{definition}
+
+It follows from the definition that substitution preserves functional abstraction or currying:
+\begin{lemma}
+    Let $\mathcal{C}$ be a contextual category with products of families of types.
+    Let $1 \lhd A \lhd B$ be objects and $f \colon J \to 1$ a morphism in $\mathcal{C}$.
+    If $t$ is a section of $B$, then 
+    \[
+        f^*(\curry(B)) = \curry(f^*B) 
+    \]
+\end{lemma}
+
+Notice that in any contextual category with products of families of types, the following equations hold:
+\begin{align*}
+    \qquad & \mathrm{eval}_B \circ p(A)^*\mathrm{curry}(s) = s \tag{$\beta$} \\[1em]
+    \qquad & \mathrm{curry}(\mathrm{eval}_B \circ p(A)^*t) = t \tag{$\eta$}
+\end{align*}
+The first equation corresponds to the $\beta$-rule of typed $\lambda$-calculi 
+and the second equation corresponds to the $\eta$-rule of typed $\lambda$-calculi.
+Contextual Categories with products correspond to $\lambda$-calculus with dependent types.
+
+Now we will add the type of propositions. To do it, we shall find objects in our category whose 
+sections corresponds, i.e. its terms, correspond to objects.
+\begin{definition}
+    Let $\mathcal{C}$ be a context category, an \textbf{enumeration of types of} $\mathcal{C}$
+    is an object $T$ of $\mathcal{C}$ with $\level(T)=2$.
+
+    An enumeration of types $T$ of $\mathcal{C}$ is called a \textbf{collection of types} of $\mathcal{C}$
+    if, and only if, for all objects $A$ and morphisms $f, g \colon A \to \father(T)$
+    \[
+        f^*T = g^*T \quad \Longrightarrow \quad f = g
+    \]
+\end{definition}
+it is the object $\father(T)$ that we are interested in.
+
+\begin{definition}
+    a \textbf{doctrine of constructions} is a contextual category with products of families of types
+    together with a collection of types $T$ such that for all $A, B \in \Ob \mathcal{C}$ with 
+    $A \lhd B$ and $f \colon B \to \Prop$, where $\Prop = \father T$, 
+    there exists a necessarily unique morphism $g \colon A \to \Prop$ also denoted by $\forall(f)$
+    such that
+    \[
+        g^*T = \forall(f)^*T = \prod(f^*T)
+    \]
+\end{definition}
+
+Now we will see that doctrines of constructions correspond to models of Calculus of Constructions.
