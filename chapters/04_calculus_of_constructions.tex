@@ -521,3 +521,25 @@ it is the object $\father(T)$ that we are interested in.
 \end{definition}
 
 Now we will see that doctrines of constructions correspond to models of Calculus of Constructions.
+
+\section{Interpretation of Calculus of Constructions}
+
+In this section we will define the interpretation of Calculus of Constructions in arbitrary
+doctrines of constructions. 
+But first we need an auxiliary definition in order to be able to define  the interpretation in an inductive way.
+\begin{definition}
+    by structural induction of expressions we define a function \textbf{$\depth$} mapping
+    pre-well-formed expressions and pre-contexts to $\omega$:
+    \[\depth[x] = 1\]
+    \[\depth[\Prop] = 1\]
+    \[\depth[\Proof(A)] = \depth[A] + 1\]
+    \[\depth[(\prod x \colon A) B] = \depth[A] + \depth[B] + 1\]
+    \[\depth[(\lambda x \colon A) t] = \depth[A] + \depth[t] + 1\]
+    \[\depth[(\forall x \colon A) t] =  \depth[A] + \depth[t] + 1\]
+    \[\depth[\App([x \colon A] B, t, s)] = \depth[A] + \depth[B] + \depth[t] + \depth[s] + 1\]
+    \[
+        \text{For } \Gamma \equiv x_1 : A_1, \dots, x_n : A_n, 
+        \quad
+        \depth[\Gamma] = \sum_{i=1}^{n}\depth[A_i]
+    \]
+\end{definition}
