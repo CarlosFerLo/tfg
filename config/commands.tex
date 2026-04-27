@@ -163,3 +163,52 @@
   \item[#1]\def\@currentlabel{#1}\label{rule:#2}%
 }
 \makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%% Prop Type %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Prop}{\text{Prop}}
+
+%%%%%%%%%%%%%% Proof Type %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Proof}{\text{Proof}}
+
+%%%%%%%%%%%%%% App %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\App}{\text{App}}
+
+%%%%%%%%%%%%%% type %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\type}{\text{type}}
+
+%%%%%%%%%%%%%% ok %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\ok}{\text{ok}}
+
+%%%%%%%%%%%%%% Var %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Var}{\text{Var}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%% Double line fraction %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\newlength{\doublefracgap}
+\setlength{\doublefracgap}{0.75pt}
+\DeclareRobustCommand{\doublefrac}[2]{%
+  \mathinner{\mathpalette\doublefrac@{{#1}{#2}}}%
+}
+\newcommand{\doublefrac@}[2]{\doublefrac@@#1#2}
+\newcommand{\doublefrac@@}[3]{%
+  \ooalign{%
+    \raisebox{\doublefracgap}{$\m@th#1\frac{#2}{\phantom{#3}}$}\cr
+    \raisebox{-\doublefracgap}{$\m@th#1\frac{\phantom{#2}}{#3}$}\cr
+  }%
+}
+\newcommand{\ddoublefrac}[2]{{\displaystyle\doublefrac{#1}{#2}}}
+\newcommand{\tdoublefrac}[2]{{\textstyle\doublefrac{#1}{#2}}}
+\makeatother
