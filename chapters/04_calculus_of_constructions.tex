@@ -526,7 +526,23 @@ Now we will see that doctrines of constructions correspond to models of Calculus
 
 In this section we will define the interpretation of Calculus of Constructions in arbitrary
 doctrines of constructions. 
-But first we need an auxiliary definition in order to be able to define  the interpretation in an inductive way.
+
+To do this, fixed one doctrine of constructions, an \textbf{interpretation function} $\mathcal{M}$ should be a
+mapping such that:
+\begin{enumerate}
+    \item for every pre-context $\Gamma$ of length $n$, if $\mathcal{M}[\Gamma]$ is defined, then 
+          $\mathcal{M}[\Gamma]$ is an object of $\level$ $n$;
+    \item for every pre-context of length $n$ and type expression $A$, 
+          if $\mathcal{M}[\Gamma ; A]$ is defined then $\mathcal{M}[\Gamma ; A]$ is an object 
+          of $\level$ $n + 1$ and $\mathcal{M}[\Gamma] \lhd \mathcal{M}[\Gamma; A]$; 
+    \item for every pre-context $\Gamma$ of length $n$ and object expression $t$, 
+          if $\mathcal{M}[\Gamma; t]$ is defined then it is a morphism $s : \mathcal{M}[\Gamma] \to A$
+          where $A$ is an object of $\level$ $n + 1$ such that \[
+          \mathcal{M}[\Gamma] \lhd A \quad \text{and} \quad p(A) \circ s = \id_{\mathcal{M}[\Gamma]}
+          \]
+\end{enumerate} 
+
+We want to build this function by induction, we need an auxiliary definition:
 \begin{definition}
     by structural induction of expressions we define a function \textbf{$\depth$} mapping
     pre-well-formed expressions and pre-contexts to $\omega$:
@@ -543,3 +559,199 @@ But first we need an auxiliary definition in order to be able to define  the int
         \depth[\Gamma] = \sum_{i=1}^{n}\depth[A_i]
     \]
 \end{definition}
+We will define $\mathcal{M}$ by induction on the level of its arguments where
+\[    \level[\Gamma] = \depth[\Gamma], \quad \]
+\[    \level[\Gamma; A] = \depth[\Gamma] + \depth[A], \quad \]
+\[    \level[\Gamma; t] = \depth[\Gamma] + \depth[t] \]
+by the following clauses:
+\begin{enumerate}
+    \item $\mathcal{M}[\space] = 1$
+    \item $\mathcal{M}[\Gamma, x \colon A] = \mathcal{M}[\Gamma; A]$
+    \item $\mathcal{M}[\Gamma, (\prod x \colon A) B] = \prod(\mathcal{M}[\Gamma, x \colon A; B])$
+          if $\mathcal{M}[\Gamma, x \colon A ; B]$ is defined
+    \item $\mathcal{M}[\Gamma, \Prop] = p(\mathcal{M}, 1)^*\Prop$
+          if $\mathcal{M}[\Gamma]$ is defined
+    \item $\mathcal{M}[\Gamma; \Proof(p)] = \mathcal{M}[\Gamma; p]^*p(\mathcal{M}[\Gamma], 1)^* T$
+          if $\mathcal{M}[\Gamma; p]$ is defined and a section of $p(\mathcal{M}[\Gamma], 1)^*\Prop$
+          \[
+            \begin{tikzcd}[column sep=3cm]
+                \mathcal{M}[\Gamma] 
+                    \arrow[dr, "\mathcal{M}{[}\Gamma{;} p{]}"] 
+                    \arrow[drr, "q(p(\mathcal{M}{[}\Gamma{]}{,} 1){,} \Prop) \circ \mathcal{M}{[}\Gamma{;} p{]}", bend left=10]
+                    \arrow[ddr, "\id_{\mathcal{M}[\Gamma]}", bend right=10]
+                    & & \\
+                & p(\mathcal{M}[\Gamma], 1)^*\Prop \arrow[r, "q(p(\mathcal{M}{[}\Gamma{]}{,} 1){,}\Prop)"] \arrow[d, open]^*\Prop & \Prop \arrow[d, open]\\
+                & \mathcal{M}[\Gamma] \arrow[r, "p(\mathcal{M}{[}\Gamma{]}{,} 1)"] & 1
+            \end{tikzcd}
+        \]
+    \item $\mathcal{M}[\Gamma, x] = s$ 
+          provided that $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$ and $x_i \equiv x$ 
+          and $\mathcal{M}[\Gamma]$ is defined and $\mathcal{M}[\Gamma] = A_n \rhd \dots \rhd A_1 \rhd A_0 \rhd 1$
+          and $s$ as follows
+          \[
+            \begin{tikzcd}[column sep=3cm]
+                A_n
+                    \arrow[dr, "s"] 
+                    \arrow[drr, "{p(A_n, A_i)}", bend left=10]
+                    \arrow[ddr, "\id_{A_n}", bend right=10]
+                    & & \\
+                & p(A_m, A_{i-1})^*A_i \arrow[r, "{q(p(A_n , A_{i-1}), A_i)}"] \arrow[d, open] & A_i \arrow[d, open]\\
+                & A_n \arrow[r, "{p(A_n , A_{i-1})}"] & A_{i-1}
+            \end{tikzcd}
+        \]
+        or in other terms $\mathcal{M}[\Gamma; x_i] = p(A_n, A_i)^*\Delta(A_i)$ where 
+        $\Delta(A_i)$ is the unique arrow $m: A_i \to p(A_i)^*A_i$ such that
+        \[
+            p(p(A_i)^*A_i) \circ m = q(p(A_i), A_i) \circ m = id_{A_i}
+        \]
+    \item $\mathcal{M}[\Gamma; (\lambda x \colon A) t] = \curry(\mathcal{M}[\Gamma, x \colon A ; t])$
+          if $\mathcal{M}[\Gamma, x \colon A; t]$ is defined.
+          By induction hypothesis we have that $\mathcal{M}[\Gamma] \lhd \mathcal{M}[\Gamma; A] \lhd \text{cod}(\mathcal{M}[\gamma, x \colon A ; t])$
+          and $s$ is a section of $\mathcal{M}[\Gamma, x \colon A; t]$ and therefore we have:
+          \[
+                \eval_{\text{cod}(\mathcal{M}[\Gamma, x \colon A; t])} \circ p(\mathcal{M}[\Gamma; A])^*\mathcal{M}[\Gamma; (\lambda x \colon A) t] 
+                = \mathcal{M}[\Gamma, x \colon A; t]
+          \]
+    \item \(
+            \mathcal{M}[\Gamma; \App([x \colon A] B), t, s] 
+            = 
+            \mathcal{M}[\Gamma; s]^*(
+                \eval_{\mathcal{M}[\Gamma, x \colon A; B]} 
+                \circ p(\mathcal{M}[\Gamma; A])^*
+                \mathcal{M}[\Gamma; t]
+            )
+          \) \\
+          provided that $\mathcal{M}[\Gamma ; t]$, $\mathcal{M}[\Gamma; s]$, $\mathcal{M}[\Gamma, x \colon A; B]$
+          are defined, and $\mathcal{M}[\Gamma; s]$ is a section of $\mathcal{M}[\Gamma; A]$
+          and $\mathcal{M}[\Gamma; t]$ is a section of $\prod(\mathcal{M}[\Gamma, x \colon A; B])$
+          \[
+          \begin{tikzcd}[column sep=3cm]
+            \mathcal{M}[\Gamma] 
+                \arrow[r, "{\mathcal{M}[\Gamma; s]}"] 
+                \arrow[d, "\substack{
+                    \mathcal{M}[\Gamma;s]^*(\eval_{\mathcal{M}[\Gamma, x \colon A; B]} \circ \\
+                    p(\mathcal{M}[\Gamma; A])^*\mathcal{M}[\Gamma; t])}"']
+            & \mathcal{M}[\Gamma; A] 
+                \arrow[d, "{\eval_{\mathcal{M}[\Gamma, x \colon A; B]} \circ p(\mathcal{M}[\Gamma; A])^*\mathcal{M}[\Gamma; t]}"]
+            \\
+            \mathcal{M}[\Gamma; s]^*\mathcal{M}[\Gamma, x \colon A; B] 
+                \arrow[r, "{q(\mathcal{M}[\Gamma; s], \mathcal{M}[\Gamma, x \colon A; B])}"]
+                \arrow[d, open]
+            & \mathcal{M}[\Gamma, x \colon A ; B] 
+                \arrow[d, open]
+            \\
+            \mathcal{M}[\Gamma]
+                \arrow[r, "{\mathcal{M}[\Gamma; s]}"]
+            & \mathcal{M}[\Gamma; A]
+          \end{tikzcd}
+          \]
+    \item $\mathcal{M}[\Gamma; (\forall x \colon A) p] = s$
+          provided $\mathcal{M}[\Gamma, x \colon A ; p]$ is a section of $p(\mathcal{M}[\Gamma; A], 1)^*\Prop$
+          and $s$ is the unique section of $p(\mathcal{M}[\Gamma], 1)$ such that 
+          \begin{multline*}
+            \forall(q(p(\mathcal{M}[\Gamma; A], 1), \Prop) \circ \mathcal{M}[\Gamma, x \colon A; p])
+            = \\
+            q(p(\mathcal{M}[\Gamma; A], 1), \Prop) \circ \mathcal{M}[\Gamma, x \colon A; p]
+          \end{multline*}
+          \[
+            \begin{tikzcd}[column sep=3cm]
+                \mathcal{M}[\Gamma; A]
+                    \arrow[dr, "{\mathcal{M}[\Gamma, x \colon A; p]}"] 
+                    \arrow[drr, "{q(p(\mathcal{M}[\Gamma; A], 1), \Prop) \circ \mathcal{M}[\Gamma, x \colon A; p]}", bend left=10]
+                    \arrow[ddr, "\id_{\mathcal{M}[\Gamma; A]}", bend right=10]
+                    & & \\
+                & p(\mathcal{M}[\Gamma; A], 1)^*\Prop \arrow[r, "{q(p(\mathcal{M}[\Gamma; A], 1), \Prop)}"] \arrow[d, open] & \Prop \arrow[d, open]\\
+                & \mathcal{M}[\Gamma; A] \arrow[r, "{p(\mathcal{M}[\Gamma; A], 1)}"] & 1
+            \end{tikzcd}
+        \]
+\end{enumerate}
+
+\begin{theorem}[Correctness Theorem]
+    for any doctrine of constructions the following correctness conditions for $\mathcal{M}$ are satisfied:
+    \begin{enumerate}
+        \item if $\vdash \Gamma \ok$ then $\mathcal{M}[\Gamma]$ is defined;
+        \item if $\vdash \Gamma \Rightarrow A \type$ then $\mathcal{M}[\Gamma; A]$ is defined;
+        \item if $\vdash \Gamma \Rightarrow t \colon A$ then $\mathcal{M}[\Gamma; A]$ and $\mathcal{M}[\Gamma; t]$
+              are both defined and $\mathcal{M}[\Gamma; t]$ is a section of $\mathcal{M}[\Gamma; A]$;
+        \item if $\vdash \Gamma = \Delta$ then $\mathcal{M}[\Gamma]$ and $\mathcal{M}[\Delta]$ are defined 
+              and $\mathcal{M}[\Gamma] = \mathcal{M}[\Delta]$;
+        \item if $\vdash \Gamma \Rightarrow A = B$ then $\mathcal{M}[\Gamma; A]$ and $\mathcal{M}[\Gamma; B]$
+              are both defined and $\mathcal{M}[\Gamma; A] = \mathcal{M}[\Gamma; B]$;
+        \item if $\vdash \Gamma \Rightarrow t = s \in A$ then $\mathcal{M}[\Gamma; A]$, $\mathcal{M}[\Gamma; t]$
+              and $\mathcal{M}[\Gamma; s]$ are defined, both $\mathcal{M}[\Gamma; t]$ and $\mathcal{M}[\Gamma; s]$
+              are sections of $\mathcal{M}[\Gamma; A]$ and $\mathcal{M}[\Gamma; t] = \mathcal{M}[\Gamma; s]$.
+    \end{enumerate}
+\end{theorem}
+
+Hence, doctrines of constructions are models of Calculus of Constructions.
+
+\section{The Term Model of Calculus of Constructions}
+
+In this section we will construct a doctrine of constructions $\mathcal{C}_I$ as a \textit{term model}
+of calculus of constructions such that the interpretation in this model interprets provably well-defined
+contexts, types and objects, and identifies only those contexts, types or objects which are provably equal
+up to renaming of the variables bound in contexts.
+
+In more technical terms, that means that for the interpretation function $\mathcal{M}$ assigning meaning
+to calculus of constructions in the doctrine of constructions $\mathcal{C}_I$, the following requirements
+must be fulfilled:
+\begin{enumerate}
+    \item for all pre-contexts $\Gamma$ and $\Delta$, if $\mathcal{M}[\Gamma] = \mathcal{M}[\Delta]$,
+          then $\vdash \Gamma = \Delta$;
+    \item for all pre-contexts $\Gamma$ and $\Delta$ and pre-type-expressions $A$ and $B$, if 
+          $\mathcal{M}[\Gamma; A] = \mathcal{M}[\Delta; B]$, then $\vdash \Gamma = \Delta$ and 
+          $\vdash \Gamma \Rightarrow A = B$;
+    \item for all pre-contexts $\Gamma$ and $\Delta$, pre-type-expressions $A$ and $B$ and pre-object-expressions
+          $t$ and $s$, if $\mathcal{M}[\Gamma; t] = \mathcal{M}[\Delta; s]$ is a section of $\mathcal{M}[\Gamma; A] = \mathcal[\Delta; B]$,
+          then $\vdash \Gamma = \Delta$, $\vdash \Gamma \Rightarrow A = B$ and $\vdash \Gamma \Rightarrow t = s \colon A$.
+\end{enumerate}
+
+In order to be able to identify contexts up to $\alpha$-conversion, we will consider a fixed numerable set of variables:
+$v_1, \dots, v_n, \dots$. We will say that a context $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$ is in 
+\textbf{$\alpha$-normal form} iff $x_i \equiv v_i$ for all $1 \leq i \leq n$.
+Moreover, we will say that a pre-context $\Gamma$ is admissible iff it is in $\alpha$-normal form and $\vdash \Gamma \ok$.
+
+Now we will define $\mathcal{C}_I$:
+
+The objects of $\mathcal{C}_I$ are the admissible contexts modulo provable equivalence, i.e. that we will consider 
+two contexts $\Gamma$ and $\Delta$ equal iff $\vdash \Gamma = \Delta$.
+By induction over the structure of derivations, one can see that $\vdash \Gamma = \Delta$ implies that $\Gamma$ and
+$\Delta$ have the same length as pre-contexts, so we can define the $\level$ of an object of $\mathcal{C}_I$ as the length
+of any of its representatives. We will write $[\Gamma]$ to represent the class containing $\Gamma$.
+If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible context, then we define
+\[
+    \father[\Gamma] = [ v_1 \colon A_1, \dots, v_{n-1} \colon A_{n-1} ]
+\]
+that is well defined according to rule \textsc{Crefl1} % TODO : this rule does not exists jajajaja
+
+If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta \equiv v_1 \colon B_1, \dots, v_m \colon B_m$
+are admissible contexts, a morphism from $[\Gamma]$ to $[\Delta]$ is given by a $m$-tuple $\langle t_1, \dots, t_m \rangle$
+of terms such that for $i$, $1 \leq i \leq m$, 
+\[
+   \vdash \Gamma \Rightarrow t_i : B_i[v_1 \mid\ t_1, \dots, v_{i-1} \mid\ t_{i-1}]
+\]
+if $\langle s_1, \dots, s_m \rangle$ is another $m$-tuple such that for  $i$, $1 \leq i \leq m$
+\[
+    \vdash \Gamma \Rightarrow s_i : B_i[v_1 \mid\ s_1, \dots, v_{i-1} \mid\ s_{i-1}]
+\]
+then $\langle t_1, \dots, t_m \rangle$ and $\langle s_1, \dots, s_m \rangle$ are considered equal
+iff for $i$, $1 \leq i \leq m$
+\[
+    \vdash \Gamma \Rightarrow t_i = s_i : B_i[v_1 \mid\ s_1, \dots, v_{i-1} \mid\ s_{i-1}]
+\]
+according to rules \textsc{Crefl1} and \textsc{Crefl2} the definition is independent from the choice of representatives.
+We write $[\langle t_1, \dots, t_m \rangle] : [\Gamma] \to [\Delta]$ for the class of $m$-tuples equatable to $\langle t_1, \dots, t_m \rangle$.
+If we consider $\Theta \equiv v_1 \colon C_1, \dots, v_k \colon C_k$ is another admissible context and 
+$[\langle s_1, \dots, s_k\rangle]: [\Delta] \to [\Theta]$, then the composition of $[\langle t_1, \dots, t_m \rangle]$
+with $[\langle s_1, \dots, s_k \rangle]$ is defined as
+\[
+    [\langle s_1, \dots, s_k \rangle] 
+    \circ 
+    [\langle t_1, \dots, t_m \rangle] 
+    = 
+    [\langle 
+        s_1[v_1 \mid\ t_1, \dots, v_m \mid\ t_m],
+        \dots,
+        s_k[v_1 \mid\ t_1, \dots, v_m \mid\ t_m]
+    \rangle]
+\]
