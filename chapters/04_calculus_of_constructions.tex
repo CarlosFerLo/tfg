@@ -755,3 +755,77 @@ with $[\langle s_1, \dots, s_k \rangle]$ is defined as
         s_k[v_1 \mid\ t_1, \dots, v_m \mid\ t_m]
     \rangle]
 \]
+If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible context with $n \geq 1$ then the \textit{canonical projection}
+map $p([\Gamma])\colon [\Gamma] \to \father [\Gamma]$ is represented by the tuple $\langle v_1, \dots, v_{n-1} \rangle$.
+Let $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta \equiv v_1 \colon B_1, \dots, v_m \colon B_m$ 
+admissible contexts and $t = [\langle t_1, \dots, t_m \rangle] \colon [\Gamma] \to [\Delta]$ and 
+$C$ a pre-well-formed type expression with $\vdash \Delta \Rightarrow C \type$, i.e. $\Delta, v_{m+1} \colon C$ is
+an admissible context, then 
+\[
+    t^*[\Delta, v_{m+1} \colon C] = [\Delta, v_{n+1} \colon C[v_1 \mid\ t_1, \dots, v_m \mid\ t_m]]
+\]
+\[
+    q([t], [\Delta, v_{m+1} \colon C]) = [\langle t_1, \dots, t_m, v_{n+1}] \colon t^*[\Delta, v_{m+1} \colon C] \to [\Delta, v_{m+1} \colon C]
+\]
+If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n, v_{n+1} \colon B, v_{n+2} \colon C$ is an admissible context
+we define 
+\[
+    \prod([\Gamma]) = [\Gamma, v_{n+1} \colon (\prod v_{n+1} \colon B) C]
+\]
+\[
+    ev_{[\Gamma]} = [\langle v_1, \dots, v_n, v_{n+1}, \App([v_{n+1} \colon B]C, v_{n+2}, v_{n+1})\rangle]
+\]
+which can be seen to be a morphism from $[\Gamma, v_{n+1} \colon B, v_{n+2} \colon (\prod v_{n+1} B) C]$ to $[\Gamma]$
+over the object $[v_1 \colon A_1, \dots, v_n \colon A_n]$.
+The object $\Prop$ of $C_I$ is defined as $[v_1 \colon \Prop]$ and the object $T$ of $C_I$ is defined as the object
+$[v_1 \colon \Prop, v_2 \colon \Proof(v_1)]$.
+If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n, v_{n+1} \colon B$ and $[\langle p \rangle]$ is a morphism 
+from $[\Gamma]$ to $[v_1 \colon \Prop]$ then we define
+\[
+    \forall([p]) = [\langle (\forall v_{n+1} \colon B) p \rangle] 
+        \colon [v_1 \colon A_1, \dots, v_n \colon A_n] 
+        \to [v_1 \colon \Prop]
+\]
+It is proven in \cite{streicher} that $C_I$ is in fact a doctrine of constructions. Also, it is immediate to see
+that $C_I$ does not interpret or identify more objects or terms that those that are provably defined as equal.
+
+\begin{theorem} [Completeness Theorem]
+    Let $\mathcal{M}$ be the interpretation of calculus of construction in $C_I$, then 
+    \begin{enumerate}
+        \item if $\mathcal{M}[\Gamma]$ is defined then $\vdash \Gamma \ok$
+        \item if $\mathcal{M}[\Gamma ; A]$ is defined then $\vdash \Gamma \Rightarrow A \type$
+        \item if $\mathcal{M}[\Gamma; t]$ is defined then $\vdash \Gamma \Rightarrow t \colon A$ for some pre-type-expression $A$
+        \item if $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$, $\Delta \equiv y_1 \colon B_1, \dots, y_m \colon B_m$
+              and $\mathcal{M}[\Gamma; A] = \mathcal{M}[\Delta; B]$, then $n = m$ and 
+              \begin{multline*}
+                \vdash 
+                    v_1 \colon A_1 [x_1 \mid\ v_1, \dots, x_n \mid\ v_n], \dots, v_n \colon A_n[x_1 \mid\ v_1, \dots, x_n \mid\ v_n]
+                = \\ =
+                    v_1 \colon B_1 [y_1 \mid\ v_1, \dots, y_m \mid\ v_m], \dots, v_m \colon B_m[y_1 \mid\ v_1, \dots, y_m \mid\ v_m]
+              \end{multline*}
+              \begin{multline*}
+                \vdash
+                    v_1 \colon A_1 [x_1 \mid\ v_1, \dots, x_n \mid\ v_n], \dots, v_n \colon A_n[x_1 \mid\ v_1, \dots, x_n \mid\ v_n] \\
+                \Rightarrow
+                    A[x_1 \mid\ v_1, \dots, x_n \mid\ v_n] = B[y_1 \mid\ v_1, \dots, y_m \mid\ v_m]
+              \end{multline*}
+        \item if $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$, $\Delta \equiv y_1 \colon B_1, \dots, y_m \colon B_m$
+              and $\mathcal{M}[\Gamma; t] = \mathcal{M}[\Delta, s]$, then $n = m$ and
+              \begin{multline*}
+                \vdash 
+                    v_1 \colon A_1 [x_1 \mid\ v_1, \dots, x_n \mid\ v_n], \dots, v_n \colon A_n[x_1 \mid\ v_1, \dots, x_n \mid\ v_n]
+                = \\ =
+                    v_1 \colon B_1 [y_1 \mid\ v_1, \dots, y_m \mid\ v_m], \dots, v_m \colon B_m[y_1 \mid\ v_1, \dots, y_m \mid\ v_m]
+              \end{multline*}
+              and for some pre-type-expression $A$
+              \begin{multline*}
+                \vdash
+                    v_1 \colon A_1 [x_1 \mid\ v_1, \dots, x_n \mid\ v_n], \dots, v_n \colon A_n[x_1 \mid\ v_1, \dots, x_n \mid\ v_n] \\
+                \Rightarrow
+                    t[x_1 \mid\ v_1, \dots, x_n \mid\ v_n] = s[y_1 \mid\ v_1, \dots, y_m \mid\ v_m] : A
+              \end{multline*}
+    \end{enumerate}
+\end{theorem}
+
+This result says that $\mathcal{C}_I$ is the initial object of the category of doctrines of constructions and 
+structure preserving functors.
