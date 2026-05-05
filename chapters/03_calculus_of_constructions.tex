@@ -419,9 +419,12 @@ We will write $\vdash \mathcal{J}$ to say that $\mathcal{J}$ is a derivable judg
 
 We will leverage the concept of context categories introduced in the earlier chapter
 to serve as a basic structure for handling dependent types, and add more conditions
-so that it can handle products of families of types and the type of properties, in
+so that it can handle products of families of types, universal quantification and the type of properties, in
 order to develop a categorical structure that captures the interpretation of the
 Calculus of constructions.
+
+Although products might be added directly in the GAT structure, we will enforce them to the base level as
+they are needed to the definition of universal quantification.
 
 \begin{definition}
     A \textbf{contextual category with products of families of types} is a category $\mathcal{C}$
@@ -478,6 +481,14 @@ The first equation corresponds to the $\beta$-rule of typed $\lambda$-calculi
 and the second equation corresponds to the $\eta$-rule of typed $\lambda$-calculi.
 Contextual Categories with products correspond to $\lambda$-calculus with dependent types.
 
+\begin{definition}
+    Let $\mathcal{C}, \mathcal{C}'$ be two contextual categories with products of families of types,
+    we a contextual functor $F \colon \mathcal{C} \to \mathcal{C}'$ \textbf{preserves products of families
+    of types} if for $1 \lhd A \lhd B$ in $\mathcal{C}$, \[
+        F\prod(B) = \prod(F B) \quad \text{ and } \quad F \eval_B = \eval_{F B}
+    \]
+\end{definition}
+
 Now we will add the type of propositions. To do it, we shall find objects in our category whose 
 sections corresponds, i.e. its terms, correspond to objects.
 \begin{definition}
@@ -492,6 +503,7 @@ sections corresponds, i.e. its terms, correspond to objects.
 \end{definition}
 it is the object $\father(T)$ that we are interested in.
 
+And finally, by wrapping everything up and adding universal quantification we have the desired structure:
 \begin{definition}
     a \textbf{doctrine of constructions} is a contextual category with products of families of types
     together with a collection of types $T$ such that for all $A, B \in \Ob \mathcal{C}$ with 
@@ -502,6 +514,16 @@ it is the object $\father(T)$ that we are interested in.
         g^*T = \forall(f)^*T = \prod(f^*T)
     \]
 \end{definition}
+
+\begin{definition}
+    Let $\mathcal{C}, \mathcal{C}'$ be two doctrines of construction,
+    a \textbf{functor of doctrines of constructions} is a contextual functor $F \colon \mathcal{C} \to \mathcal{C}'$
+    that preserves products of families of types such that if $T$ and $T'$ are the selected collections of types 
+    of $\mathcal{C}$ and $\mathcal{C}'$ respectively, $F T = T'$, and for any $A \lhd B$ in $\mathcal{C}$, 
+    and $f \colon B \to \Prop$, $F(\forall(f)) = \forall(F(f))$.
+\end{definition}
+
+We will consider the category $\mathbf{DoC}$ of doctrines of constructions and functors of doctrines of constructions.
 
 Now we will see that doctrines of constructions correspond to models of Calculus of Constructions.
 
@@ -811,4 +833,62 @@ that $C_I$ does not interpret or identify more objects or terms that those that 
 \end{theorem}
 
 This result says that $\mathcal{C}_I$ is the initial object of the category of doctrines of constructions and 
-structure preserving functors.
+structure preserving functors, named $\mathbf{DoC}$.
+
+\section{Extending Calculus of Constructions and its Interpretation}
+
+In this section we will show how to add symbols to Calculus of Constructions, the same thing that we could do in 
+GATs. We need to understand the current CoC as just as a minimal starting point, same as the empty theory. 
+Inspired by the constructions for Categories with Families presented in this paper \cite{bezem2021}, we will inductively
+define the concept of signature $\Sigma$ (corresponding to theory when talking about GATs), CoC extended by $\Sigma$,
+the corresponding category $\mathbf{DoC}_\Sigma$ and interpretation functions $\mathcal{M}^\Sigma$.
+
+As a starting case, we will consider the empty signature $\Sigma = \emptyset$, together with $\text{CoC}_\emptyset$
+representing the current syntax of Calculus of Constructions. The category $\mathbf{DoC}_\emptyset$ is exactly $\mathbf{DoC}$,
+and the notion of interpretation morphism stays the same.
+
+Now, for the inductive step, assume we have defined $\Sigma$ as a valid signature, and the associated syntax
+$\text{CoC}_\Sigma$, category $\mathbf{DoC}_\Sigma$ and interpretation function $\mathcal{M}$. Then 
+\begin{itemize}
+    \item \textbf{Adding a sort symbol:} 
+          let $\Gamma$ be a context in $\text{CoC}_\Sigma$, then we can extend $\Sigma$
+          with a sort symbol $S$ relative to $\Gamma$, to obtain the signature $\Sigma' = (\Sigma, (\Gamma, S))$.
+          Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ by adding a production of 
+          pre-type-expressions $E \Coloneqq S$ and the inference rule $\Gamma \vdash S$.
+          The category $\mathbf{DoC}_{\Sigma'}$ has as objects pairs $(\mathcal{C}, S_\mathcal{C})$, where 
+          $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $\mathcal{M}_\mathcal{C}[\Gamma] \lhd A_\mathcal{C}$.
+          Finally, we define $\mathcal{M}'_\mathcal{C}$, for each object $\mathcal{C}$ of $\mathbf{DoC}_{\Sigma'}$,
+          by adding $\mathcal{M}'_\mathcal{C}[\Gamma; S] = S_\mathcal{C}$.
+    \item \textbf{Adding an operator symbol:}
+          let $\Gamma$ be a context and $A$ be a type under $\Gamma$ of $\text{CoC}_\Sigma$,
+          we can extend $\Sigma$ with a new operator symbol $f$ relative to $\Gamma$ and $A$
+          obtaining $\Sigma' = (\Sigma, (\Gamma, A, f))$.
+          Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ bu adding a production of 
+          pre-object-expressions $t \Coloneqq f$ and the inference rule $\Gamma \vdash f \colon A$.
+          The category $\mathbf{DoC}_{\Sigma'}$ has as objects pairs $(\mathcal{C}, f_\mathcal{C})$,
+          where $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $f_\mathcal{C}$ is a section of $\mathcal{M_C}[\Gamma, x \colon A]$.
+          Finally, we define $\mathcal{M}'_\mathcal{C}$, for each object $\mathcal{C}$ of $\mathbf{DoC}_{\Sigma'}$,
+          by adding $\mathcal{M}'_\mathcal{C}[\Gamma; f] = f_\mathcal{C}$.
+    \item \textbf{Adding an equality of types:}
+          let $\Gamma$ be a context, $A, A'$ types under $\Gamma$ of $\text{CoC}_\Sigma$, we can extend $\Sigma$ with
+          a new equation $A = A'$ relative to $\Gamma$, to obtain $\Sigma' = (\Sigma, (\Gamma, A, A'))$. % TODO: is this good notation?
+          Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ by adding the inference rule 
+          $\Gamma \vdash A = A'$.
+          The category $\mathbf{DoC}_{\Sigma'}$ is a full subcategory of $\mathbf{DoC}_\Sigma$ containing the objects 
+          $\mathcal{C}$ of $\mathbf{DoC}_\Sigma$ such that $\mathcal{M_C}[\Gamma; A] = \mathcal{M_C}[\Gamma; A']$.
+          $\mathcal{M}'$ is the restriction of $\mathcal{M}$ to the objects of $\mathbf{DoC}_{\Sigma'}$.
+    \item \textbf{Adding an equality of terms:}
+          let $\Gamma$ be a context, $A$ a type under $\Gamma$ and $a, a'$ terms of type $A$ under $\Gamma$ 
+          of $\text{CoC}_\Sigma$, we can extend $\Sigma$ with a new equation $a = a'$ relative to $\Gamma$ and $A$,
+          to obtain $\Sigma' = (\Sigma, (\Gamma, A, a, a'))$.
+          Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ by adding the inference rule 
+          $\Gamma \vdash a = a' \colon A$.
+          The category $\mathbf{DoC}_{\Sigma'}$ is a full subcategory of $\mathbf{DoC}_\Sigma$ containing the objects 
+          $\mathcal{C}$ of $\mathbf{DoC}_\Sigma$ such that $\mathcal{M_C}[\Gamma; a] = \mathcal{M_C}[\Gamma; a']$.
+          $\mathcal{M}'$ is the restriction of $\mathcal{M}$ to the objects of $\mathbf{DoC}_{\Sigma'}$.
+\end{itemize}
+
+Under this construction, we can consider $\mathcal{C}_\Sigma$ to be the exact same construction as $\mathcal{C}_I$,
+but with $\text{CoC}_\Sigma$ instead of $\text{CoC}_\emptyset$. Following a similar proof that the original proof
+for $\mathcal{C}_I$ in \cite{streicher} we can prove the corresponding \textit{Completeness Theorems} and 
+that $\mathcal{C}_\Sigma$ is the initial object of $\mathbf{DoC}_\Sigma$. 
