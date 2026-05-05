@@ -423,23 +423,6 @@ so that it can handle products of families of types and the type of properties, 
 order to develop a categorical structure that captures the interpretation of the
 Calculus of constructions.
 
-First, we will introduce product types into our semantics, but to do so, we need
-the notion of section of an object:
-\begin{definition}
-    Let $\mathcal{C}$ be a contextual category, $A$ and $B$ be objects of $\mathcal{C}$ such that $A \lhd B$,
-    the set of \textbf{sections} of $B$ is defined as 
-    \begin{equation*}
-        \Sections(B) \coloneqq \{ s \colon A \to B  \mid\ p(B) \circ s = \id_A\}
-    \end{equation*}
-\end{definition}
-If $\level(B) = 1$, then 
-\[
-    \Sections(B) = \{ s \mid\ s \colon 1 \to B \}
-\]
-as any morphism $s \colon 1 \to B$ satisfies $p(B) \circ s = \id_1$ as 
-$1$ is a terminal object. In this case, the notion of section
-matches the notion of \textit{global element} of $B$.
-
 \begin{definition}
     A \textbf{contextual category with products of families of types} is a category $\mathcal{C}$
     together with two mappings $\prod$ and $\eval$ defined over the collection of objects $B$ of 
