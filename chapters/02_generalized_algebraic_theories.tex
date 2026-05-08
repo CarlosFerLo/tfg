@@ -1219,4 +1219,81 @@ of $G_n$:
         \xrightarrow{\langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma}
         \langle y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_j \colon C_j \rangle_\Gamma
     \]
+    By expansion rule \ref{rule:pullback}, the following diagram is constructible by expansion:
+    \[
+    \begin{tikzcd} % TODO: fix overflow
+        \langle y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_j | z_j]\rangle_\Gamma
+        \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots {,} t_{j-1} {,} z_j \rangle_\Gamma"]
+        \arrow[d, open] &
+        \langle y_1 : B_1, \dots, y_m : B_m, z_1 : C_1, \dots, z_j : C_j \rangle_\Gamma
+        \arrow[d, open] \\
+        \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+        \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots{,} t_{j-1} \rangle_\Gamma"] &
+        \langle y_1 : B_1, \dots, y_m : B_m, z_1 : C_1, \dots, z_{j-1} : C_{j-1} \rangle_\Gamma
+    \end{tikzcd}
+    \]
+    and by composition we get that 
+    \[
+        \langle y_1, \dots, y_m, t_1, \dots, t_{j-1}, z_j \rangle_\Gamma
+        \circ
+        \langle y_1, \dots, y_m, t_j \rangle_\Gamma
+        = 
+        \langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma
+    \]
+    is constructible by expansion.
+    It remains to see that the morphism
+    \[
+        \langle
+            y_1 : B_1, \dots, y_m : B_m,
+            z_1 : C_1, \dots, z_w : C_w
+        \rangle_\Gamma
+        \xrightarrow{\langle z_1, \dots, z_w \rangle_\Gamma}
+        \langle
+            z_1 : C_1, \dots, z_w : C_w
+        \rangle_\Gamma
+    \]
+    is constructible by expansion. That comes directly from the 
+    fact that $\langle z_1 \colon C_1, \dots, z_w \colon C_w \rangle_\Gamma$
+    is a context, and the repeated application of the rule \ref{rule:pullback}
+    gives us the following diagram: 
+    \[
+    \begin{tikzcd}
+        \langle 
+            y_1 : B_1, \dots, y_m : B_m
+            z_1 : C_1, \dots, z_w : C_w
+        \rangle_\Gamma    
+        \arrow[r, "\langle z_1{,} \dots{,} z_w \rangle_\Gamma"]
+        \arrow[d, open] &
+        \langle
+            z_1 : C_1, \dots, z_w : C_w
+        \rangle_\Gamma
+        \arrow[d, open] \\
+        \langle 
+            y_1 : B_1, \dots, y_m : B_m
+            z_1 : C_1, \dots, z_{w-1} : C_{w-1}
+        \rangle_\Gamma  
+        \arrow[r, "\langle z_1{,} \dots{,} z_{w-1} \rangle_\Gamma"]
+        \arrow[d, open] &
+        \langle
+            z_1 : C_1, \dots, z_{w-1} : C_{w-1}
+        \rangle_\Gamma
+        \arrow[d, open] \\
+        \vdots \arrow[d, open] & \vdots \arrow[d, open]\\
+        \langle 
+            y_1 : B_1, \dots, y_m : B_m,
+            z_1 : C_1
+        \rangle_\Gamma
+        \arrow[r, "\langle z_1 \rangle_\Gamma"]
+        \arrow[d, open] &
+        \langle
+            z_1 : C_1
+        \rangle_\Gamma
+        \arrow[d, open] \\
+        \langle
+            y_1 : B_1, \dots, y_m : B_m
+        \rangle_\Gamma
+        \arrow[r, "\langle \rangle_\Gamma"] &
+        \langle \rangle_\Gamma
+    \end{tikzcd}
+    \]
 \end{proof}
