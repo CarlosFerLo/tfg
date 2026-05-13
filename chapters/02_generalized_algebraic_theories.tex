@@ -533,9 +533,11 @@ In this section we will state some properties about contextual categories that w
 % generalized projection morphism
 The first useful result is about the projections, although we defined projections on pairs $A \lhd B$, 
 we might extend the notion to pairs $A \leq B$ defined as \[
-    p(B, A) = p(X_1) \circ \dots, \circ p(X_n) \circ B
+    p(B, A) = p(X_1) \circ \dots, \circ p(X_n) \circ p(B)
 \] where $X_1, \dots, X_n$ is the unique sequence of objects in $\mathcal{C}$ such that
-$A \lhd X_1 \lhd \dots \lhd X_n \lhd B$ in $\mathcal{C}$. Notation: $B \openrightarrow A$. % TODO: fix notation?
+$A \lhd X_1 \lhd \dots \lhd X_n \lhd B$ in $\mathcal{C}$. 
+In the case where $A = B$, we will take $p(B, A) = \id_A$.
+Notation: $B \openrightarrow A$. % TODO: fix notation?
 
 Let $\mathcal{C}$ be a contextual category and $A$ an arbitrary object of $\mathcal{C}$. Then we define 
 the \textbf{relativization} of $\mathcal{C}$ to $A$, notes as $\mathcal{C}_A$, as the contextual category
@@ -554,7 +556,7 @@ where:
 \end{enumerate}
 
 Now we will see that any morphism $f \colon B \to A$ in $\mathcal{C}$ induces a pullback functor 
-$f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which preserves contextual structure.
+$f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which is a contextual functor.
 
 \begin{lemma}
     let $\mathcal{C}$ be a contextual category, and $f \colon B \to A$ a morphism in $\mathcal{C}$,
@@ -562,7 +564,7 @@ $f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which preserves contextual structur
     $q(f, C) \colon f^*C \to C$ by induction over $\level C - \level A$:
     \begin{enumerate}
         \item if $C = A$, \[
-                f^*C = C \quad \text{ and } \quad q(f, C) = id_C
+                f^*C = B \quad \text{ and } \quad q(f, C) = f
               \]
         \item if $C > A$, \[
                 f^*C = q(f, \father(C))^*C
