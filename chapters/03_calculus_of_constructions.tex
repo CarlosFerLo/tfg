@@ -1,6 +1,15 @@
 % !TEX root = ../main.tex
 \chapter{Calculus of Constructions}
 
+In this chapter we will expand the notions presented to Calculus of Constructions a type theory 
+presented by Coquand and Huet in \cite{coquand1988}. It is the base of Calculus of Inductive constructions,
+the type theory under Rocq (formerly Coq), and the first step to our goal of extending this framework to
+Lean. 
+The main additions in this type theory compared to GATs are the following:
+here product types are first class citizens, i.e. they are included in the base level, not in the signature,
+also, we can find a $Prop$ universe whose terms are also types themselves, something we could not build 
+with GAT. 
+
 \section{Syntactic Formulation}
 
 In this section, we will formally define the syntax of Calculus of Constructions.
@@ -60,7 +69,7 @@ We define a \textbf{pre-sequent} as a syntactic expression of the following form
 \begin{array}{ll}
     \Gamma \ok & \Gamma \text{ is a context} \\
     \Gamma = \Delta & \Gamma \text{ and } \Delta \text{ are equal contexts} \\
-    \Gamma \Rightarrow \mathcal{J} & \text{the judgement } \mathcal{J} \text{ holds w.r.t. } \Gamma
+    \Gamma \vdash \mathcal{J} & \text{the judgement } \mathcal{J} \text{ holds w.r.t. } \Gamma
 \end{array}
 \]
 
@@ -78,15 +87,15 @@ When presenting the axiomatization of Calculus of Constructions we shall use the
 
 Context Formation Rules:
 \begin{enumerate} % TODO: reformat this
-    \item[\textsc{Empty}] $\dfrac{}{\quad \ok}$
-    \item[\textsc{Cont-Intro}] $\ddoublefrac{\Gamma \Rightarrow A \type}{\Gamma, x \colon A \ok}$, if $x \notin \Var(\Gamma)$
-    \item[\textsc{Cont-Thin}] $\dfrac{
-            \Gamma, \Delta \ok \quad \Gamma \Rightarrow A \type
+    \ruleitem{Empty}{empty} $\dfrac{}{\quad \ok}$
+    \ruleitem{Cont-Intro}{cont-intro} $\ddoublefrac{\Gamma \vdash A \type}{\Gamma, x \colon A \ok}$, if $x \notin \Var(\Gamma)$
+    \ruleitem{Cont-Thin}{cont-thin} $\dfrac{
+            \Gamma, \Delta \ok \quad \Gamma \vdash A \type
         }{
             \Gamma, x \colon A, \Delta \ok
         }$, if $x \notin \Var(\Gamma) \cup \Var(\Delta)$
-    \item[\textsc{Cont-Sub}] $\dfrac{
-        \Gamma, x \colon A, \Delta \ok \quad \Gamma \Rightarrow t \colon A
+    \ruleitem{Cont-Sub}{cont-sub} $\dfrac{
+        \Gamma, x \colon A, \Delta \ok \quad \Gamma \vdash t \colon A
     }{
         \Gamma, \Delta[x \mid\ t] \ok
     }$
@@ -94,129 +103,129 @@ Context Formation Rules:
 
 Context Equality Rules
 \begin{enumerate}
-    \item[\textsc{Crefl}] $\ddoublefrac{
+    \ruleitem{Crefl}{crefl} $\ddoublefrac{
         \Gamma = \Gamma
     }{
         \Gamma \ok
     }$
-    \item[\textsc{Csym}] $\dfrac{
+    \ruleitem{Csym}{csym} $\dfrac{
         \Gamma = \Delta
     }{
         \Delta = \Gamma
     }$
-    \item[\textsc{Ctrans}] $\dfrac{
+    \ruleitem{Ctrans}{ctrans} $\dfrac{
         \Gamma = \Delta \quad \Delta = \Theta
     }{
         \Gamma = \Theta
     }$
-    \item[\textsc{Cequ}] $\dfrac{
+    \ruleitem{Cequ}{cequ} $\dfrac{
         \Gamma, x \colon A, \Delta \ok 
         \quad 
-        \Gamma \Rightarrow A = B
+        \Gamma \vdash A = B
     }{
         \Gamma, x \colon A, \Delta
         =
         \Gamma, x : B, \Delta
     }$
-    \item[\textsc{Creflect1}] $\dfrac{
+    \ruleitem{Creflect1}{creflect1} $\dfrac{
         \Gamma, x \colon A 
         = 
         \Delta, x \colon B
     }{
         \Gamma = \Delta
     }$
-    \item[\textsc{Creflect2}] $\dfrac{
+    \ruleitem{Creflect2}{creflect2} $\dfrac{
         \Gamma, x \colon A 
         = \Delta, x \colon B
     }{
-        \Gamma \Rightarrow A = B_1
+        \Gamma \vdash A = B_1
     }$
 \end{enumerate}
 
 Structural Rules for Judgement Formation
 \begin{enumerate}
-    \item[\textsc{Ass}] $\dfrac{
+    \ruleitem{Ass}{ass} $\dfrac{
         \Gamma, x \colon A, \Delta \ok
     }{
         \Gamma, x \colon A, \Delta 
-        \Rightarrow 
+        \vdash 
         x \colon A
     }$ 
-    \item[\textsc{Reflection1}] $\dfrac{
-        \Gamma \Rightarrow \mathcal{J}
+    \ruleitem{Reflection1}{reflection1} $\dfrac{
+        \Gamma \vdash \mathcal{J}
     }{
         \Gamma \ok
     }$
-    \item[\textsc{Reflection2}] $\dfrac{
-        \Gamma \Rightarrow t : A
+    \ruleitem{Reflection2}{reflection2} $\dfrac{
+        \Gamma \vdash t : A
     }{
-        \Gamma \Rightarrow A \type
+        \Gamma \vdash A \type
     }$
-    \item[\textsc{Thin}] $\dfrac{
-        \Gamma, \Delta \Rightarrow \mathcal{J}
+    \ruleitem{Thin}{thin} $\dfrac{
+        \Gamma, \Delta \vdash \mathcal{J}
         \quad
-        \Gamma \Rightarrow A \type   
+        \Gamma \vdash A \type   
     }{
         \Gamma, x \colon A, \Delta 
-        \Rightarrow 
+        \vdash 
         \mathcal{J}
     }$, if $x \notin \Var(\Gamma) \cup \Var(\Delta)$
-    \item[\textsc{Sub}] $\dfrac{
-        \Gamma, x \colon A, \Delta \Rightarrow \mathcal{J}
+    \ruleitem{Sub}{sub} $\dfrac{
+        \Gamma, x \colon A, \Delta \vdash \mathcal{J}
         \quad
-        \Gamma \Rightarrow t : A  
+        \Gamma \vdash t : A  
     }{
         \Gamma, \Delta[x \mid\ t] 
-        \Rightarrow
+        \vdash
         \mathcal{J}[x \mid\ t]
     }$
 \end{enumerate}
 
 Equality Rules:
 \begin{enumerate}
-    \item[\textsc{Equ}] $\dfrac{
+    \ruleitem{Equ}{equ} $\dfrac{
         \Gamma = \Delta
         \quad
-        \Gamma \Rightarrow \mathcal{J}
+        \Gamma \vdash \mathcal{J}
     }{
-        \Delta \Rightarrow \mathcal{J}
+        \Delta \vdash \mathcal{J}
     }$ 
-    \item[\textsc{Refl-Typ}] $\ddoublefrac{
-        \Gamma \Rightarrow A = A
+    \ruleitem{Refl-Typ}{refl-typ} $\ddoublefrac{
+        \Gamma \vdash A = A
     }{
-        \Gamma \Rightarrow A \type
+        \Gamma \vdash A \type
     }$
-    \item[\textsc{Refl-Obj}] $\ddoublefrac{
-        \Gamma \Rightarrow t = t : A
+    \ruleitem{Refl-Obj}{refl-obj} $\ddoublefrac{
+        \Gamma \vdash t = t : A
     }{
-        \Gamma \Rightarrow t : A
+        \Gamma \vdash t : A
     }$
-    \item[\textsc{Symm-Typ}] $\dfrac{
-        \Gamma \Rightarrow A = B
+    \ruleitem{Symm-Typ}{symm-typ} $\dfrac{
+        \Gamma \vdash A = B
     }{
-        \Gamma \Rightarrow B = A
+        \Gamma \vdash B = A
     }$
-    \item[\textsc{Symm-Obj}] $\dfrac{
-        \Gamma \Rightarrow t = s : A
+    \ruleitem{Symm-Obj}{symm-obj} $\dfrac{
+        \Gamma \vdash t = s : A
     }{
-        \Gamma \Rightarrow s = t : A
+        \Gamma \vdash s = t : A
     }$
-    \item[\textsc{Trans-Typ}] $\dfrac{
-        \Gamma \Rightarrow A = B 
+    \ruleitem{Trans-Typ}{trans-typ} $\dfrac{
+        \Gamma \vdash A = B 
         \quad
-        \Gamma \Rightarrow B = C
+        \Gamma \vdash B = C
     }{
-        \Gamma \Rightarrow A = C
+        \Gamma \vdash A = C
     }$
-    \item[\textsc{Trans-Obj}] $\dfrac{
-        \Gamma \Rightarrow t_1 = t_2 : A 
+    \ruleitem{Trans-Obj}{trans-obj} $\dfrac{
+        \Gamma \vdash t_1 = t_2 : A 
         \quad
-        \Gamma \Rightarrow t_2 = t_3 : A
+        \Gamma \vdash t_2 = t_3 : A
     }{
-        \Gamma \Rightarrow t_1 = t_3 : A
+        \Gamma \vdash t_1 = t_3 : A
     }$
-    \item[\textsc{Repl1}] $\dfrac{
-        \Gamma \Rightarrow t = s : A
+    \ruleitem{Repl1}{repl1} $\dfrac{
+        \Gamma \vdash t = s : A
         \quad
         \Gamma, x \colon A, \Delta \ok
     }{
@@ -224,135 +233,135 @@ Equality Rules:
         =
         \Gamma, \Delta[x \mid\ t]
     }$
-    \item[\textsc{Repl2}] $\dfrac{
-        \Gamma \Rightarrow t = s : A
+    \ruleitem{Repl2}{rupl2} $\dfrac{
+        \Gamma \vdash t = s : A
         \quad
-        \Gamma, x \colon A, \Gamma \Rightarrow B \type
+        \Gamma, x \colon A, \Gamma \vdash B \type
     }{
         \Gamma, \Delta[x \mid\ t]
-        \Rightarrow
+        \vdash
         B[x \mid\ t] = B[x \mid\ s]
     }$
-    \item[\textsc{Repl3}] $\dfrac{
-        \Gamma \Rightarrow t_1 = t_2 : A
+    \ruleitem{Repl3}{repl3} $\dfrac{
+        \Gamma \vdash t_1 = t_2 : A
         \quad
-        \Gamma, x \colon A, \Delta \Rightarrow s : B
+        \Gamma, x \colon A, \Delta \vdash s : B
     }{
         \Gamma, \Delta[ x \mid\ t_1]
-        \Rightarrow
+        \vdash
         s[x \mid\ t_1] = s[x \mid\ t_2] : B[x \mid\ t_1]
     }$
-    \item[\textsc{Conv1}] $\dfrac{
-        \Gamma \Rightarrow A = B
+    \ruleitem{Conv1}{conv1} $\dfrac{
+        \Gamma \vdash A = B
         \quad
-        \Gamma \Rightarrow t : A
+        \Gamma \vdash t : A
     }{
-        \Gamma \Rightarrow t : B
+        \Gamma \vdash t : B
     }$
-    \item[\textsc{Conv2}] $\dfrac{
-        \Gamma \Rightarrow A = B
+    \ruleitem{Conv2}{conv2} $\dfrac{
+        \Gamma \vdash A = B
         \quad
-        \Gamma \Rightarrow t = s : A
+        \Gamma \vdash t = s : A
     }{
-        \Gamma \Rightarrow t = s : B
+        \Gamma \vdash t = s : B
     }$
 \end{enumerate}
 
 Rules for Products of types
 
 \begin{enumerate}
-    \item[\textsc{$\prod$-Form}] $\dfrac{
-        \Gamma, x \colon A \Rightarrow B \type
+    \ruleitem{$\prod$-Form}{prod-form} $\dfrac{
+        \Gamma, x \colon A \vdash B \type
     }{
         \Gamma 
-        \Rightarrow 
+        \vdash 
         (\prod x \colon A) B \type
     }$
-    \item[\textsc{$\prod$-Equ}] $\dfrac{
-        \Gamma \Rightarrow A_1 = A_2
+    \ruleitem{$\prod$-Equ}{prod-equ} $\dfrac{
+        \Gamma \vdash A_1 = A_2
         \quad
-        \Gamma, x \colon A_1 \Rightarrow B_1 = B_2
+        \Gamma, x \colon A_1 \vdash B_1 = B_2
     }{
         \Gamma
-        \Rightarrow
+        \vdash
         (\prod x \colon A_1) B_1
         =
         (\prod x \colon A_2) B_2
     }$
-    \item[\textsc{$\prod$-Intro}] $\dfrac{
-        \Gamma, x \colon A \Rightarrow t : B
+    \ruleitem{$\prod$-Intro}{prod-intro} $\dfrac{
+        \Gamma, x \colon A \vdash t : B
     }{
         \Gamma
-        \Rightarrow
+        \vdash
         (\lambda x \colon A) t
         :
         (\prod x \colon A) B
     }$
-    \item[\textsc{$\xi$-Rule}] $\dfrac{
-        \Gamma, x \colon A_1 \Rightarrow t_1 = t_2 : B
+    \ruleitem{$\xi$-Rule}{xi-rule} $\dfrac{
+        \Gamma, x \colon A_1 \vdash t_1 = t_2 : B
         \quad
-        \Gamma \Rightarrow A_1 = A_2
+        \Gamma \vdash A_1 = A_2
     }{
         \Gamma
-        \Rightarrow
+        \vdash
         (\lambda x \colon A_1) t_1
         =
         (\lambda x \colon A_2) t_2
         \colon
         (\prod x \colon A_1) B
     }$
-    \item[\textsc{$\prod$-Elim}] $\dfrac{
-        \Gamma \Rightarrow t \colon (\prod x \colon A) B
+    \ruleitem{$\prod$-Elim}{prod-elim} $\dfrac{
+        \Gamma \vdash t \colon (\prod x \colon A) B
         \quad
-        \Gamma \Rightarrow s \colon A
+        \Gamma \vdash s \colon A
         \quad
-        \Gamma, x \colon A \Rightarrow B \type
+        \Gamma, x \colon A \vdash B \type
     }{
         \Gamma
-        \Rightarrow
+        \vdash
         \App([x \colon A] B, t, s) 
         \colon 
         B[x \mid\ s]
     }$
-    \item[\textsc{$\prod$-Elim-Equ}] $\dfrac{
-        \Gamma \Rightarrow A_1 = A_2
+    \ruleitem{$\prod$-Elim-Equ}{prod-elim-equ} $\dfrac{
+        \Gamma \vdash A_1 = A_2
         \quad
-        \Gamma \Rightarrow t_1 = t_2 \colon (\prod x \colon A_1) B_1
+        \Gamma \vdash t_1 = t_2 \colon (\prod x \colon A_1) B_1
         \quad
-        \Gamma, x \colon A_1 \Rightarrow B_1 = B_2
+        \Gamma, x \colon A_1 \vdash B_1 = B_2
         \quad
-        \Gamma \Rightarrow s_1 = s_2 \colon A_1
+        \Gamma \vdash s_1 = s_2 \colon A_1
     }{
         \Gamma
-        \Rightarrow
+        \vdash
         \App([x \colon A_1] B_1, t_1, s_1)
         = 
         \App([x \colon A_2] B_2, t_2, s_2)
         \colon
         B_1[x \mid\ s_1]
     }$
-    \item[\textsc{$\beta$-Rule}] $\dfrac{
-        \Gamma, x \colon A \Rightarrow B \type
+    \ruleitem{$\beta$-Rule}{beta-rule} $\dfrac{
+        \Gamma, x \colon A \vdash B \type
         \quad
-        \Gamma, x \colon A \Rightarrow t \colon B
+        \Gamma, x \colon A \vdash t \colon B
         \quad
-        \Gamma \Rightarrow s \colon A
+        \Gamma \vdash s \colon A
     }{
         \Gamma 
-        \Rightarrow
+        \vdash
         \App([x \colon A] B, (\lambda x : A) t, s)
         = 
         t[x \mid\ s] 
         \colon
         B[x \mid\ s]
     }$
-    \item[\textsc{$\eta$-rule}] $\dfrac{
-        \Gamma, x \colon A \Rightarrow B \type
+    \ruleitem{$\eta$-rule}{eta-rule} $\dfrac{
+        \Gamma, x \colon A \vdash B \type
         \quad
-        \Gamma \Rightarrow t \colon (\prod x \colon A) B
+        \Gamma \vdash t \colon (\prod x \colon A) B
     }{
         \Gamma 
-        \Rightarrow
+        \vdash
         (\lambda x \colon A) \App([x \colon A] B, t, x) 
         = 
         t
@@ -364,56 +373,54 @@ Rules for Products of types
 Rules for Propositions
 
 \begin{enumerate}
-    \item[\textsc{Prop}] $\dfrac{
+    \ruleitem{Prop}{prop} $\dfrac{
         \Gamma \ok
     }{
-        \Gamma \Rightarrow \Prop \type
+        \Gamma \vdash \Prop \type
     }$ 
-    \item[\textsc{Prop-Type}] $\ddoublefrac{
-        \Gamma \Rightarrow p \colon \Prop
+    \ruleitem{Prop-Type}{prop-type} $\ddoublefrac{
+        \Gamma \vdash p \colon \Prop
     }{
-        \Gamma \Rightarrow \Proof(p) \type
+        \Gamma \vdash \Proof(p) \type
     }$
-    \item[\textsc{Prop-Equ}] $\ddoublefrac{
-        \Gamma \Rightarrow p_1 = p_2 \colon \Prop
+    \ruleitem{Prop-Equ}{prop-equ} $\ddoublefrac{
+        \Gamma \vdash p_1 = p_2 \colon \Prop
     }{
-        \Gamma \Rightarrow \Proof(p_1) = \Proof(p_2)
+        \Gamma \vdash \Proof(p_1) = \Proof(p_2)
     }$
-    \item[\textsc{$\forall$-Intro}] $\dfrac{
+    \ruleitem{$\forall$-Intro}{forall-intro} $\dfrac{
         \Gamma, x \colon A 
-        \Rightarrow
+        \vdash
         p \colon \Prop
     }{
         \Gamma
-        \Rightarrow
+        \vdash
         (\forall x \colon A) p 
         \colon \Prop
     }$
-    \item[\textsc{$\forall$-Equ}] $\dfrac{
-        \Gamma, x \colon A_1 \Rightarrow p_1 = p_2 \colon \Prop
+    \ruleitem{$\forall$-Equ}{forall-equ} $\dfrac{
+        \Gamma, x \colon A_1 \vdash p_1 = p_2 \colon \Prop
         \quad
-        \Gamma \Rightarrow A_1 = A_2
+        \Gamma \vdash A_1 = A_2
     }{
         \Gamma
-        \Rightarrow
+        \vdash
         (\forall x \colon A_1) p_1
         =
         (\forall x \colon A_2) p_2 
         \colon
         \Prop
     }$
-    \item[\textsc{$\forall$-Elim}] $\dfrac{
-        \Gamma, x \colon A \Rightarrow p \in \Prop
+    \ruleitem{$\forall$-Elim}{forall-elim} $\dfrac{
+        \Gamma, x \colon A \vdash p \in \Prop
     }{
         \Gamma 
-        \Rightarrow
+        \vdash
         \Proof((\forall x \colon A) p)
         = 
         (\prod x \colon A) \Proof(p)
     }$
 \end{enumerate}
-
-We will write $\vdash \mathcal{J}$ to say that $\mathcal{J}$ is a derivable judgement.
 
 \section{Doctrines of Constructions}
 
@@ -421,7 +428,7 @@ We will leverage the concept of context categories introduced in the earlier cha
 to serve as a basic structure for handling dependent types, and add more conditions
 so that it can handle products of families of types, universal quantification and the type of properties, in
 order to develop a categorical structure that captures the interpretation of the
-Calculus of constructions.
+Calculus of Constructions.
 
 Although products might be added directly in the GAT structure, we will enforce them to the base level as
 they are needed to the definition of universal quantification.
@@ -487,6 +494,39 @@ Contextual Categories with products correspond to $\lambda$-calculus with depend
     of types} if for $1 \lhd A \lhd B$ in $\mathcal{C}$, \[
         F\prod(B) = \prod(F B) \quad \text{ and } \quad F \eval_B = \eval_{F B}
     \]
+\end{definition}
+
+NOTE: this definition is better for actually proving relativization on the section on Problem Redefinition
+An alternative definition of contextual categories with products of families of types is given by Vladimir Voevodsky in this INSERT REF % TODO: insert reference
+\begin{definition}
+    Let $\mathcal{C}$ be a category. Let $g \colon Z \to Y$, $f \colon Y \to X$ be a pair of morphisms such that for any $U \to X$ there 
+    exists a pullback $U \times_X Y$. A pair \[
+        (w \colon W \to X, h \colon W \times_X Y \to Z)
+    \] such that $g \circ h = pr$ is called a universal pair for $(f, g)$ if for any $U \to X$ the map 
+    \begin{align*}
+        \Hom_X(U, W) & \longrightarrow \Hom_Y(U \times_X Y, Z) \\
+        u & \longmapsto h \circ (u \times \id_Y)
+    \end{align*}
+    is a bijection.
+\end{definition}
+\begin{definition}
+    a contextual category with products of families of types (or a $\prod$-contextual category in the reference) consist of a 
+    contextual category $\mathcal{C}$ together with:
+    \begin{enumerate}
+        \item for each object $Y$ of $\mathcal{C}$, with $\level(Y) \geq 2$, an object $\prod(Y)$ of $\mathcal{C}$ 
+              such that $\father(\prod(Y)) = \father^2(Y)$.
+        \item for each object $Y$ of $\mathcal{C}$, with $\level(Y) \geq 2$, a morphism \[
+                \eval_y \colon p(\father(Y))^*\prod(Y) \to Y
+            \] over $\father(Y)$ such that:
+            \begin{enumerate}
+                \item for any $f \colon Z \to \father^2(Y)$ \[
+                    f^*\prod(Y) = \prod(f^*Y) 
+                        \quad \text{ and } \quad
+                    f^*\eval_Y = \eval_{f^*Y}
+                \]
+                \item $(\prod(Y), \eval_Y)$ is a universal pair for $(p(Y), p(\father(Y)))$.
+            \end{enumerate}
+    \end{enumerate}
 \end{definition}
 
 Now we will add the type of propositions. To do it, we shall find objects in our category whose 
@@ -674,15 +714,15 @@ by the following clauses:
 \begin{theorem}[Correctness Theorem]
     for any doctrine of constructions the following correctness conditions for $\mathcal{M}$ are satisfied:
     \begin{enumerate}
-        \item if $\vdash \Gamma \ok$ then $\mathcal{M}[\Gamma]$ is defined;
-        \item if $\vdash \Gamma \Rightarrow A \type$ then $\mathcal{M}[\Gamma; A]$ is defined;
-        \item if $\vdash \Gamma \Rightarrow t \colon A$ then $\mathcal{M}[\Gamma; A]$ and $\mathcal{M}[\Gamma; t]$
+        \item if $\Gamma \ok$ is derivable, then $\mathcal{M}[\Gamma]$ is defined;
+        \item if $\Gamma \vdash A \type$ is derivable, then $\mathcal{M}[\Gamma; A]$ is defined;
+        \item if $\Gamma \vdash t \colon A$ is derivable, then $\mathcal{M}[\Gamma; A]$ and $\mathcal{M}[\Gamma; t]$
               are both defined and $\mathcal{M}[\Gamma; t]$ is a section of $\mathcal{M}[\Gamma; A]$;
-        \item if $\vdash \Gamma = \Delta$ then $\mathcal{M}[\Gamma]$ and $\mathcal{M}[\Delta]$ are defined 
+        \item if $\Gamma = \Delta$ is derivable, then $\mathcal{M}[\Gamma]$ and $\mathcal{M}[\Delta]$ are defined 
               and $\mathcal{M}[\Gamma] = \mathcal{M}[\Delta]$;
-        \item if $\vdash \Gamma \Rightarrow A = B$ then $\mathcal{M}[\Gamma; A]$ and $\mathcal{M}[\Gamma; B]$
+        \item if $\Gamma \vdash A = B$ is derivable, then $\mathcal{M}[\Gamma; A]$ and $\mathcal{M}[\Gamma; B]$
               are both defined and $\mathcal{M}[\Gamma; A] = \mathcal{M}[\Gamma; B]$;
-        \item if $\vdash \Gamma \Rightarrow t = s \in A$ then $\mathcal{M}[\Gamma; A]$, $\mathcal{M}[\Gamma; t]$
+        \item if $\Gamma \vdash t = s \in A$ is derivable, then $\mathcal{M}[\Gamma; A]$, $\mathcal{M}[\Gamma; t]$
               and $\mathcal{M}[\Gamma; s]$ are defined, both $\mathcal{M}[\Gamma; t]$ and $\mathcal{M}[\Gamma; s]$
               are sections of $\mathcal{M}[\Gamma; A]$ and $\mathcal{M}[\Gamma; t] = \mathcal{M}[\Gamma; s]$.
     \end{enumerate}
@@ -702,13 +742,13 @@ to calculus of constructions in the doctrine of constructions $\mathcal{C}_I$, t
 must be fulfilled:
 \begin{enumerate}
     \item for all pre-contexts $\Gamma$ and $\Delta$, if $\mathcal{M}[\Gamma] = \mathcal{M}[\Delta]$,
-          then $\vdash \Gamma = \Delta$;
+          then $\Gamma = \Delta$ is derivable;
     \item for all pre-contexts $\Gamma$ and $\Delta$ and pre-type-expressions $A$ and $B$, if 
-          $\mathcal{M}[\Gamma; A] = \mathcal{M}[\Delta; B]$, then $\vdash \Gamma = \Delta$ and 
-          $\vdash \Gamma \Rightarrow A = B$;
+          $\mathcal{M}[\Gamma; A] = \mathcal{M}[\Delta; B]$, then $\Gamma = \Delta$ and 
+          $\Gamma \vdash A = B$ are derivable;
     \item for all pre-contexts $\Gamma$ and $\Delta$, pre-type-expressions $A$ and $B$ and pre-object-expressions
           $t$ and $s$, if $\mathcal{M}[\Gamma; t] = \mathcal{M}[\Delta; s]$ is a section of $\mathcal{M}[\Gamma; A] = \mathcal[\Delta; B]$,
-          then $\vdash \Gamma = \Delta$, $\vdash \Gamma \Rightarrow A = B$ and $\vdash \Gamma \Rightarrow t = s \colon A$.
+          then $\Gamma = \Delta$, $\Gamma \vdash A = B$ and $\Gamma \vdash t = s \colon A$ are derivable.
 \end{enumerate}
 
 In order to be able to identify contexts up to $\alpha$-conversion, we will consider a fixed numerable set of variables:
@@ -719,8 +759,8 @@ Moreover, we will say that a pre-context $\Gamma$ is admissible iff it is in $\a
 Now we will define $\mathcal{C}_I$:
 
 The objects of $\mathcal{C}_I$ are the admissible contexts modulo provable equivalence, i.e. that we will consider 
-two contexts $\Gamma$ and $\Delta$ equal iff $\vdash \Gamma = \Delta$.
-By induction over the structure of derivations, one can see that $\vdash \Gamma = \Delta$ implies that $\Gamma$ and
+two contexts $\Gamma$ and $\Delta$ equal iff $\Gamma = \Delta$ is derivable.
+By induction over the structure of derivations, one can see that $\Gamma = \Delta$ implies that $\Gamma$ and
 $\Delta$ have the same length as pre-contexts, so we can define the $\level$ of an object of $\mathcal{C}_I$ as the length
 of any of its representatives. We will write $[\Gamma]$ to represent the class containing $\Gamma$.
 If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible context, then we define
@@ -733,17 +773,17 @@ If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta \equiv v_1 
 are admissible contexts, a morphism from $[\Gamma]$ to $[\Delta]$ is given by a $m$-tuple $\langle t_1, \dots, t_m \rangle$
 of terms such that for $i$, $1 \leq i \leq m$, 
 \[
-   \vdash \Gamma \Rightarrow t_i : B_i[v_1 \mid\ t_1, \dots, v_{i-1} \mid\ t_{i-1}]
-\]
+    \Gamma \vdash t_i : B_i[v_1 \mid\ t_1, \dots, v_{i-1} \mid\ t_{i-1}]
+\] is derivable,
 if $\langle s_1, \dots, s_m \rangle$ is another $m$-tuple such that for  $i$, $1 \leq i \leq m$
 \[
-    \vdash \Gamma \Rightarrow s_i : B_i[v_1 \mid\ s_1, \dots, v_{i-1} \mid\ s_{i-1}]
-\]
+    \Gamma \vdash s_i : B_i[v_1 \mid\ s_1, \dots, v_{i-1} \mid\ s_{i-1}]
+\] is derivable,
 then $\langle t_1, \dots, t_m \rangle$ and $\langle s_1, \dots, s_m \rangle$ are considered equal
 iff for $i$, $1 \leq i \leq m$
 \[
-    \vdash \Gamma \Rightarrow t_i = s_i : B_i[v_1 \mid\ s_1, \dots, v_{i-1} \mid\ s_{i-1}]
-\]
+    \Gamma \vdash t_i = s_i : B_i[v_1 \mid\ s_1, \dots, v_{i-1} \mid\ s_{i-1}]
+\] is derivable,
 according to rules \textsc{Crefl1} and \textsc{Crefl2} the definition is independent from the choice of representatives.
 We write $[\langle t_1, \dots, t_m \rangle] : [\Gamma] \to [\Delta]$ for the class of $m$-tuples equatable to $\langle t_1, \dots, t_m \rangle$.
 If we consider $\Theta \equiv v_1 \colon C_1, \dots, v_k \colon C_k$ is another admissible context and 
@@ -764,7 +804,7 @@ If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible contex
 map $p([\Gamma])\colon [\Gamma] \to \father [\Gamma]$ is represented by the tuple $\langle v_1, \dots, v_{n-1} \rangle$.
 Let $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta \equiv v_1 \colon B_1, \dots, v_m \colon B_m$ 
 admissible contexts and $t = [\langle t_1, \dots, t_m \rangle] \colon [\Gamma] \to [\Delta]$ and 
-$C$ a pre-well-formed type expression with $\vdash \Delta \Rightarrow C \type$, i.e. $\Delta, v_{m+1} \colon C$ is
+$C$ a pre-well-formed type expression with $\Delta \vdash C \type$, i.e. $\Delta, v_{m+1} \colon C$ derivable is
 an admissible context, then 
 \[
     t^*[\Delta, v_{m+1} \colon C] = [\Delta, v_{n+1} \colon C[v_1 \mid\ t_1, \dots, v_m \mid\ t_m]]
@@ -797,48 +837,47 @@ that $C_I$ does not interpret or identify more objects or terms that those that 
 \begin{theorem} [Completeness Theorem]
     Let $\mathcal{M}$ be the interpretation of calculus of construction in $C_I$, then 
     \begin{enumerate}
-        \item if $\mathcal{M}[\Gamma]$ is defined then $\vdash \Gamma \ok$
-        \item if $\mathcal{M}[\Gamma ; A]$ is defined then $\vdash \Gamma \Rightarrow A \type$
-        \item if $\mathcal{M}[\Gamma; t]$ is defined then $\vdash \Gamma \Rightarrow t \colon A$ for some pre-type-expression $A$
+        \item if $\mathcal{M}[\Gamma]$ is defined then $\Gamma \ok$ is derivable;
+        \item if $\mathcal{M}[\Gamma ; A]$ is defined then $\Gamma \vdash A \type$ is derivable;
+        \item if $\mathcal{M}[\Gamma; t]$ is defined then $\Gamma \vdash t \colon A$ is derivable for some pre-type-expression $A$;
         \item if $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$, $\Delta \equiv y_1 \colon B_1, \dots, y_m \colon B_m$
               and $\mathcal{M}[\Gamma; A] = \mathcal{M}[\Delta; B]$, then $n = m$ and 
-              \begin{multline*}
-                \vdash 
+              \begin{multline*} 
                     v_1 \colon A_1 [x_1 \mid\ v_1, \dots, x_n \mid\ v_n], \dots, v_n \colon A_n[x_1 \mid\ v_1, \dots, x_n \mid\ v_n]
                 = \\ =
                     v_1 \colon B_1 [y_1 \mid\ v_1, \dots, y_m \mid\ v_m], \dots, v_m \colon B_m[y_1 \mid\ v_1, \dots, y_m \mid\ v_m]
               \end{multline*}
               \begin{multline*}
-                \vdash
                     v_1 \colon A_1 [x_1 \mid\ v_1, \dots, x_n \mid\ v_n], \dots, v_n \colon A_n[x_1 \mid\ v_1, \dots, x_n \mid\ v_n] \\
-                \Rightarrow
+                \vdash
                     A[x_1 \mid\ v_1, \dots, x_n \mid\ v_n] = B[y_1 \mid\ v_1, \dots, y_m \mid\ v_m]
               \end{multline*}
+              are derivable;
         \item if $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$, $\Delta \equiv y_1 \colon B_1, \dots, y_m \colon B_m$
               and $\mathcal{M}[\Gamma; t] = \mathcal{M}[\Delta, s]$, then $n = m$ and
-              \begin{multline*}
-                \vdash 
+              \begin{multline*} 
                     v_1 \colon A_1 [x_1 \mid\ v_1, \dots, x_n \mid\ v_n], \dots, v_n \colon A_n[x_1 \mid\ v_1, \dots, x_n \mid\ v_n]
                 = \\ =
                     v_1 \colon B_1 [y_1 \mid\ v_1, \dots, y_m \mid\ v_m], \dots, v_m \colon B_m[y_1 \mid\ v_1, \dots, y_m \mid\ v_m]
-              \end{multline*}
+              \end{multline*} is derivable,
               and for some pre-type-expression $A$
               \begin{multline*}
-                \vdash
                     v_1 \colon A_1 [x_1 \mid\ v_1, \dots, x_n \mid\ v_n], \dots, v_n \colon A_n[x_1 \mid\ v_1, \dots, x_n \mid\ v_n] \\
-                \Rightarrow
+                \vdash
                     t[x_1 \mid\ v_1, \dots, x_n \mid\ v_n] = s[y_1 \mid\ v_1, \dots, y_m \mid\ v_m] : A
               \end{multline*}
+              is derivable.
     \end{enumerate}
 \end{theorem}
 
-This result says that $\mathcal{C}_I$ is the initial object of the category of doctrines of constructions and 
-structure preserving functors, named $\mathbf{DoC}$.
+It can be also shown that $\mathcal{C}_I$ is the initial object of the category of doctrines of constructions and 
+structure preserving functors, named $\mathbf{DoC}$. Hence tha term model satisfies the properties of soundness, 
+completeness and initiality that we wanted.
 
 \section{Extending Calculus of Constructions and its Interpretation}
 
 In this section we will show how to add symbols to Calculus of Constructions, the same thing that we could do in 
-GATs. We need to understand the current CoC as just as a minimal starting point, same as the empty theory. 
+GATs. We need to understand the current CoC as just as a minimal starting point, same as the empty theory for GATs. 
 Inspired by the constructions for Categories with Families presented in this paper \cite{bezem2021}, we will inductively
 define the concept of signature $\Sigma$ (corresponding to theory when talking about GATs), CoC extended by $\Sigma$,
 the corresponding category $\mathbf{DoC}_\Sigma$ and interpretation functions $\mathcal{M}^\Sigma$.
@@ -892,3 +931,360 @@ Under this construction, we can consider $\mathcal{C}_\Sigma$ to be the exact sa
 but with $\text{CoC}_\Sigma$ instead of $\text{CoC}_\emptyset$. Following a similar proof that the original proof
 for $\mathcal{C}_I$ in \cite{streicher} we can prove the corresponding \textit{Completeness Theorems} and 
 that $\mathcal{C}_\Sigma$ is the initial object of $\mathbf{DoC}_\Sigma$. 
+
+\section{Problem Redefinition}
+
+Now, we want to redefine our problem from the previous definition for GATs to our new syntax, then rephrase it to 
+similar categorical terms such that an extended version of the expansion algorithm works.
+
+The problem now can be formalized as follows:
+given a valid signature of Calculus of Constructions $\Sigma$ and a derivable sequent $\Gamma \vdash A \type$ in 
+$\text{CoC}_\Sigma$, we want to find a pre-object-expression $t$ such that 
+$\Gamma \vdash t \colon A$ is a derivable rule in $\text{CoC}_\Sigma$.
+
+We can consider this from the point of view of the category $\mathcal{C}_\Sigma$ introduced in the previous section.
+This means that our problem is equivalent to finding a section $s$ of 
+$\mathcal{M}[\Gamma; A] = [\Gamma, v_{n+1} \colon A]$ in $\mathcal{C}_\Sigma$, assuming
+$\Gamma$ is a context of length $n$ in normal form.
+
+Moreover, we want to use the reduction of our search space we did on the previous case
+by considering the category over a base object. To do it we need the following result:
+
+\begin{theorem}
+    Given $\mathcal{C}$ a doctrine of constructions, and $A$ an arbitrary object of $\mathcal{C}$. Then the \textbf{relativization}
+    of $\mathcal{C}$ to $A$, noted as $\mathcal{C}_A$, is defined as:
+    \begin{enumerate}
+        \item $\mathcal{C}_A$ is a category whose objects are the collection of objects $B$ over $A$ in $\mathcal{C}$,
+              i.e. objects $B$ in $\mathcal{C}$ such that $A \leq B$;
+        \item for two object $B, C$ in $\mathcal{C}_A$, a morphism from $B$ to $C$ over $A$, i.e. a morphism in $\mathcal{C}_A$,
+              is a morphism $f \colon B \to C$ in $\mathcal{C}$ such that $p(C, A) \circ f = p(B, A)$, composition
+              of morphisms is inherited from $\mathcal{C}$;
+        \item $\father_A(B) = \father(B)$ for $B > A$ and $\father_A(A) = \father(A)$;
+        \item for objects $B > A$ we put $p_A(B) = p(B) \colon B \to \father_A(B)$;
+        \item for $B, C, D$ objects of $\mathcal{C}$ with $\father_A(D) = C$ and morphism $f \colon B \to C$ in $\mathcal{C}_A$
+              we put \[
+                f^{*_A}D = f^*D \quad \text{ and } \quad q_A(f, D) = q(f, D)
+              \]
+        \item for $B$ in $\mathcal{C}$ with $\level_A(B) \geq 2$,
+              \[
+                \prod_A(B) = \prod(B) \quad \text{ and } \quad \eval^A_B = \eval_B
+              \]
+        \item if $T$ is the collection of types of $\mathcal{C}$, then 
+              \[
+                T_A = p(A)^*T
+              \]
+              is the collection of types of $\mathcal{C}_A$.
+    \end{enumerate}
+    is a doctrine of constructions.
+\end{theorem}
+\begin{proof}
+    TODO : write proof
+\end{proof}
+
+With this result, and with the notation of $\Gamma$ subscript introduced in the second chapter, we will reduce our problem of 
+finding a section of $[\langle x \colon A \rangle_\Gamma]$ in $\mathcal{C}_{\Sigma, \Gamma}$ the relativization of $\mathcal{C}_\Sigma$
+to $\Gamma$.
+
+\section{Expansion Algorithm}
+
+Now we will extend the expansion algorithm from the previous chapter. We will reintroduce the rules in order to match the syntax we are 
+using for Calculus of Constructions.
+First, consider $G$ to be a finite subcategory of $\mathcal{C}_{\Sigma, \Gamma}$ containing: $[\langle \rangle_\Gamma]$,
+$[\langle \Prop \rangle_\Gamma]$, $\langle x \colon A \rangle_\Gamma$ and their projections.
+Now we will define the expansion rules. Consider a context $\Delta$, then
+\begin{enumerate}
+    \ruleitem{E1}{sort-symbol-intro-2}
+        For each sort symbol in the signature $\Sigma$, with an introductory rule $\Omega \vdash S \type$,
+        such that $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, $\Omega \equiv z_1 \colon C_1, \dots, z_w \colon C_w$ and
+        $G_n$ contains sections
+        \begin{align*}
+            [ \Delta ] 
+                &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma} 
+                [ \Delta, z_1 \colon C_1 ] \\
+            [ \Delta ] 
+                &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma} 
+                [ \Delta, z_2 \colon C_2[z_1 \mid\ t_1] ] \\
+            & \vdots \\
+            [ \Delta ] 
+                &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_\Gamma} 
+                [ \Delta, z_w \colon C_w[z_1 \mid\ t_1, \dots, z_{w-1} \mid\ t_{w-1}] ]
+        \end{align*}
+        then we add $[ \Delta, y \colon A[z_1 \mid\ t_1, \dots, z_w \mid\ t_w] ]$ and its projection to $G_{n+1}$.
+    \ruleitem{E2}{variable-duplication-2}
+        if $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, then we add the sections 
+        \[
+            [\Delta] \xrightarrow{\langle y_1, \dots, y_m, y_i \rangle_\Gamma} [\Delta, y \colon B_i] 
+        \]\[
+            [\Delta] \xrightarrow{\langle y_1, \dots, y_m, x_j \rangle_\Gamma} [\Delta, x \colon A_j]
+        \]
+        and their corresponding projections for each $1 \leq i \leq m$ and each $1 \leq j \leq n$.
+    \ruleitem{E3}{operator-symbol-intro-2}
+        For each sort symbol in the signature $\Sigma$, with an introductory rule $\Omega \vdash F \colon A$,
+        such that $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, $\Omega \equiv z_1 \colon C_1, \dots, z_w \colon C_w$
+        and the following sections exist in $G_n$
+        \begin{align*}
+            [ \Delta ]
+                &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}
+                [ \Delta, z_1 \colon C_1 ] \\
+            [ \Delta ]
+                &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma}
+                [ \Delta, z_2 \colon C_2[z_1 \mid\ t_1] ] \\
+            & \vdots \\
+            [ \Delta ]
+                &\xrightarrow{\langle y_1, \dots, y_m, t_w\rangle_\Gamma}
+                [ \Delta, z_w \colon C_w[z_1 \mid\ t_1, \dots, z_{w-1} \mid\ t_{w-1}] ]
+        \end{align*}
+        then we add the section
+        \[
+            [ \Delta ]
+            \xrightarrow{\langle y_1, \dots, y_m, F [z_1 \mid\ t_1, \dots, z_w \mid\ t_w] \rangle_\Gamma}
+            [ \Delta, z \colon A[z_1 \mid\ t_1, \dots, z_w \mid\ t_w] ]
+        \]
+    \ruleitem{E4}{pullback-2}
+        if $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, 
+        for every morphism \[
+            [\langle t_1, \dots, t_{m-1} \rangle_\Gamma]
+            : [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w ]
+            \to [\Gamma y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1} ]
+        \]
+        we construct the corresponding pullback:
+        \[
+        \begin{tikzcd}
+            \Gamma, 
+            z_1 \colon C_1, \dots, z_w \colon C_w,
+            y_m \colon B_m[y_1 \mid\ t_1, \dots, y_{m-1} \mid\ t_{m-1}]
+                \arrow[r, "{\langle t_1, \dots, t_{m-1}, y_m \rangle_\Gamma}"]
+                \arrow[d, open] 
+            & 
+            \Gamma,
+            y_1 \colon B_1, \dots, y_m \colon B_m
+                \arrow[d, open]
+            \\ 
+            \Gamma,
+            z_1 \colon C_1, \dots, z_w \colon C_w 
+                \arrow[r, "{\langle t_1, \dots, t_{m-1} \rangle_\Gamma}"]
+            &
+            \Gamma,
+            y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}
+        \end{tikzcd}
+        \]
+        to $G_{n+1}$.
+    \ruleitem{E5}{product-formation-2}
+        If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, v_{m+1} \colon C, v_{n+2} \colon D$
+        we add \[
+            \prod([\Delta]) = [
+                \Gamma,
+                v_1 \colon B_1, \dots, v_m \colon B_m,
+                v_{m+1} \colon (\prod v_{m+1} \colon C) D
+            ]
+        \]
+        \[
+            \eval_{[\Delta]} = [
+                \Gamma,
+                v_1, \dots, v_{m+1},
+                \App([v_{m+1} \colon C]D, v_{m+2}, v_{m+1})
+            ]
+        \]
+        a morphism from $[\Gamma, v_1 \colon A_1, \dots, v_m \colon B_m, v_{n+1} \colon C, v_{n+2} \colon (\prod v_{n+1} \colon B)C ]$
+        to $[\Delta]$, and the corresponding projections.
+    \ruleitem{E6}{proof-forall-intro-2}
+        If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, v_{m+1} \colon C$,
+        for any morphism $[\langle p \rangle_\Gamma] \colon [\Delta] \to [\langle v_1 \colon \Prop \rangle_\Gamma]$
+        we add \[ 
+            \forall([\langle p \rangle_\Gamma]) 
+            = [ \langle (\forall v_{m+1} C)p \rangle_\Gamma]
+            \colon [\Gamma, v_1 \colon B_1, \dots, v_m \colon B_m]
+            \to [ \langle v_1 \colon \Prop \rangle_\Gamma]
+        \]
+        \[
+            [\Delta, x \colon \Proof(p)]
+        \]
+        and its corresponding projection. 
+\end{enumerate}
+And after each expansion, we complete the category in the following way:
+for every product object, i.e. for each object $[\Delta]$ with $\Delta$
+of the form $\Omega, (\prod x \colon A) B$, and every section 
+$s = \langle x, a \rangle_\Omega$ of $[\Omega, x \colon A, y \colon B]$
+we add $\curry(s) = \langle (\lambda x \colon A) a \rangle_\Omega$
+as a section of $[\Delta]$.
+Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it as a subcategory of $\mathcal{C}_{\Sigma, \Gamma}$.
+
+\begin{theorem}
+    Every object and morphism of $\mathcal{C}_{\Sigma, \Gamma}$ is constructible by expansion.
+\end{theorem}
+\begin{proof} % TODO: how do Thin and Sub rules affect?
+    We will prove this result by induction over the $\level$ of contexts, pre-type-expressions and terms.
+
+    Consider a context $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$ in $\text{CoC}_\Sigma$, and the corresponding
+    object $[\Delta]$ in $\mathcal{C}_{\Sigma, \Gamma}$. We will prove that 
+    this object is constructible by expansion. 
+    We consider how the sequent $\Delta \ok$ was derived, it has to be by one of the following rules: 
+    \ref{rule:empty}, \ref{rule:cont-intro}, \ref{rule:cont-thin}, \ref{rule:cont-sub}, \ref{rule:crefl} and \ref{rule:reflection1}.
+    The case of \ref{rule:crefl} and \ref{rule:reflection1} are trivial, 
+    hence we consider each of the other cases:
+    \begin{enumerate}
+        \item[\ref{rule:empty}] This is the base case, when $\Delta$ is the empty context.
+            This may only happen when $\Gamma = \Delta = \langle \rangle$ and $m = 0$, and as the object $[\Gamma]$
+            is included in $G$, it is always constructible by expansion.
+        \item[\ref{rule:cont-intro}] This means that the sequent $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1} \vdash A_m \type$
+            is derivable. Which itself can only be derivable using the following rules: 
+            \ref{rule:cont-intro} (in the reverse form), \ref{rule:refl-typ}, \ref{rule:prod-form}, \ref{rule:prop}, \ref{rule:prop-type}
+            and any introductory rule of a sort symbol in $\Sigma$.
+            The derivation from rules \ref{rule:cont-intro} and \ref{rule:refl-typ} are trivial, as they both enforce the existence of the object $[\Delta]$ by premise,
+            hence we will consider the other cases:
+            \begin{enumerate}
+                \item[\ref{rule:prod-form}] Then, we have that $A_m$ is a pre-type-expression of the form $(\prod x \colon N)M$ 
+                    for some variable $x$ and two pre-type-expressions $N, M$ such that the sequent 
+                    $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}, x \colon N \vdash M \type$ is derivable.
+                    By induction hypothesis, the object 
+                    \begin{multline*}
+                        \mathcal{M}[
+                        \Gamma, 
+                        y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1},
+                        x \colon N ; M
+                        ] 
+                        = \\ =
+                        [
+                            \Gamma, 
+                            y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}, 
+                            x \colon N, y \colon M
+                        ]
+                    \end{multline*}
+                     is constructible by expansion. By the expansion rule \ref{rule:product-formation-2}
+                     applied to that object, gives us that 
+                     \begin{multline*}
+                        \prod([
+                            \Gamma,
+                            y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1},
+                            x \colon N, y \colon M
+                        ]) 
+                        = \\ =
+                        [
+                            \Gamma,
+                            y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1},
+                            x \colon (\prod x \colon N) M
+                        ] 
+                     \end{multline*}
+                     is constructible, that is equal to $[\Delta]$ as they just differ by the naming of bound variables.
+                     Hence, $[\Delta]$ is constructible by expansion.
+                \item[\ref{rule:prop}] Then we have that $A_m$ is equal to $\Prop$ as a pre-type-expression, and 
+                     and, with $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$, $\Delta' \ok$ is a derivable sequent.
+                     By induction hypothesis, we know that $[\Delta']$ 
+                     is constructible by expansion. Also, as $G$ contains $[\Gamma, x \colon \Prop]$ and it's projection to 
+                     $[\Gamma]$, by applying the expansion rule \ref{rule:pullback-2} to $[\Gamma, x \colon \Prop]$
+                     with the projection morphism from $[\Delta']$ to $[\Gamma]$,
+                     we get that the following pullback diagram is constructible by expansion:
+                     \[
+                     \begin{tikzcd}
+                        {[\Delta', x \colon \Prop]}
+                            \arrow[r, "{\langle x\rangle_\Gamma}"] 
+                            \arrow[d, open]
+                        & {[\Gamma, x \colon \Prop]}
+                            \arrow[d, open]
+                        \\
+                        {[\Delta']}
+                            \arrow[r, open]
+                        & {[\Gamma]}
+                     \end{tikzcd}
+                     \]
+                     and $[\Delta', x \colon \Prop] = [\Delta]$ as they only differ by the naming of the variables.
+                \item[\ref{rule:prop-type}] Then we have that there is a pre-object-expression $p$ such that $A_m$ equals $\Proof(p)$ as a pre-type-expression
+                     and the sequent $\Delta' \vdash p \colon \Prop$, with $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$, is derivable.
+                     By induction hypothesis, $[\Delta']$ is constructible by expansion.
+                     Moreover, by applying induction hypothesis,
+                     \[
+                        \mathcal{M}[\Delta'; p] = \langle p \rangle_\Gamma
+                     \]
+                     is constructible by expansion.
+                     Finally, by applying expansion rule \ref{rule:proof-forall-intro-2},
+                     we get that $[\Delta] = [\Delta', x \colon \Proof(p)]$ is constructible by expansion.
+                \item[\textsc{Introductory Rule}] Consider a sort symbol $S$ with the corresponding introductory rule $\Omega \vdash S$,
+                     with $\Omega \equiv z_1 \colon C_1, \dots, z_k \colon C_k$, and $t_1, \dots, t_k$ pre-object-symbols
+                     such that $A_m = S[z_1 \mid\ t_1, \dots, z_k \mid\ t_k]$.
+                     Then, for each $i$, $1 \leq i \leq k$, $\Delta' \vdash t_i \colon C_i [z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}]$
+                     are derivable judgments, where $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$.
+                     Hence, by inductive hypothesis, the sections \[
+                        \mathcal{M}[\Delta'; t_1] \colon [\Delta'] \to [\Delta', z_1 \colon C_1]
+                     \] \[
+                        \mathcal{M}[\Delta'; t_2] \colon [\Delta'] \to [\Delta', z_2 \colon C_2[z_1 \mid\ t_1]]
+                     \] \[
+                        \vdots
+                     \] \[
+                        \mathcal{M}[\Delta'; t_k] \colon [\Delta'] \to [\Delta', z_k \colon C_k[z_1 \mid\ t_1, \dots, z_{k-1} \mid\ t_{k-1}]]
+                     \] are constructible by expansion. Then, by expansion rule \ref{rule:sort-symbol-intro-2},
+                     $[\Delta] = [\Delta', y \colon S[z_1 \mid\ t_1, \dots, z_m \mid\ t_m]]$
+                     is constructible by expansion.
+                \item[] 
+            \end{enumerate}
+        \item[\ref{rule:cont-thin}] Since context $\Delta$ is of the form $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$,
+            then there exists an $k$, $1 \leq k \leq m$ such that $\Gamma, y_1 \colon B_1, \dots, y_{k-1} \colon B_{k-1}, y_{k+1} \colon B_{k+1}, \dots, y_m \colon B_m$
+            is a context and $\Gamma, y_1 \colon B_1, \dots, y_{k-1} \colon B_{k-1} \vdash B_k \type$ is a derivable sequent.
+            By induction hypothesis, if $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{k-1}$, $[\Delta']$ is constructible by expansion,
+            and by the same argument in the last point, so is $[\Delta', y_k \colon B_k]$.
+            Finally, by considering the expansion rule \ref{rule:pullback-2} on $[\Delta', y_{k+1} \colon B_{k+1}, \dots, y_m \colon B_m]$
+            and the projection morphism of $[\Delta', y_k \colon B_k]$ onto $[\Delta']$, we get that the pullback diagram
+            \[
+            \begin{tikzcd}
+                {[\Delta]} 
+                    \arrow[r, "{\langle y_1, \dots, y_{k-1}, y_{k+1}, \dots, y_m \rangle_\Gamma}"]
+                    \arrow[d, open]
+                & {[\Delta', y_{k+1} \colon B_{k+1}, \dots, y_m \colon B_m]}
+                    \arrow[d, open]
+                \\
+                {[\Delta', y_k \colon B_k]} 
+                    \arrow[r, open] 
+                & {[\Delta']}
+            \end{tikzcd}
+            \] is constructible by expansion, hence, so is $[\Delta]$.
+        \item[\ref{rule:cont-sub}] TODO
+        \end{enumerate}
+
+        Now consider a morphism \[
+            [\langle t_1, \dots, t_w \rangle_\Gamma]
+            \colon [\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m]
+            \to [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]
+        \] in $\mathcal{C}_{\Sigma, \Gamma}$. 
+        We will note $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. 
+        Then for $i$, $1 \leq i \leq w$, \[
+            \Delta \vdash t_i \colon C_i[z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}]
+        \] are derivable sequents of $\text{CoC}_\Sigma$. Now we want to see that 
+        for each $i$, the following section is constructible by expansion: \[
+            [\langle y_1, \dots, y_m, t_i \rangle_\Gamma]
+            \colon [\Delta] 
+            \to [\Delta, z_i \colon C_i[z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}]]
+        \]
+        We will consider the ways the mentioned sequents are derived. 
+        They must be derived by one of the following rules:
+        \ref{rule:ass}, \ref{rule:refl-obj}, \ref{rule:conv1}, \ref{rule:prod-intro}, \ref{rule:prod-elim}, \ref{rule:prop-type} and \ref{rule:forall-intro}. 
+        The cases of \ref{rule:refl-obj} and \ref{rule:conv1} are trivial, hence we will consider the other cases:
+        \begin{enumerate}
+            \item[\ref{rule:ass}] We have that there exists an $1 \leq j \leq m$ or $1 \leq k \leq n$ such that 
+                \begin{align*}
+                    t_i = y_j \quad \text{ orange } \quad t_i = x_k
+                \end{align*}
+                we will suppose that $t_i = y_j$ for some $j$, the other case is equivalent.
+                In that case $B_j = C_i [z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}]$.
+                We know that $\Delta$ is a context, hence by inductive hypothesis we have that $[\Delta]$ is constructible by expansion.
+                When applying the expansion rule \ref{rule:variable-duplication-2}, we get that the 
+                section \[
+                    [\langle y_1, \dots, y_m, y_j \rangle_\Gamma] 
+                    \colon [\Delta] 
+                    \to [\Delta, y \colon B_j] 
+                \] is constructible by expansion, and it is equal to $[\langle y_1, \dots, y_m, t_i \rangle_\Gamma]$,
+                hence the least is also constructible by expansion.
+            \item[\ref{rule:prod-intro}] Then there exists one pre-object-expression $t$ and two pre-type-expression $A, B$
+                such that $t_i = (\lambda x \colon A) t$ and $C_i[z_1 \mid\ t_1, \dots z_{i-1} \mid\ t_{i-1}] = (\prod x \colon A) B$,
+                for some variable $x$. Moreover, as $\level[\Delta; (\lambda x \colon A) t] = \level[\Delta, x \colon A ; t] + 1$,
+                by induction hypothesis, the section \[
+                    [\langle y_1, \dots, y_m, x, t\rangle_\Gamma]
+                    \colon [ \Delta, x \colon A]
+                    \to [ \Delta, x \colon A, y \colon B]
+                \] is constructible by expansion.
+                Applying the expansion rule \ref{rule:product-formation-2} to $[\Delta, x \colon A, y \colon B]$,
+                we get that $[\Delta, f \colon (\prod x \colon A) B]$ is constructible by expansion.
+                Finally by the curry completion condition we get that \[
+                    \curry(\langle y_1, \dots, y_m, x, t \rangle_\Gamma) = \langle y_1, \dots, y_m, (\lambda x \colon A) t \rangle_\Gamma
+                \] is constructible by expansion.
+            \item[\ref{rule:prod-elim}] 
+        \end{enumerate}
+\end{proof}
