@@ -1236,7 +1236,31 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
                 & {[\Delta']}
             \end{tikzcd}
             \] is constructible by expansion, hence, so is $[\Delta]$.
-        \item[\ref{rule:cont-sub}] TODO
+            % TODO : fix alignment
+        \item[\ref{rule:cont-sub}] Then there exists a $k$, $1 \leq k \leq m$, a variable $x$ not appearing in $\Delta$, pre-type-expressions $A, B'_k, \dots, B'_m$ and a pre-object-expression $t$
+            such that $\Gamma, y_1 \colon B_1, \dots, y_{k-1} \colon B_{k-1}, x \colon A, y_k \colon B'_k, \dots y_m \colon B'_m \ok$ and $\Gamma, y_1 \colon B_1, \dots, y_{k-1} \colon B_{k-1} \vdash t \colon A$
+            are derivable sequents and $B_i = B'_i[x \mid\ t]$ for $k \leq i \leq m$.
+            For simplicity of notation, we will note $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{k-1} \colon B_{k-1}$
+            Then, by induction hypothesis we have that both contexts $[\Delta', x \colon A]$ % TODO: check if this induction is valid
+            and $[\Delta', x \colon A, y_k \colon B'_k, \dots y_m \colon B'_m]$
+            and the section $[\langle y_1, \dots, y_{k-1}, t \rangle_\Gamma]$ are constructible by expansion.
+            Hence, by rule \ref{rule:pullback-2}, so is the following pullback diagram:
+            \[
+            \begin{tikzcd}
+                {[\Delta', y_k \colon B'_k[x \mid\ t], \dots, y_m \colon B'_m[x \mid\ t]]} 
+                    \arrow[r, "{[\langle s, y_k, \dots, y_m \rangle_{\Delta'}]}"] 
+                    \arrow[d, open]
+                & {[\Delta', x \colon A, y_k \colon B'_k, \dots, y_m \colon B'_m]} 
+                    \arrow[d, open]
+                \\ 
+                {[\Delta']}
+                    \arrow[r, "{[\langle s \rangle_{\Delta'}]}"]
+                & {[\Delta', x \colon A]}
+            \end{tikzcd}
+            \]
+            Finally, $[\Delta] = [\Delta', y_k \colon B'_k[x \mid\ t], \dots, y_m \colon B'_m[x \mid\ t] ]$ 
+            is constructible by expansion.
+
         \end{enumerate}
 
         Now consider a morphism \[
@@ -1285,6 +1309,11 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
                 Finally by the curry completion condition we get that \[
                     \curry(\langle y_1, \dots, y_m, x, t \rangle_\Gamma) = \langle y_1, \dots, y_m, (\lambda x \colon A) t \rangle_\Gamma
                 \] is constructible by expansion.
-            \item[\ref{rule:prod-elim}] 
+            \item[\ref{rule:prod-elim}] Then there exists one variable $x$, two pre-type-expressions $A, B$ and two pre-term-expressions $t, s$ such that
+                $\Delta' \vdash t \colon (\prod x \colon A) B$, $\Delta' \vdash s \colon A$, $\Delta', x \colon A \vdash B \type$ and $B_m = \App([x \colon A] B, t, s)$.
+                TODO: finish this, photo of partial proof 
+
+            \item[\ref{rule:prop-type}] TODO
+            \item[\ref{rule:forall-intro}] TODO  
         \end{enumerate}
 \end{proof}
