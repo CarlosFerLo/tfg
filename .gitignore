@@ -328,3 +328,4 @@ TSWLatexianTemp*
 .vscode
 .notebook
 .venv
+_minted-main
