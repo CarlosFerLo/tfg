@@ -1,14 +1,28 @@
 % !TEX root = ../main.tex
 \chapter{The Calculus of Constructions}
 
-In this chapter we will expand the notions presented to Calculus of Constructions a type theory 
-presented by Coquand and Huet in \cite{coquand1988}. It is the base of Calculus of Inductive constructions,
-the type theory under Rocq (formerly Coq), and the first step to our goal of extending this framework to
-Lean. 
-The main additions in this type theory compared to GATs are the following:
-here product types are first class citizens, i.e. they are included in the base level, not in the signature,
-also, we can find a $Prop$ universe whose terms are also types themselves, something we could not build 
-with GAT. 
+In Chapter 1, we established a pipeline for autonomous theorem proving: 
+take a theory, translate its syntax into a Contextual Category, and reframe proof-finding
+as the geometric problem of finding a section in a graph.
+
+In this chapter, we scale up the complexity to the Calculus of Constructions (CoC).
+Introduced by Coquand and Huet \cite{coquand1988}, CoC is a powerful high-order typed lambda calculus.
+It serves as the foundation for the Calculus of Inductive Constructions, the type 
+theory powering modern proof assistants like Rocq (formerly Coq).
+
+The primary additions in CoC, compared to Generalized Algebraic Theories (GATs), are: 
+\begin{enumerate}
+    \item \textbf{Product Types ($\prod$-types):} These are first-class citizens,
+        meaning dependent function types exist at the base level rather than just
+        in the theory's signature.
+    \item \textbf{The universe of Propositions ($\Prop$):} A type universe whose terms are themselves
+        types, allowing for higher-order logic and universal quantification over types.
+\end{enumerate}
+
+We will define syntax of CoC, map it to a richer categorical structure called
+Doctrine of Constructions, and extend our Expansion Algorithm to navigate this new, 
+highly complex search space.
+
 
 \section{Syntactic Formulation}
 

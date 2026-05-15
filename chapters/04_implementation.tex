@@ -100,6 +100,7 @@ First we will initialize an implica graph and we add the proposition $A \to A$ u
 \begin{minted}{python}
     import implica
 
+    # Initialize the graph with Combinatory Logic constants
     graph = implica.Graph(
         constants = [
             implica.Constant(("K", "(A:*)->(B:*)->A")),
@@ -107,27 +108,34 @@ First we will initialize an implica graph and we add the proposition $A \to A$ u
         ]
     )
 
+    # Seed the graph with our target objective (A -> A)
     graph.query().create(f"(:{query})").execute()
 \end{minted}
 
 Now, to perform one expansion iteration we execute the following code
 \begin{minted}{python}
+    # Mark all current nodes as 'existed' to differentiate them from new generations
     graph.query().match("(N:*)").set("N", { "existed" : True }).execute()
 
+    # Rule 1 & 2: K-Combinator Expansions
     (
         self.graph.query()
+        # Find existing nodes matching the signature of a K-target
         .match("(N:(B:*) -> (A:*) { existed: true })")
+        # Create the precursor node and the connecting morphism
         .create("(: A { existed: false })-[::@K(A, B)]->(N)")
         .execute()
     )
     (
         self.graph.query()
         .match("(N:(A:*) { existed: true })")
+        # CRITICAL: Limit creation number to prevent memory overflow
         .limit(10)
         .match("(M:(B:*) { existed: true })")
         .create("(N)-[::@K(A, B)]->(:B -> A { existed: false })")
         .execute()
     )
+    # Rule 3 & 4: S-Combinator Expansions
     (
         self.graph.query()
         .match("(N:((A:*) -> (B:*)) -> A -> (C:*) { existed: true })")
@@ -194,6 +202,23 @@ the exponential growth of the graph continues.
     \caption{Overview of the $G_1$ through $G_4$ subcategories.}
     \label{fig:g-grid}
 \end{figure}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Iteration ($G_n$)} & \textbf{Nodes (Capped at 10/match)} & \textbf{Nodes (Uncapped)} \\
+\midrule
+$G_0$ & 1 & 1 \\
+$G_1$ & 3 & 3 \\
+$G_2$ & 11 & 11 \\
+$G_3$ & 116 & 123 \\
+$G_4$ & 1352 & 15131 \\
+\bottomrule
+\end{tabular}
+\caption{Node count explosion during the expansion algorithm for the proof of $A \to A$ in $CL_\rightarrow$.}
+\label{tab:node_explosion}
+\end{table}
 
 Now that we have a clearer understanding of how the expansion algorithm works, we will introduce the 
 optimizations for the general case.
@@ -289,3 +314,7 @@ output $(0.3, 0.3, 0.4)$ from the prover, that node would still be label \textsc
 A constant function provides little-to-none benefit, because it will cap the complexity of objects our model can handle,
 as by not allowing drastic pruning the model won't be able to dig to deep into the graph. An example of such a function 
 could be $f(x) = (a - b) \exp^{-cx} + b$, with $a, b, c > 0$.
+This confidence baseline $f(x)$ will decay over time, when $x$ grows, and it will give more autonomy to the Prover as it learns
+to accurately slice through the combinatorial explosion.
+
+% TODO: add "Scaling the Architecture to the Calculus of Constructions"
