@@ -194,3 +194,82 @@ the exponential growth of the graph continues.
     \caption{Overview of the $G_1$ through $G_4$ subcategories.}
     \label{fig:g-grid}
 \end{figure}
+
+Now that we have a clearer understanding of how the expansion algorithm works, we will introduce the 
+optimizations for the general case.
+
+\section{Graph Neural Networks}
+
+Graph Neural Networks (GNNs) process complex data structures by leveraging the relationships between individual 
+data points (nodes) and their connections (edges) through a mechanism known as "message passing". 
+During this process, each node iteratively updates its own representation by gathering and aggregating information 
+from its immediate neighbors, enabling the model to learn both the local features of the data and the broader structural 
+geometry of the network. Because of this unique architecture, GNNs are highly effective for node classification 
+(assigning specific labels to individual nodes), graph classification (categorizing the entire network structure as a 
+single entity), and graph embedding (translating complex graph structures into lower-dimensional vectors for easier 
+processing in downstream machine learning tasks).
+
+The idea behind the expansion algorithm comes from trying to use GNNs to take advantage of the graph structures that 
+emerge from the categorical semantics we presented in the previous chapters. So we built it to work together with a 
+GNN performing node classification. 
+First consider the GNN as just a simple labeler, that given the finite subcategory $G_n$ produced by the previous 
+expansion, it labels each node in the following 3 categories: \textsc{Keep}, \textsc{Expand} and \textsc{Delete}.
+Then we define a partial expansion phase where we compute $G_{n+1}$ from $G_n$ without those nodes labeled as 
+\textsc{Delete}, and by only applying expansion on those nodes marked as \textsc{Expand}.
+This change will make us lose the exhaustivity of the process, but we will be gaining a lot of efficiency if the 
+GNN manages to prune all the useless nodes and expand only those nodes we really need for our generation. 
+In the ideal case, i.e. the GNN always labels nodes correctly, we will be able to still generate terms of any type
+but we would make it with far less complexity.
+
+Although the implementation of the following algorithm is left for further work, we will present the basic ideas
+for building our labeling model. 
+The first thing we must note is that using supervised learning techniques (that need to have input - output pairs)
+need for us to be able to generate a large quantity of training examples by the execution of the raw expansion algorithm,
+hence we have to discard this option as we would just be able to train our model on very simple examples, due to 
+the high complexity of the algorithm. 
+To solve this we would need to train using unsupervised learning. The technique we are going to be use is called 
+Teacher-Student or Conjecturer-Prover. It consists in having a two-headed model, i.e. a model with a GNN based body 
+together with two different projection heads. The first head or conjecturer will propose a challenge, or in our case a type we need 
+to find a term of, and the second head or prover will act as the GNN we talked before and try to find the term with 
+the partial expansion algorithm. Then, if a solution is found, we will compute the optimal labels at each step to compute
+the loss of the prover head. Then we will compute the loss of the conjecturer by measuring how far it was the prover's
+loss from some objective loss, this way we make the conjecturer output problems with the right kind of complexity.
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/model.png}
+    \caption{Base architecture diagram}
+\end{figure}
+
+We will study the components separately:
+
+\noindent
+\textbf{Node Embedding:} The objective of this component is to assign numerical embeddings, i.e. vectors, to the nodes of
+    the input graph. This embeddings represent the raw concept of the node, without taking the graph structure into consideration.
+    Hence it mainly reflects the syntactic meaning of the node. They can be learned or computed from the syntax. 
+    If we fix a signature, we could learn a basic embeddings for all sort and operator symbols of the signature, assign 
+    variables a non-learnable embedding computed just from the name, and learn some embedding merging operations to 
+    generate embeddings of more complex expressions or contexts. 
+    This merging operations can be performed by small encoder only transformer models for example.
+    In the case were we have no fixed signature, i.e. we want to create a foundational model to be used with any given signature
+    we could just learn the aggregation operations, but this is left for further research.
+
+\noindent 
+\textbf{GNN Body:} The exact architecture of the message passing GNN has to be determined, but it's propose is to enrich
+    the basic embeddings into structure aware embeddings. It is important that the architecture selected expects directed
+    edges, as the direction of morphisms is key in this setup. 
+
+\noindent
+\textbf{Conjecturer:} just a linear projection layer from the original embedding dimension to a 3-dimensional vector.
+    This means that the conjecturer will be classifying nodes into 3 categories: \textsc{Objective}, \textsc{Include} and \textsc{Exclude};
+    with the constraint that only one node can be chosen to be the objective node, so first we take the node with the highest 
+    \textsc{Objective} score, mark it as an Objective, then we perform soft-max with the other two components of the other nodes
+    to assign the labels \textsc{Include} and \textsc{Exclude}. Then the challenge the Prover will try to solve is to 
+    generate a section of the \textsc{Objective} node starting from the graph composed by the \textsc{Objective} node and
+    all the nodes labeled as \textsc{Include}. Morphisms that exist due to composition or currying of morphisms that include
+    an excluded node won't be included.
+    
+\noindent
+\textbf{Prover:} this component is just a linear layer from the original embedding dimension to a 3-dimensional vector,
+    same as the conjecturer, and then apply a soft-max. It classifies the nodes in 3 categories: \textsc{Keep}, \textsc{Expand} and \textsc{Delete}.
+
+
