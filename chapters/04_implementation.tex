@@ -272,4 +272,20 @@ We will study the components separately:
 \textbf{Prover:} this component is just a linear layer from the original embedding dimension to a 3-dimensional vector,
     same as the conjecturer, and then apply a soft-max. It classifies the nodes in 3 categories: \textsc{Keep}, \textsc{Expand} and \textsc{Delete}.
 
-
+Now we have to consider training the model. The first problem is cold start. At the beginning we face an empty graph 
+to feed to the conjecturer and a conjecturer yielding nonsense. This means that we have to somehow pre-train the conjecturer
+before stating the unsupervised training loop. 
+We will propose a way to go around this problem, but it must undergo testing before assuring it works. We start by feeding 
+the model a type we know it will find a type in relatively few steps of expansion, like $A \to A$ in our previous example.
+We can use this expansion to construct a base graph. 
+This graph contains objects whose sections are fairly easy to construct, as we did it in a few iterations,
+then we select some of them and use them first as labeled examples for our conjecturer.
+Then we start the unsupervised training loop. At first, our prover also yields nonsense, so if we let it decide the path 
+of our partial expansion it will fail catastrophically, leaving us with no examples to train our model with.
+To solve this, we consider a function that determines the score (value) needed by a label in order for us to take action.
+Name this function $f \colon \omega \to (0, + \infty)$. As an example, we take the function $f = 0.8$, then if we get the 
+output $(0.3, 0.3, 0.4)$ from the prover, that node would still be label \textsc{Expand}, although it should be labeled as 
+\textsc{Delete}. In the other hand, if the prover output $(0.05, 0.1, 0.85)$ for a node, it would be labeled as \textsc{Delete}.
+A constant function provides little-to-none benefit, because it will cap the complexity of objects our model can handle,
+as by not allowing drastic pruning the model won't be able to dig to deep into the graph. An example of such a function 
+could be $f(x) = (a - b) \exp^{-cx} + b$, with $a, b, c > 0$.
