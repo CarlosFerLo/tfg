@@ -9,7 +9,7 @@ for interpreting the more complex Calculus of Constructions in Chapter 2.
 
 \section{Generalized Algebraic Theories}
 
-Generalized Algebraic Theory (or GAT), originally presented by J. Cartmell 
+Generalized Algebraic Theories, originally presented by J. Cartmell 
 in his thesis \cite{cartmell1978} \cite{cartmell1986},
 is an abstraction of Martin-L\"of type theory
 and is a generalization of the usual notion of a many-sorted 
@@ -17,8 +17,10 @@ algebraic theory in the following manner:
 while in Martin L{\"o}ff's many-sorted algebraic theories sorts
 are constant types, interpreted as sets, in generalized
 algebraic theories sorts might be constant or variable,
-over a specified range of types, and variable types
-are interpreted as families of sets. So a generalized
+over a specified range of types. Variable types
+are interpreted as families of sets. 
+
+Formally, a generalized
 algebraic theory consists of:
 \begin{enumerate}
     \item a set of sorts, that can be constant or variable;
@@ -26,21 +28,19 @@ algebraic theory consists of:
     \item a set of axioms, where each axiom is an identity between similar expressions. 
 \end{enumerate}
 
-Let's present category theory for example:
+To build intuition, consider the theory of categories.
 The set of sorts contains two elements $Ob$ and $Hom$.
-$Ob$ is a constant type and $Hom$ is a variable type,
-for a pair of terms of type $Ob$, name them $x, y$, we
-have a type $Hom(x, y)$.
-Here we see a key point in general algebraic theories,
-types vary over terms, no over types.
+$Ob$ is a constant type and $Hom$ is a variable type;
+for any two terms $x, y$ of type $\Ob$, we have a type $\Hom(x,y)$.
+Here, we see a key feature of GATs: types vary over terms, not over types.
 The set of operators also has two elements $id$ and $\circ$.
 The $id$ operator has one argument $x$ of type $Ob$,
 and returns a value of type $Hom(x, x)$. This shows
 how the type of value of an operator might vary depending
 on the arguments. 
 The $\circ$ operator (or composition) expects 5 arguments, 
-three of type $Ob$, name them $x, y, z$, one of type $Hom(x, y)$,
-say $f$, and one of type $Hom(y, z)$, named $g$, and it returns
+three terms $x, y, z$ of type $Ob$, one term $f$ of type $Hom(x, y)$,
+and one term $g$ of type $Hom(y, z)$. It returns
 a value of type $Hom(x, z)$.
 Here we see that the type of an argument might also vary depending
 on a previous argument.
@@ -49,8 +49,8 @@ write $\circ(f, g)$, as the first three arguments might be inferred from the las
 This notation is discussed in the original paper \cite{cartmell1986}. 
 
 Now we will introduce the notation we will be using when talking 
-about terms and types. {\color{orange} This notation will be formally defined
-in a later section.} So consider you have a set of variables $V$,
+about terms and types. This notation will be formally defined
+in a later section. So consider you have a set of variables $V$,
 we will associate terms to variables as required.
 When asserting that a term $t$ is of type $A$ we will write
 $t \colon A$, but if $t$ has variables $x_1, \dots, x_n$ occurring in it this assertion
@@ -313,16 +313,20 @@ but would make applying induction very messy.
 
 \section{Contexts and Realizations} % --- Notation Changes ---
 
-In order to construct the context category of a theory $U$,
-we will first define the category of contexts and realizations of $U$.
-This category, noted $R(U)$ has as objects the contexts of $U$.
+To transition from syntax to geometry (which our Graph Neural Network will eventually navigate),
+we construct a category out of the theory syntax.
+
+Let $U$ be a theory, we define the category of contexts and realizations,
+denoted $R(U)$.
+This category has as objects the contexts of $U$.
 Given two contexts $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$ and 
 $\Delta \equiv y_1 \colon B_1, \dots, y_m \colon B_m$ of $U$, a morphism from $\Gamma$ to $\Delta$,
 or a \textit{realization} of $\Delta$ from $\Gamma$, is a $m$-tuple $\langle t_1, \dots, t_n \rangle$ 
 such that for each $j$, $1 \leq j \leq m$, the rule 
 \[
-    \vdash \Gamma \Rightarrow t_j \colon B_j[y_1 \mid\ t_1, \dots, y_{j-1} \mid\ t_{j-1}] 
+    \Gamma \vdash t_j \colon B_j[y_1 \mid\ t_1, \dots, y_{j-1} \mid\ t_{j-1}] 
 \]
+is derivable.
 The identity of an object $x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n$ is the realization 
 $\langle x_1, \dots, x_n \rangle$, and composition is defined as 
 \begin{multline*}
@@ -443,50 +447,49 @@ but syntactically different rules are interpreted as different elements. Hence w
 relation between derived $T$- and $\in$- rules such that:
 \[
         x_1 \colon A_1, \dots, x_n \colon A_n
-        \Rightarrow
+        \vdash
         A_{n+1} \type
     \equiv
         y_1 \colon B_1, \dots, y_m \colon B_m
-        \Rightarrow
+        \vdash
         B_{m+1} \type
 \]
 if, and only if, $m = n$ and for each $1 \leq i \leq n + 1$, \[
-    \vdash x_1 \colon A_1, \dots, x_{i-1} \colon A_{i-1} \Rightarrow A_i = B_i[y_1 \mid\ x_1, \dots, y_{i-1} \mid\ x_{i-1}]
-\]
+     x_1 \colon A_1, \dots, x_{i-1} \colon A_{i-1} \vdash A_i = B_i[y_1 \mid\ x_1, \dots, y_{i-1} \mid\ x_{i-1}]
+\] is derivable,
 and 
 \[
         x_1 \colon A_1, \dots, x_n \colon A_n 
-        \Rightarrow 
+        \vdash 
         t : A
     \equiv
         y_1 \colon B_1, \dots, y_m \colon B_m
-        \Rightarrow
+        \vdash
         s : B
 \]
 if, and only if, \[
         x_1 \colon A_1, \dots, x_n \colon A_n
-        \Rightarrow
+        \vdash
         A \type
     \equiv
         y_1 \colon B_1, \dots, y_m \colon B_m
-        \Rightarrow
+        \vdash
         B \type
-\] and \[
-    \vdash 
+\] and \[ 
     x_1 \colon A_1, \dots, x_n \colon A_n 
-    \Rightarrow t = s[y_1 \mid\ x_1, \dots, y_m \mid\ x_m] : A
-\]
+    \vdash t = s[y_1 \mid\ x_1, \dots, y_m \mid\ x_m] : A
+\] is derivable.
 
 We define $C(U)$ as the homomorphic image of $R(U)$ induced by this equivalence relation.
 This means that $C(U)$ is the category of equivalence classes of contexts and of equivalence
 classes of realizations. Two contexts $x_1 \colon A_1, \dots, x_n \colon A_n$ and 
 $y_1 \colon B_1, \dots, y_m \colon B_m$ are equivalent if, and only if, \[
         x_1 \colon A_1, \dots, x_{n-1} \colon A_{n-1}
-        \Rightarrow
+        \vdash
         A_{n} \type
     \equiv
         y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}
-        \Rightarrow
+        \vdash
         B_{m} \type
 \] and two realizations 
 \begin{align*}
@@ -500,11 +503,11 @@ $y_1 \colon B_1, \dots, y_m \colon B_m$ are equivalent if, and only if, \[
 are equivalent if, and only if, for each $j$, $1 \leq j \leq n$,
 \begin{multline*}
      x_1 \colon A_1, \dots, x_n \colon A_n
-        \Rightarrow
+        \vdash
         t_j \colon B_j[y_1 \mid\ t_1, \dots, y_{j-1} \mid\ t_{j-1}]
     \equiv \\ 
         x'_1 \colon A'_1, \dots, x'_n \colon A'_n
-        \Rightarrow 
+        \vdash 
         s_j \colon B'_j[y'_1 \mid\ s_1, \dots, y_{j-1} \mid\ s_{j-1}]
 \end{multline*}
 
@@ -539,8 +542,11 @@ $A \lhd X_1 \lhd \dots \lhd X_n \lhd B$ in $\mathcal{C}$.
 In the case where $A = B$, we will take $p(B, A) = \id_A$.
 Notation: $B \openrightarrow A$. % TODO: fix notation?
 
-Let $\mathcal{C}$ be a contextual category and $A$ an arbitrary object of $\mathcal{C}$. Then we define 
-the \textbf{relativization} of $\mathcal{C}$ to $A$, notes as $\mathcal{C}_A$, as the contextual category
+In type theory, roving a theorem often requires working under a set of assumptions (a context).
+In categorical semantics, "assuming a context $A$" corresponds to taking the relativization of $\mathcal{C}$
+to $A$, noted as $\mathcal{C}_A$.
+More formally, et $\mathcal{C}$ be a contextual category and $A$ an arbitrary object of $\mathcal{C}$. Then we define 
+the \textbf{relativization} of $\mathcal{C}$ to $A$, as the contextual category
 where:
 \begin{enumerate}
     \item the objects of $\mathcal{C}_A$ are the objects $B$ of $\mathcal{C}$ such that $A \leq B$.
@@ -557,6 +563,8 @@ where:
 
 Now we will see that any morphism $f \colon B \to A$ in $\mathcal{C}$ induces a pullback functor 
 $f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which is a contextual functor.
+This functor can be thought as a way of generalizing knowledge we have in one part of the category to the rest 
+of the category.
 
 \begin{lemma}
     let $\mathcal{C}$ be a contextual category, and $f \colon B \to A$ a morphism in $\mathcal{C}$,
@@ -610,7 +618,9 @@ If $\level(B) = 1$, then
 \]
 as any morphism $s \colon 1 \to B$ satisfies $p(B) \circ s = \id_1$ as 
 $1$ is a terminal object. In this case, the notion of section
-matches the notion of \textit{global element} of $B$.
+matches the notion of \textit{global element} of $B$. 
+The concept of section of a context $\langle x_1 \colon A_1, \dots, x_n \colon A_n, y \colon B \rangle$ is 
+the categorical equivalent of a term of type $B$ under context $\langle x_1 \colon A_1, \dots, x_n \colon A_n \rangle$.
 
 \section{Relevance of the Context Category}
 
@@ -625,7 +635,8 @@ The three main properties of this models are:
     \item \textbf{Completeness}: a judgement is provable/derivable in the theory if it holds in all models, 
           or equivalently if it holds in the term model.
     \item \textbf{Initiality}: the term model is often the initial object of the category of all models.
-\end{enumerate} 
+\end{enumerate}
+Because of Completeness, navigating $C(U)$ is equivalent as manipulating the syntax of $U$.
 
 We will start by seeing the completeness of $C(U)$. The following completeness theorem is 
 direct from the definition of $C(U)$:
