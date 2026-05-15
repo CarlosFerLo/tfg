@@ -329,3 +329,4 @@ TSWLatexianTemp*
 .notebook
 .venv
 _minted-main
+.DS_Store
