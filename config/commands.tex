@@ -2,15 +2,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % theorem environments
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\theoremstyle{definition}
 \newtheorem{defn0}{Definition}[chapter]
+\newtheorem{example0}[defn0]{Example}
+
+\theoremstyle{plain}
 \newtheorem{prop0}[defn0]{Proposition}
 \newtheorem{thm0}[defn0]{Theorem}
 \newtheorem{lemma0}[defn0]{Lemma}
 \newtheorem{corollary0}[defn0]{Corollary}
-\newtheorem{example0}[defn0]{Example}
-\newtheorem{observation0}[defn0]{Observation}
+
+\theoremstyle{remark}
 \newtheorem{remark0}[defn0]{Remark}
+\newtheorem{observation0}[defn0]{Observation}
 \newtheorem{conjecture0}[defn0]{Conjecture}
 
 \newenvironment{definition}{ \begin{defn0}}{\end{defn0}}
@@ -168,9 +172,11 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% TODO: operatorname
+
 %%%%%%%%%%%%%% Ob %%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\Ob}{\text{Ob}}
+\newcommand{\Ob}{Ob}
 
 %%%%%%%%%%%%%% Prop Type %%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -186,7 +192,7 @@
 
 %%%%%%%%%%%%%% type %%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\type}{\text{type}}
+\newcommand{\type}{\text{ type}}
 
 %%%%%%%%%%%%%% ok %%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -206,7 +212,7 @@
 
 %%%%%%%%%%%%%% id %%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\id}{\text{id}}
+\newcommand{\id}{id}
 
 %%%%%%%%%%%%%% level %%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
