@@ -4,7 +4,7 @@
 In this chapter, we introduce Generalized Algebraic Theories (GATs), a framework for working with 
 dependent types. Our ultimate goal in this thesis is to translate the syntactical problem of theorem proving
 into a geometrical graph-exploration problem. GATs allow us to construct the concept of \textit{contextual category},
-the foundational categorical structure to deal with dependent types. We will use this structure as a baseline 
+the foundational categorical structure to deal with dependent types. We use this structure as a baseline 
 for interpreting the more complex Calculus of Constructions in Chapter 2.
 
 \section{Generalized Algebraic Theories}
@@ -14,7 +14,7 @@ in his thesis \cite{cartmell1978} \cite{cartmell1986},
 is an abstraction of Martin-L\"of type theory
 and is a generalization of the usual notion of a many-sorted 
 algebraic theory in the following manner:
-while in Martin L{\"o}ff's many-sorted algebraic theories sorts
+while in Martin L{\"o}f's many-sorted algebraic theories sorts
 are constant types, interpreted as sets, in generalized
 algebraic theories sorts might be constant or variable,
 over a specified range of types. Variable types
@@ -24,38 +24,38 @@ Formally, a generalized
 algebraic theory consists of:
 \begin{enumerate}
     \item a set of sorts, that can be constant or variable;
-    \item a set of operators, with the sort of the arguments and value specified;
+    \item a set of operators, with the sorts of the arguments and value specified;
     \item a set of axioms, where each axiom is an identity between similar expressions. 
 \end{enumerate}
 
 To build intuition, consider the theory of categories.
-The set of sorts contains two elements $Ob$ and $Hom$.
-$Ob$ is a constant type and $Hom$ is a variable type;
+The set of sorts contains two elements $\Ob$ and $\Hom$.
+$\Ob$ is a constant type and $\Hom$ is a variable type;
 for any two terms $x, y$ of type $\Ob$, we have a type $\Hom(x,y)$.
 Here, we see a key feature of GATs: types vary over terms, not over types.
-The set of operators also has two elements $id$ and $\circ$.
-The $id$ operator has one argument $x$ of type $Ob$,
-and returns a value of type $Hom(x, x)$. This shows
+The set of operators also has two elements $\id$ and $\circ$.
+The $\id$ operator has one argument $x$ of type $\Ob$,
+and returns a value of type $\Hom(x, x)$. This shows
 how the type of value of an operator might vary depending
 on the arguments. 
 The $\circ$ operator (or composition) expects 5 arguments, 
-three terms $x, y, z$ of type $Ob$, one term $f$ of type $Hom(x, y)$,
-and one term $g$ of type $Hom(y, z)$. It returns
-a value of type $Hom(x, z)$.
+three terms $x, y, z$ of type $\Ob$, one term $f$ of type $\Hom(x, y)$,
+and one term $g$ of type $\Hom(y, z)$. It returns
+a value of type $\Hom(x, z)$.
 Here we see that the type of an argument might also vary depending
 on a previous argument.
 Informally, instead of writing $\circ(x, y, z, f, g)$ we can
 write $\circ(f, g)$, as the first three arguments might be inferred from the last two.
 This notation is discussed in the original paper \cite{cartmell1986}. 
 
-Now we will introduce the notation we will be using when talking 
+Now we introduce the notation we will be using when talking 
 about terms and types. This notation will be formally defined
-in a later section. So consider you have a set of variables $V$,
-we will associate terms to variables as required.
-When asserting that a term $t$ is of type $A$ we will write
-$t \colon A$, but if $t$ has variables $x_1, \dots, x_n$ occurring in it this assertion
+in a later section. Given a set of variables $V$,
+we associate terms to variables as required.
+When asserting that a term $t$ is of type $A$, we will write
+$t \colon A$, but if $t$ has variables $x_1, \dots, x_n$ occurring in it, this assertion
 does not make sense unless we assign some types to $x_1, \dots, x_m$.
-To do this we will write $x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A$ or
+To do this we write $x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A$ or
 \begin{equation*}
     \dfrac{
         x_1 : A_1, \dots, x_n: A_n
@@ -63,7 +63,7 @@ To do this we will write $x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon 
         t : A
     }
 \end{equation*}
-that reads as: if $x_1$ is a variable of type $A_1$, \dots and if $x_n$ is a variable of type $A_n$,
+that reads as follows: if $x_1$ is a variable of type $A_1$, \dots and if $x_n$ is a variable of type $A_n$,
 then $t$ is a term of type $A$. 
 Similarly, if we want to assert that if $x_1$ is a variable of type $A_1$,
 \dots and if $x_n$ is a variable of type $A_n$,
@@ -72,18 +72,18 @@ then $A$ is a type, we can write: $x_1 \colon A_1, \dots, x_n \colon A_n \vdash 
     \dfrac{
         x_1 : A_1, \dots, x_n : A_n 
     }{
-        t : A
+        A \type
     }
 \end{equation*}
-this assertions are called rules or sequents.
+Such assertions are called rules or sequents.
 Rules are used to express which expressions are well-formed.
-We will work with rules as units instead of the base expressions.
+We work with rules as units instead of the base expressions.
 This is because terms and types do not make sense by themselves
 but they need to be thought of in a context. 
 
 Axioms are also written as rules. The conclusion of those rules
 are equalities between types or between terms of the same type.
-We write those rules as:
+We write those rules as follows:
 
 \begin{minipage}{0.5\textwidth}
   \begin{equation*}
@@ -103,13 +103,14 @@ We write those rules as:
     }
   \end{equation*}
 \end{minipage}
-and read as: if $x_1$ is a variable of type $\Delta_1$, \dots and $x_n$ is a variable of type $\Delta_n$,
-then $\Delta = \Delta'$, or $t = t'$ as terms of type $\Delta$, respectively.
+
+and read as: if $x_1$ is a variable of type $A_1$, \dots and $x_n$ is a variable of type $A_n$,
+then $A = A'$, or $t = t'$ as terms of type $A$, respectively.
 We will be using both shorthand and fraction notation as needed.
 
 % TODO: fix alignment
 To continue with the previous example, we can write the axioms
-of category theory as:
+of category theory as follows:
 \begin{alignat*}{2}
     &x, y : Ob, f : Hom(x, y),  \vdash  \circ(id(x), f) = f \\
     &x, y : Ob, f : Hom(x, y),  \vdash  \circ(f, id(y)) = f \\
@@ -117,11 +118,11 @@ of category theory as:
         &\qquad\vdash \circ(\circ(f, g), h) = \circ(f, \circ(g, h))
 \end{alignat*}
 
-When presenting a theory's language i.e. the sets of sorts and operators,
-we must present each symbol with a rules specifying the role
+When presenting a theory's language i.e., the sets of sorts and operators,
+we must present each symbol with a rule specifying the role
 of this symbol, either as a sort symbol or as specifically typed operator symbol. 
-This rules are called introductory rules.
-In the case of a sort symbol $A$ the rule should be like 
+These rules are called introductory rules.
+In the case of a sort symbol $A$, the rule should be like 
 \begin{equation*}
     \dfrac{
         x_1 : A_1, \dots, x_n : A_n
@@ -140,7 +141,7 @@ In the case of an operator symbol, a rule of the form
 \end{equation*}
 suffices to specify the types of the arguments and the value of $f$.
 
-Finally, to present a theory we will give a set os symbols,
+Finally, to present a theory we will give a set of symbols,
 each associated to its introductory rule, and a set of axioms.
 And, of course, everything must be well-formed, {\color{orange} something we 
 will address in the following section.}
@@ -165,25 +166,25 @@ $\circ(\circ(f, g), h) = \circ(f, \circ(g, h)),$
 
 \section{Formal Definition}
 
-In this section we will formally define all of the concepts 
+In this section we formally define all of the concepts 
 we just introduced.
-To give a notion of well-formed introductory rule, we need the concept of drivability,
+To give a notion of well-formed introductory rule, we need the concept of derivability,
 which also depends on the introductory rules. 
-To tackle this problem we will leave aside the question of
+To tackle this problem, we leave aside the question of
 well-formedness until we have the complete set of derived rules
 of a theory.
-We will first define a pretheory and then define a theory
+We first define a pretheory and then define a theory
 as a well-formed pretheory.
 
-We will assume to have countable set of variables $V$.
-Lets define the notion of rule on an alphabet $W$,
-the elements of $W$ are called symbols.
+We assume given a countable set of variables $V$.
+Let us define the notion of rule on an alphabet $W$,
+whose elements are called symbols.
 
 \begin{definition}
-    The set of \textbf{expressions} is defined inductively
-    such that expressions are finite sequences of elements
+    The set of \textit{expressions} $\mathcal{E}$, is defined inductively
+    so that expressions are finite sequences of elements
     of $W \cup V \cup \{(\} \cup \{)\} \cup \{,\}$
-    defined by the clauses:
+    defined by the following clauses:
     \begin{enumerate}
         \item if $x \in V$, then $x$ is an expression;
         \item if $L \in W$, then $L$ is an expression;
@@ -194,13 +195,13 @@ the elements of $W$ are called symbols.
 
 Now we can define the building blocks of a rule:
 \begin{definition}
-    A \textbf{premise} is defined to be a sequence of $V \times$ the set of expressions.
+    A \textit{premise} is defined to be a sequence of $V \times \mathcal{E}$.
     The empty sequence is allowed and we call it an empty premise.
     If $((x_1, A_1), \dots, (x_n, A_n))$ is a premise,
     we write it as $x_1 : A_1, \dots, x_n : A_n$.
 \end{definition}
 \begin{definition}
-    We call a \textbf{conclusion} to one of the following:
+    We call a \textit{conclusion} to one of the following:
     \begin{enumerate}
         \item $T$-conclusion: defined by a single expression $A$
               and written as '$A$ is a type'.
@@ -212,12 +213,12 @@ Now we can define the building blocks of a rule:
               and written as '$t_1 = t_2 : A$'
     \end{enumerate}
 \end{definition}
-Finally a \textbf{rule} is determined by a premise $P$ and a
+Finally a \textit{rule} is determined by a premise $P$ and a
 conclusion $C$, and is written as $\dfrac{P}{C}$ or as $P \vdash C$.
 We name the rule as $T$-rule, $\in$-rule, $T=$rule or $\in=$rule
 according to the form of the conclusion.
 
-Now we can define pretheory and later theory.
+Now we can define a pretheory and later a theory.
 
 \begin{definition}
     A \textbf{pretheory} consists of
@@ -244,15 +245,15 @@ Now we can define pretheory and later theory.
                     F(x_1, \dots, x_n) : A
                 }
               \end{equation*}
-              for some $n \geq 0$. It is called the introductory
-              rule of $F$;
-        \item a set of axioms. Each axiom is either a $T=$rule or
+              for some $n \geq 0$. It is called the \textit{introductory
+              rule} of $F$;
+        \item a set of axioms. Where each axiom is either a $T=$rule or
               a $\in=$rule of the alphabet $S \cup Z$.
 
     \end{enumerate}
 \end{definition}
 
-Now we will tackle the problem of well-formedness of rules.
+Now we tackle the problem of well-formedness of rules.
 
 \begin{definition}
     If $U$ is a pretheory, then
@@ -298,30 +299,29 @@ Now we will tackle the problem of well-formedness of rules.
     A \textbf{theory} is a well-formed pretheory.
 \end{definition}
 
-Lastly, we will introduce substitution.
-Given $\Delta, t_1, \dots, t_n$ expressions and \\ 
-$x_1, \dots, x_n$ variables,
+Lastly, we introduce substitution.
+Given expressions $\Delta, t_1, \dots, t_n$ and variables $x_1, \dots, x_n$,
 then we define the expression $\Delta[x_1 | t_1, \dots, x_n | t_n]$
-the result of simultaneous replacement of $x_1, \dots, x_n$ in $\Delta$
+as the result of simultaneous replacement of $x_1, \dots, x_n$ in $\Delta$
 by $t_1, \dots, t_n$. We call this the Substitution operation.
 Then, as proven in the original paper \cite{cartmell1986}, 
 the set of derived rules of a theory is closed under the 
 operation of substitution of correctly typed terms 
 for variables.
-We could add substitution as one of the derivation rules
-but would make applying induction very messy.
+We could add substitution as one of the derivation rules,
+but this would make applying induction very messy.
 
 \section{Contexts and Realizations} % --- Notation Changes ---
 
 To transition from syntax to geometry (which our Graph Neural Network will eventually navigate),
 we construct a category out of the theory syntax.
 
-Let $U$ be a theory, we define the category of contexts and realizations,
+For a theory $U$, we define the category of contexts and realizations,
 denoted $R(U)$.
 This category has as objects the contexts of $U$.
 Given two contexts $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$ and 
 $\Delta \equiv y_1 \colon B_1, \dots, y_m \colon B_m$ of $U$, a morphism from $\Gamma$ to $\Delta$,
-or a \textit{realization} of $\Delta$ from $\Gamma$, is a $m$-tuple $\langle t_1, \dots, t_n \rangle$ 
+or a \textit{realization} of $\Delta$ from $\Gamma$, is an $m$-tuple $\langle t_1, \dots, t_n \rangle$ 
 such that for each $j$, $1 \leq j \leq m$, the rule 
 \[
     \Gamma \vdash t_j \colon B_j[y_1 \mid\ t_1, \dots, y_{j-1} \mid\ t_{j-1}] 
@@ -333,49 +333,47 @@ $\langle x_1, \dots, x_n \rangle$, and composition is defined as
     \langle t_1, \dots, t_m \rangle \circ \langle s_1, \dots, s_w \rangle = \\
     \langle s_1[y_1 \mid\ t_1, \dots, y_m \mid\ t_m], \dots, s_w[y_1 \mid\ t_1, \dots, y_m \mid\ t_m] \rangle
 \end{multline*}
-
 whenever $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, $\Delta = y_1 \colon B_1, \dots, y_m \colon B_m$
 and $\Omega = z_1 \colon C_1, \dots,  z_w \colon C_w$ are contexts, and 
 $\langle t_1, \dots, t_m \rangle : \Gamma \to \Delta$ and $\langle s_1, \dots, s_w \rangle : \Delta \to \Omega$
 are realizations.
 
-Now we will study some properties of this category.
-
-First, we will see that it has a tree structure.
+Now we study some properties of this category.
+First, we see that it has a tree structure.
 \begin{definition}
-    A \text{tree} is a pair $(N, father)$ where 
-    $N$ is a not empty set of nodes and 
-    $father: N \to N$ such that:
+    A \text{tree} is a pair $(N, \father)$ where 
+    $N$ is a nonempty set of nodes and 
+    $\father: N \to N$ is a function such that:
     \begin{enumerate}
-        \item for all $A \in N$ there exists $n \in \omega$
+        \item for all $A \in N$, there exists $n \in \omega$
               such that $father^n(A) = father^{n+1}(A)$;
         \item \label{item:tree-ii}
               for all $A, B \in N$, if $A = father(A)$ and
               $B = father(B)$, then $A = B$.
     \end{enumerate}
 \end{definition}
-We will write $A \unlhd B$ if $A = father(B)$
+We write $A \unlhd B$ if $A = \father(B)$
 and $A \lhd B$ if $A \unlhd B$ and $A \neq B$.
 By condition \ref{item:tree-ii}, there is a unique
-least element of $N$, call it $1$.
-Finally we will define, for any $A \in N$,
-$level(A)$ to be the least $n \in \omega$ with 
-$father^n(A) = father^{n+1}(A)$.
-We can see that the set of objects of $R(U)$, i.e. the set of contexts of $U$ is structured as a tree
-Whit the empty context as it's least element and 
+least element of $N$, which we call $1$.
+Finally, we will define, for any $A \in N$,
+$\level(A)$ to be the least $n \in \omega$ with 
+$\father^n(A) = \father^{n+1}(A)$.
+We can see that the set of objects of $R(U)$, i.e., the set of contexts of $U$, is structured as a tree
+with the empty context as its least element and 
 \(
-    father (\langle x_1 : \Delta_1, \dots, x_n : \Delta_n\rangle)
+    \father (\langle x_1 : A_1, \dots, x_n : A_n\rangle)
     = 
-    \langle x_1 : \Delta_1, \dots, \Delta_{n-1} \rangle
+    \langle x_1 : A_1, \dots, A_{n-1} \rangle
 \).
 Moreover, given a context $x_1 \colon A_1, \dots, x_n \colon A_n, x_{n+1} \colon A_{n+1}, \dots x_{n+m}$
 of $U$, $\langle x_1, \dots, x_n \rangle$ is a realization of $x_1 \colon A_1, \dots, x_n \colon A_n$
 with regard to $x_1 \colon A_1, \dots, x_n \colon A_n, x_{n+1} \colon A_{n+1}, \dots x_{n+m}$, and is noted
-as $p(\langle x_1 \colon A_1, \dots, x_{n+m} \colon A_{n+m} \rangle, \langle x_1 \colon A_1, \dots, x_n \colon A_n \rangle)$
-Hence, given two objects $\Gamma, \Delta \in \Ob R(U)$, such that $\Gamma \leq \Delta$, $p(\Delta, \Gamma)$ is defined and 
+as $p(\langle x_1 \colon A_1, \dots, x_{n+m} \colon A_{n+m} \rangle, \langle x_1 \colon A_1, \dots, x_n \colon A_n \rangle)$.
+Hence, given two objects $\Gamma, \Delta \in \Ob R(U)$ such that $\Gamma \leq \Delta$, $p(\Delta, \Gamma)$ is defined and 
 $p(\Delta, \Gamma) : \Delta \to \Gamma$ in $R(U)$.
 
-And if $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$, $\Gamma' \equiv y_1 \colon B_1, \dots, y_m \colon B_m$
+If $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$, $\Gamma' \equiv y_1 \colon B_1, \dots, y_m \colon B_m$
 and $\Delta \equiv y_1 \colon B_1, \dots, y_{m+w} \colon B_{m+w}$ are contexts, and if 
 $f = \langle t_1, \dots, t_m \rangle : \Gamma \to \Gamma'$ in $R(U)$, then
 \[
@@ -394,22 +392,22 @@ is a pullback diagram in $R(U)$, where % TODO: fix alignment
         y_{m+w} \colon B[y_1 \mid\ t_1, \dots, y_m \mid\ t_m] 
 \end{multline*}
 \[
-    q(f, \Delta) = \langle t_1, \dots, t_m, y_{m+1}, \dots, y_{m+w} \rangle
+    q(f, \Delta) = \langle t_1, \dots, t_m, y_{m+1}, \dots, y_{m+w} \rangle.
 \]
 
-This motivates the following definition
+This motivates the following definition.
 
 \section{Contextual Categories}
 
 \begin{definition}
-    a \textbf{contextual category} consists of
+    A \textit{contextual category} consists of
     \begin{enumerate}
         \item a category $\mathcal{C}$ with a terminal object $1$;
         \item a function $\father \colon \Ob \mathcal{C} \to \Ob \mathcal{C}$ 
               such that $(\Ob \mathcal{C}, \father)$ is a tree, and $1$ is the root of the tree, 
-              i.e. $\father 1 = 1$;
-        \item for each object $A$ of $\mathcal{C}$ different from $1$, a morphism $p(A) \colon A \to \father A$
-              called \textit{canonical projection of $A$}, we write it as $A \openrightarrow \father(A)$;
+              i.e., $\father 1 = 1$;
+        \item for each object $A$ of $\mathcal{C}$ different from $1$, a morphism $p(A) \colon A \to \father A$,
+              called \textit{canonical projection of $A$}, which we write as $A \openrightarrow \father(A)$;
         \item for all objects $A, B$ in $\mathcal{C}$ with $A \lhd B$ and all morphisms $f \colon C \to A$, 
               an object $f^*B$ of $\mathcal{C}$ such that $C \lhd f^*B$, and a morphism $q(f, B) \colon f^*B \to B$
               in $\mathcal{C}$ such that
@@ -423,7 +421,7 @@ This motivates the following definition
               \begin{enumerate}
                 \item if $A$ and $B$ are objects in $\mathcal{C}$ such that $A \lhd B$, then 
                       \[
-                        id_A^*B = B \quad \text{ and } \quad q(id_A, B) = id_B
+                        id_A^*B = B \quad \text{ and } \quad q(id_A, B) = id_B;
                       \]
                 \item whenever 
                       \[
@@ -436,15 +434,15 @@ This motivates the following definition
                       \[
                         (f' \circ f)^*B = f^*(f'^*B) 
                             \quad \text{ and } \quad 
-                        q(f' \circ f, B) = q(f', B) \circ q(f, f'^*B)
+                        q(f' \circ f, B) = q(f', B) \circ q(f, f'^*B).
                       \]
               \end{enumerate}
     \end{enumerate}
 \end{definition}
 
 We have that $R(U)$ is structured as a contextual category. The problem with $R(U)$ is that semantically equal 
-but syntactically different rules are interpreted as different elements. Hence we will define an equivalence
-relation between derived $T$- and $\in$- rules such that:
+but syntactically different rules are interpreted as different elements. Hence we define an equivalence
+relation between derived $T$- and $\in$- rules as follows:
 \[
         x_1 \colon A_1, \dots, x_n \colon A_n
         \vdash
@@ -454,7 +452,7 @@ relation between derived $T$- and $\in$- rules such that:
         \vdash
         B_{m+1} \type
 \]
-if, and only if, $m = n$ and for each $1 \leq i \leq n + 1$, \[
+if and only if $m = n$ and, for each $1 \leq i \leq n + 1$, \[
      x_1 \colon A_1, \dots, x_{i-1} \colon A_{i-1} \vdash A_i = B_i[y_1 \mid\ x_1, \dots, y_{i-1} \mid\ x_{i-1}]
 \] is derivable,
 and 
@@ -467,7 +465,7 @@ and
         \vdash
         s : B
 \]
-if, and only if, \[
+if and only if \[
         x_1 \colon A_1, \dots, x_n \colon A_n
         \vdash
         A \type
@@ -483,7 +481,7 @@ if, and only if, \[
 We define $C(U)$ as the homomorphic image of $R(U)$ induced by this equivalence relation.
 This means that $C(U)$ is the category of equivalence classes of contexts and of equivalence
 classes of realizations. Two contexts $x_1 \colon A_1, \dots, x_n \colon A_n$ and 
-$y_1 \colon B_1, \dots, y_m \colon B_m$ are equivalent if, and only if, \[
+$y_1 \colon B_1, \dots, y_m \colon B_m$ are equivalent if and only if \[
         x_1 \colon A_1, \dots, x_{n-1} \colon A_{n-1}
         \vdash
         A_{n} \type
@@ -500,7 +498,7 @@ $y_1 \colon B_1, \dots, y_m \colon B_m$ are equivalent if, and only if, \[
         & \colon \langle x'_1 \colon A'_1, \dots, x'_n \colon A'_n \rangle 
          \to \langle y'_1 \colon B'_1, \dots, y'_m \colon B'_m \rangle
 \end{align*}
-are equivalent if, and only if, for each $j$, $1 \leq j \leq n$,
+are equivalent if and only if, for each $j$, $1 \leq j \leq n$,
 \begin{multline*}
      x_1 \colon A_1, \dots, x_n \colon A_n
         \vdash
@@ -508,22 +506,22 @@ are equivalent if, and only if, for each $j$, $1 \leq j \leq n$,
     \equiv \\ 
         x'_1 \colon A'_1, \dots, x'_n \colon A'_n
         \vdash 
-        s_j \colon B'_j[y'_1 \mid\ s_1, \dots, y_{j-1} \mid\ s_{j-1}]
+        s_j \colon B'_j[y'_1 \mid\ s_1, \dots, y_{j-1} \mid\ s_{j-1}].
 \end{multline*}
 
-It is easy to see that $C(U)$ is itself a contextual category.
+It follows that $C(U)$ is itself a contextual category.
 
 \begin{definition}
-    if $\mathcal{C}$ and $\mathcal{C}'$ are contextual categories, then a \textbf{contextual functor}
-    $F \colon \mathcal{C} \to \mathcal{C}'$ is a functor $F \colon \mathcal{C} \to \mathcal{C}'$ such that:
+    If $\mathcal{C}$ and $\mathcal{C}'$ are contextual categories, then a \textbf{contextual functor}
+    is a functor $F \colon \mathcal{C} \to \mathcal{C}'$ such that:
     \begin{enumerate}
         \item $F(1) = 1$ and if $A \lhd B$ in $\mathcal{C}$, then $F(A) \lhd F(B)$ in $\mathcal{C}'$;
-        \item for all object $A$ of $\mathcal{C}$, $F(p(A)) = p(F(A))$;
+        \item for every object $A$ of $\mathcal{C}$, $F(p(A)) = p(F(A))$;
         \item for all $f$ and $B$ such that $f^*B$ is defined in $\mathcal{C}$,
             \[
                 F(f^*B) = F(f)^*F(B) 
                     \quad \text{ and } \quad 
-                F(q(f, B)) = q(F(f), F(B))
+                F(q(f, B)) = q(F(f), F(B)).
             \]
     \end{enumerate}
 \end{definition}
@@ -531,69 +529,71 @@ $\mathbf{Con}$ is the category of contextual categories and contextual functors.
 
 \section{Properties of Contextual Categories}
 
-In this section we will state some properties about contextual categories that will be used later.
+In this section we state some properties about contextual categories that will be used later.
 
 % generalized projection morphism
-The first useful result is about the projections, although we defined projections on pairs $A \lhd B$, 
+The first useful result is about projections; Although we defined projections on pairs $A \lhd B$, 
 we might extend the notion to pairs $A \leq B$ defined as \[
-    p(B, A) = p(X_1) \circ \dots, \circ p(X_n) \circ p(B)
+    p(B, A) = p(X_1) \circ \dots, \circ p(X_n) \circ p(B),
 \] where $X_1, \dots, X_n$ is the unique sequence of objects in $\mathcal{C}$ such that
 $A \lhd X_1 \lhd \dots \lhd X_n \lhd B$ in $\mathcal{C}$. 
-In the case where $A = B$, we will take $p(B, A) = \id_A$.
+In the case where $A = B$, we take $p(B, A) = \id_A$.
 Notation: $B \openrightarrow A$. % TODO: fix notation?
 
-In type theory, roving a theorem often requires working under a set of assumptions (a context).
+In type theory, proving a theorem often requires working under a set of assumptions (a context).
 In categorical semantics, "assuming a context $A$" corresponds to taking the relativization of $\mathcal{C}$
 to $A$, noted as $\mathcal{C}_A$.
-More formally, et $\mathcal{C}$ be a contextual category and $A$ an arbitrary object of $\mathcal{C}$. Then we define 
-the \textbf{relativization} of $\mathcal{C}$ to $A$, as the contextual category
+More formally, let $\mathcal{C}$ be a contextual category and $A$ an arbitrary object of $\mathcal{C}$. Then we define 
+the \textit{relativization} of $\mathcal{C}$ to $A$ as the contextual category
 where:
 \begin{enumerate}
-    \item the objects of $\mathcal{C}_A$ are the objects $B$ of $\mathcal{C}$ such that $A \leq B$.
-    \item for objects $B, C$ in $\mathcal{C}_A$, a morphism from $B$ to $C$ over $A$ is a morphism, 
-          i.e. a morphism from $B$ to $C$ in $\mathcal{A}$, is a morphism $f \colon B \to C$ in $\mathcal{C}$
+    \item The objects of $\mathcal{C}_A$ are the objects $B$ of $\mathcal{C}$ such that $A \leq B$.
+    \item For objects $B, C$ in $\mathcal{C}_A$, a morphism from $B$ to $C$ over $A$ is a morphism, 
+          i.e., a morphism from $B$ to $C$ in $\mathcal{C}_A$ is a morphism $f \colon B \to C$ in $\mathcal{C}$
           such that $p(C, A) \circ f = p(B, A)$. Composition of morphisms is inherited from $\mathcal{C}$.
     \item $\father_A(B) = \father(B)$ if $A < B$, and $\father_A(A) = A$.
-    \item for objects $B > A$, $p_A(B) = p(B) \colon B \to \father(B)$.
-    \item for $B, C, D$ objects of $\mathcal{C}_A$ with $\father_A(D) = C$ and morphisms $f \colon B \to C$ we put
+    \item For objects $B > A$, $p_A(B) = p(B) \colon B \to \father(B)$.
+    \item For $B, C, D$ objects of $\mathcal{C}_A$ with $\father_A(D) = C$ and morphisms $f \colon B \to C$, we write
           \[
-                f^{*_A}D = f^*D \quad \text{ and } \quad q_A(f, D) = q(f, D)
+                f^{*_A}D = f^*D \quad \text{ and } \quad q_A(f, D) = q(f, D).
           \]
 \end{enumerate}
 
-Now we will see that any morphism $f \colon B \to A$ in $\mathcal{C}$ induces a pullback functor 
+Now we see that any morphism $f \colon B \to A$ in $\mathcal{C}$ induces a pullback functor 
 $f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which is a contextual functor.
-This functor can be thought as a way of generalizing knowledge we have in one part of the category to the rest 
+This functor can be thought of as a way of generalizing knowledge we have in one part of the category to the rest 
 of the category.
 
 \begin{lemma}
-    let $\mathcal{C}$ be a contextual category, and $f \colon B \to A$ a morphism in $\mathcal{C}$,
-    then for any object $C$ with $C \geq A$ we define an object $f^*C \geq B$ and a morphism 
+    Let $\mathcal{C}$ be a contextual category, and $f \colon B \to A$ a morphism in $\mathcal{C}$.
+    Then, for any object $C$ with $C \geq A$, we define an object $f^*C \geq B$ and a morphism 
     $q(f, C) \colon f^*C \to C$ by induction over $\level C - \level A$:
     \begin{enumerate}
         \item if $C = A$, \[
-                f^*C = B \quad \text{ and } \quad q(f, C) = f
+                f^*C = B \quad \text{ and } \quad q(f, C) = f;
               \]
         \item if $C > A$, \[
                 f^*C = q(f, \father(C))^*C
                     \quad \text{ and } \quad 
-                q(f, C) = q(q(f, \father(C)), C)
+                q(f, C) = q(q(f, \father(C)), C).
               \]
     \end{enumerate}
-    then if $C \geq A$, the pair $(p(f^*C, B), q(f, C))$ is a pullback cone over $(f, p(C, A))$.
+    Then, if $C \geq A$, the pair $(p(f^*C, B), q(f, C))$ is a pullback cone over $(f, p(C, A))$.
 \end{lemma}
 \begin{theorem}
-    Let $\mathcal{C}$ be a contextual category and $f \colon B \to A$ a morphism in $\mathcal{C}$, 
-    by mapping an object $C$ of $\mathcal{C}_A$ to $f^*C$ in $\mathcal{C}_B$,
+    Let $\mathcal{C}$ be a contextual category and $f \colon B \to A$ a morphism in $\mathcal{C}$.
+    By mapping an object $C$ of $\mathcal{C}_A$ to $f^*C$ in $\mathcal{C}_B$,
     and mapping $g \colon C \to D$ over $A$ to $f^*g \colon f^*C \to f^*D$ over $B$
     determined by
     \begin{align*}
         p(f^*D, B) \circ f^*g &= p(f^*C, B) \\
-        q(f, D) \circ f^*g = q(f, C)
+           q(f, D) \circ f^*g &= q(f, C)
     \end{align*}
-    we obtain the contextual functor $f^* \colon \mathcal{C}_A \to \mathcal{C}_B$
-    called \textbf{reindexing along} $f$.
+    we obtain a contextual functor $f^* \colon \mathcal{C}_A \to \mathcal{C}_B$
+    called \textit{reindexing along} $f$.
 \end{theorem}
+% TODO: add reference of proof
+
 \begin{theorem} % TODO: see if it is used elsewhere or delete
     Let $\mathcal{C}$ be a contextual category and $f \colon B \to A$, $g \colon C \to B$ be morphisms in $\mathcal{C}$.
     Then, \[
@@ -602,21 +602,21 @@ of the category.
         q(f \circ g, D) = q(f, D) \circ q(g, f^*D)
     \]
     for objects $D \geq A$.
-
 \end{theorem}
+% TODO: add reference of proof
 
 \begin{definition}
-    Let $\mathcal{C}$ be a contextual category, $A$ and $B$ be objects of $\mathcal{C}$ such that $A \lhd B$,
-    the set of \textbf{sections} of $B$ is defined as 
+    Let $\mathcal{C}$ be a contextual category, $A$ and $B$ be objects of $\mathcal{C}$ such that $A \lhd B$.
+    The set of \textbf{sections} of $B$ is defined as 
     \begin{equation*}
-        \Sections(B) \coloneqq \{ s \colon A \to B  \mid\ p(B) \circ s = \id_A\}
+        \Sections(B) \coloneqq \{ s \colon A \to B  \mid\ p(B) \circ s = \id_A\}.
     \end{equation*}
 \end{definition}
 If $\level(B) = 1$, then 
 \[
-    \Sections(B) = \{ s \mid\ s \colon 1 \to B \}
+    \Sections(B) = \{ s \mid\ s \colon 1 \to B \},
 \]
-as any morphism $s \colon 1 \to B$ satisfies $p(B) \circ s = \id_1$ as 
+as any morphism $s \colon 1 \to B$ satisfies $p(B) \circ s = \id_1$ since
 $1$ is a terminal object. In this case, the notion of section
 matches the notion of \textit{global element} of $B$. 
 The concept of section of a context $\langle x_1 \colon A_1, \dots, x_n \colon A_n, y \colon B \rangle$ is 
@@ -624,74 +624,74 @@ the categorical equivalent of a term of type $B$ under context $\langle x_1 \col
 
 \section{Relevance of the Context Category}
 
-The context category is the first example of what it is called a \textbf{term model},
-this means that it is a category built directly from the syntax of a theory 
+The context category is the first example of what it is called a \textbf{term model}.
+This means that it is a category built directly from the syntax of a theory 
 without picking any particular mathematical interpretation. 
-This gives you the \textit{most generic} model of that theory.
-The three main properties of this models are:
+This gives us the \textit{most generic} model of that theory.
+The three main properties of this models are the following:
 \begin{enumerate}
-    \item \textbf{Soundness}: any model of such theory corresponds to a structure preserving 
+    \item \textbf{Soundness}: Any model of such theory corresponds to a structure preserving 
           functor out of the term model.
-    \item \textbf{Completeness}: a judgement is provable/derivable in the theory if it holds in all models, 
+    \item \textbf{Completeness}: A judgement is provable/derivable in the theory if it holds in all models, 
           or equivalently if it holds in the term model.
-    \item \textbf{Initiality}: the term model is often the initial object of the category of all models.
+    \item \textbf{Initiality}: The term model is often the initial object of the category of all models.
 \end{enumerate}
-Because of Completeness, navigating $C(U)$ is equivalent as manipulating the syntax of $U$.
+Because of completeness, navigating $C(U)$ is equivalent to manipulating the syntax of $U$.
 
-We will start by seeing the completeness of $C(U)$. The following completeness theorem is 
+We start by proving the completeness of $C(U)$. The following completeness theorem is 
 direct from the definition of $C(U)$:
 \begin{theorem}[Completeness Theorem] \label{thm:completeness-context-category}
     Let $\mathcal{M}$ be the canonical interpretation of a theory $U$ in $C(U)$.
     \begin{enumerate}
-        \item the $T$-rule \[
+        \item The $T$-rule \[
                 \dfrac{
                     x_1 \colon A_1, \dots, x_n \colon A_n
                 }{
                     A \type
                 }
-            \] is derivable if, and only if,
+            \] is derivable if and only if
             $x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A$
-            is a context, i.e. if \\$[x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A]$
+            is a context, i.e., if $[x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A]$
             in $C(U)$.
-        \item the $\in$-rule \[
+        \item The $\in$-rule \[
                 \dfrac{
                     x_1 \colon A_1, \dots, x_n \colon A_n
                 }{
                     t \colon A
                 }
-            \]  is derivable if, and only if,
-            $\langle x_1, \dots, x_n, t \rangle$ is a section of \\
+            \]  is derivable if and only if
+            $\langle x_1, \dots, x_n, t \rangle$ is a section of 
             $[x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A]$
             in $C(U)$.
-        \item if the following $T$-rules are derivable: \[
+        \item If the following $T$-rules are derivable: \[
                 \Gamma \vdash A_1 \type 
                     \quad \text{ and } \quad
-                \Gamma \vdash A_2 \type
-            \] Then the rule \(
+                \Gamma \vdash A_2 \type,
+            \] then the rule \(
                 \Gamma \vdash A_1 = A_2
-            \) is derivable if, and only if, \[
+            \) is derivable if and only if \[
                 [\Gamma, x \colon A_1]
                 = 
-                [\Gamma, x \colon A_2]
+                [\Gamma, x \colon A_2],
             \]
-            where $x$ is a variable that does not appear on $\Gamma$.
-        \item if the following $\in$-rules are derivable: \[
+            where $x$ is a variable that does not appear in $\Gamma$.
+        \item If the following $\in$-rules are derivable: \[
                 \Gamma \vdash t \colon A 
                     \quad \text{ and } \quad
-                \Gamma \vdash s \colon A
-            \] Then the rule $\Gamma \vdash t = s \colon A$ is derivable
-            if, and only if, $\langle x_1, \dots, x_n, t \rangle$ and \\ 
+                \Gamma \vdash s \colon A,
+            \] then the rule $\Gamma \vdash t = s \colon A$ is derivable
+            if, and only if, $\langle x_1, \dots, x_n, t \rangle$ and 
             $\langle x_1, \dots, x_n, s \rangle$
             are equal sections of $[\Gamma, x: A]$ in $C(U)$,
             where $x$ is a variable not appearing in $\Gamma$.
     \end{enumerate}
 \end{theorem}
 
-Now we will prove the initiality of $C(U)$.Hence, we need to define interpretation fo a theory $U$
-on a contextual category, and see that the interpretation into $C(U)$ is the 
+Now we prove the initiality of $C(U)$. Hence, we need to define interpretation of a theory $U$
+in a contextual category, and see that the interpretation into $C(U)$ is the 
 initial object of the category of interpretations of $U$.
 
-Given a contextual category $\mathcal{C}$ and a theory $U$, an \textbf{interpretation} of $U$ in $\mathcal{C}$
+Given a contextual category $\mathcal{C}$ and a theory $U$, an \textit{interpretation} of $U$ in $\mathcal{C}$
 is a mapping $\mathcal{M}$ from the $T$- and $\in$-rules of $U$ to the $\mathcal{C}$ such that
 \begin{enumerate}
     \item if $R$ is a derived $T$-rule \(
@@ -724,13 +724,13 @@ is a mapping $\mathcal{M}$ from the $T$- and $\in$-rules of $U$ to the $\mathcal
     \item if $\Gamma \Rightarrow A = A'$ is a derived $T=$rule, then if \[
             R \equiv \Gamma \Rightarrow A \type
             \quad \text{ and } \quad
-            R' \equiv \Gamma \Rightarrow A' \type
+            R' \equiv \Gamma \Rightarrow A' \type,
         \] then $\mathcal{M}[R] = \mathcal{M}[R']$.
     \item if $\Gamma \Rightarrow t = t' \colon A$ is a derived $\in=$rule, then if \[
             R_t \equiv \Gamma \Rightarrow t \colon A, \quad
             R_{t'} \equiv \Gamma \Rightarrow t' \colon A, \quad
-            R \equiv \Gamma \Rightarrow A \type
-        \] then, both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$
+            R \equiv \Gamma \Rightarrow A \type,
+        \] then both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$.
         and $\mathcal{M}[R_t] = \mathcal{M}[R_{t'}]$
 \end{enumerate}
 
@@ -738,30 +738,30 @@ There is a canonical interpretation $\mathcal{M}$ of $U$ in $\mathcal{C}(U)$, de
 \begin{enumerate}
     \item if $R \equiv x_1 \colon A_1, \dots, x_n \colon A_n \Rightarrow A \type$ is a derived $T$-judgement, 
             then we define \[
-                \mathcal{M}[R] = [x_1 \colon A_1, \dots, x_n \colon A_n, x_{n+1} \colon A]
+                \mathcal{M}[R] = [x_1 \colon A_1, \dots, x_n \colon A_n, x_{n+1} \colon A];
             \]
     \item if $R_t \equiv x_1 \colon A_1, \dots, x_n \colon A_n \Rightarrow t \colon A$ is a derived $\in$-judgement,
             then we define \[
                 \mathcal{M}[R_t] = [\langle x_1, \dots, x_n, t \rangle]
             \] a section of $\mathcal{M}[R]$.
 \end{enumerate}
-The completeness theorem \ref{thm:completeness-context-category} guarantees that $\mathcal{M}$ is well defined.
+The Completeness Theorem \ref{thm:completeness-context-category} guarantees that $\mathcal{M}$ is well defined.
 
 Now we shall define the concept of homomorphism between interpretations of a theory $U$.
 Let $\mathcal{C}$, $\mathcal{C}'$ be two contextual categories, and let $\mathcal{M_C}$ and $\mathcal{M_{C'}}$
 be two $U$-interpretations in $\mathcal{C}$ and $\mathcal{C}'$ respectively. Then, an interpretation 
 homomorphism is a contextual functor $F \colon \mathcal{C} \to \mathcal{C}'$ such that:
 \begin{enumerate}
-    \item if $R$ is a $T$-rule, then $F \mathcal{M_C}[R] = \mathcal{M_{C'}}[R]$
-    \item if $R_t$ is a $\in$-rule, then $F \mathcal{M_C}[R_t] = \mathcal{M_{C'}}[R_t]$
+    \item if $R$ is a $T$-rule, then $F \mathcal{M_C}[R] = \mathcal{M_{C'}}[R]$;
+    \item if $R_t$ is a $\in$-rule, then $F \mathcal{M_C}[R_t] = \mathcal{M_{C'}}[R_t]$.
 \end{enumerate}
 
 So we can define the category $\mathbf{Con}_U$ as the category with pairs of contextual categories and $U$-interpretations
-and their Homomorphisms. We can easily see that $(C(U), \mathcal{M})$ is an
-initial object of $\mathbf{Con}_U$, consider $(\mathcal{C}, \mathcal{N})$ an object of
-$\mathbf{Con}_U$, let's construct a morphism $F \colon ((C(U), \mathcal{M})) \to (\mathcal{C}, \mathcal{N})$, i.e. we have to construct
+and their homomorphisms. We can easily see that $(C(U), \mathcal{M})$ is an
+initial object of $\mathbf{Con}_U$. Consider an object $(\mathcal{C}, \mathcal{N})$ of
+$\mathbf{Con}_U$. Let construct a morphism $F \colon ((C(U), \mathcal{M})) \to (\mathcal{C}, \mathcal{N})$, i.e., we have to construct
 a contextual functor $F \colon C(U) \to \mathcal{C}$ that \textit{commutes} with the interpretation functions.
-Consider an object $[\Gamma]$ of $C(U)$, there is a $T$-rule $R^\Gamma$ such that $\mathcal{M}[R^\Gamma] = \Gamma$, we define 
+If $[\Gamma]$ an object of $C(U)$, then there is a $T$-rule $R^\Gamma$ such that $\mathcal{M}[R^\Gamma] = \Gamma$. We define 
 $F \Gamma = \mathcal{N}[R^\Gamma]$. 
 In order to define $F$ on the morphisms of $C(U)$, it suffices to define it for the sections of $C(U)$, as any morphism 
 \[
@@ -769,7 +769,7 @@ In order to define $F$ on the morphisms of $C(U)$, it suffices to define it for 
     \langle x_1 \colon A_1, \dots, x_n \colon A_n \rangle \to
     \langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle
 \]
-can be build by composition and $^*$ of sections and projections, and the latter is uniquely determined by the condition that $F$
+can be built by composition and pullback functors of sections and projections, and the latter is uniquely determined by the condition that $F$
 is a contextual functor.
 Hence, given a section $s = \langle x_1, \dots, x_n, t \rangle$ of $R \equiv x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A$,
 by definition there exists a derived $\in$-rule $R_t$ such that $\mathcal{M}[R_t] = s$, so we can define
@@ -778,18 +778,18 @@ The uniqueness of $F$ is rather simple to see, as we cannot assign any other val
 conflicting with the structural conditions of the functor.
 Hence, $(C(U), \mathcal{M})$ is an initial object of $\mathbf{Con}_U$.
 
-Soundness comes from the initiality of $C(U)$, as any model of $U$, i.e. any element of $\mathbf{Con}_U$, 
+Soundness comes from the initiality of $C(U)$, as any model of $U$, i.e., any element of $\mathbf{Con}_U$, 
 is equivalent to the initial morphism $F$ we just defined.
 
-\section{Problem Definition}
+\section{Definition of the Problem}
 
-In this section we will introduce a formal definition of our 
+In this section we introduce a formal definition of our 
 problem, proposed at the beginning of the {\color{red} thesis}, % TODO: What do I put here?
 and reformulate it to an equivalent problem easier to solve
 with artificial intelligence. % TODO: rephrase this better
 
 Our problem might be formalized in the following manner:
-given a theory $U$ and a derived rule of $U$ of the form 
+Given a theory $U$ and a derived rule of $U$ of the form 
 \begin{equation*}
     \dfrac{
         x_1 : A_1, \dots, x_n : A_n
@@ -808,53 +808,48 @@ we want to find an expression $t$ of $U$ such that the rule
 is a derived rule of $U$.
 
 This problem is undecidable, in general, as it follows from the undecidability
-of the inhabitation in a $GAT$. This is why we won't try to find
+of the inhabitation in a $GAT$. This is why we will not try to find
 an algorithm that either finds a term or says that the type is empty.
-We aim to find an algorithm that in the case that the type is 
-inhabited, it will find a term in a finite number of steps.
-In the case that the type is empty, it does not have to give an
+We aim to find an algorithm that, in case that the type is 
+inhabited, it finds a term in a finite number of steps.
+In case that the type is empty, it does not have to give an
 output.
 
 We can consider this problem from the point of view of the 
-context category $C(U)$, where by the completeness theorem \ref{thm:completeness-context-category}
-it is rephrased as:
-given a context $\langle x_1 : A_1, \dots, x_n : A_n \rangle$
+context category $C(U)$, where by the Completeness Theorem \ref{thm:completeness-context-category}
+it is rephrased as follows:
+Given a context $\langle x_1 : A_1, \dots, x_n : A_n \rangle$
 in $C(U)$, we want to find a section of $\langle x_1 : A_1, \dots, x_n : A_n, x : A \rangle$
 in $C(U)$.
 
-By naming $\Gamma \equiv \langle x_1 : A_1, \dots, x_n : A_n \rangle$
+By naming $\Gamma \equiv \langle x_1 : A_1, \dots, x_n : A_n \rangle$,
 we can restrict our search to the \textit{relativization} of $C(U)$ to $[\Gamma]$,
-that we will note as $\mathcal{C}_\Gamma$.
-We will note contexts of the form $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
-with the subindex $\Gamma$ in the following way \[
-    \langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma
-\] to serve as a shorthand notation of objects of $\mathcal{C}_\Gamma$.
-The same notation will be used when talking about morphisms in $\mathcal{C}_\Gamma$,
-by noting $\langle x_1, \dots, x_n, t_{n+1}, \dots, t_{n+m} \rangle$ 
+that we denote as $\mathcal{C}_\Gamma$.
+We denote a morphism $\langle x_1, \dots, x_n, t_{n+1}, \dots, t_{n+m} \rangle$  in $\mathcal{C}_\Gamma$,
 as $\langle t_{n+1}, \dots, t_{n+m} \rangle_\Gamma$.
 
 \section{Expansion Algorithm}
 
-In this section we will define the \textit{expansion algorithm}
+In this section, we define the \textit{expansion algorithm}
 that will be responsible of finding $\langle t \rangle_\Gamma$
 in $\mathcal{C}_\Gamma$.
 The complexity of this algorithm is really high, and it will serve
-as a baseline to be optimized by a graph neural network, we will
+as a baseline to be optimized by a graph neural network. We will
 explain this in the last chapter.
 
-First, consider $G$ a finite subcategory of $\mathcal{C}_A$ such that
-it contains $\Gamma$, $\langle x \colon A \rangle_\Gamma$ and
+First, consider a finite subcategory $G$ of $\mathcal{C}_A$ which 
+contains $\Gamma$, $\Gamma, x \colon A$ and
 its projection.
-The process will consist in the construction of a sequence $\{ G_i\}_i$
+The process consists of the construction of a sequence $\{ G_i\}_i$
 of finite subcategories of $\mathcal{C}_\Gamma$ such that $G_0 = G$,
 and that $G_{n+1}$ is computed by the process described below
 from $G_n$, and where $G_n \subseteq G_{n+1}$ for all $n \geq 0$.
-We will say that an object or morphism of $\mathcal{C_A}$ is \textbf{constructible by expansion}
-if there exists a $n \geq 0$ such that the given object or morphism 
+We say that an object or morphism of $\mathcal{C_A}$ is \textit{constructible by expansion}
+if there exists an $n \geq 0$ such that the given object or morphism 
 is contained in $G_n$. 
-The process of constructing $G_{n+1}$ from $G_n$ consists on applying
+The process of constructing $G_{n+1}$ from $G_n$ consists of applying
 the following rules to each context 
-$\langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma$
+$\Gamma y_1 \colon B_1, \dots, y_m \colon B_m$
 of $G_n$:
 \begin{itemize}
     \ruleitem{E1}{sort-symbol-intro} For each sort symbol $S$ with a well-formed
@@ -866,26 +861,26 @@ of $G_n$:
             }
         \] such that $G_n$ contains sections
         \begin{align*} % TODO: fix alignment
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma 
+            \Gamma, y_1 : B_1, \dots, y_m : B_m
             &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, z_1 : C_1 \rangle_\Gamma \\
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, z_1 : C_1 \\
+            \Gamma, y_1 : B_1, \dots, y_m : B_m
             &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, z_2 : C_2[z_1 | t_1] \rangle_\Gamma \\
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, z_2 : C_2[z_1 | t_1] \\
             \vdots \\
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m
             &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, z_w : C_w[z_1 | t_1, \dots, z_{w-1} | t_{w-1}] \rangle_\Gamma \\
+            \Gamma y_1 : B_1, \dots, y_m : B_m, z_w : C_w[z_1 | t_1, \dots, z_{w-1} | t_{w-1}] \\
         \end{align*}
         then we add the context
-        $\langle y_1 \colon B_1, \dots, y_m \colon B_m, y \colon A(t_1, \dots, t_w) \rangle_\Gamma$ 
-        and its projection to $G_{n+1}$
-    \ruleitem{E2}{variable-duplication} add the morphisms \[
-            \langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma
+        $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, y \colon A(t_1, \dots, t_w)$ 
+        and its projection to $G_{n+1}$.
+    \ruleitem{E2}{variable-duplication} Add the morphisms \[
+            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
             \xrightarrow{\langle y_1, \dots, y_m, y_i\rangle_\Gamma}
-            \langle y_1 \colon B_1, \dots, y_m \colon B_m, y \colon B_i \rangle_\Gamma
+            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, y \colon B_i 
         \] and their corresponding projections for each $0 \leq i \leq n$.
-    \ruleitem{E3}{operator-symbol-intro} for every operator symbol $F$ with a well-formed
+    \ruleitem{E3}{operator-symbol-intro} For every operator symbol $F$ with a well-formed
         introductory rule \[
             \dfrac{
                 z_1 \colon C_1, \dots, z_w \colon C_w
@@ -894,68 +889,68 @@ of $G_n$:
             }
         \] if the following sections exist in $G_n$
         \begin{align*} % TODO: fix alignment
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma 
+            \Gamma, y_1 : B_1, \dots, y_m : B_m 
             &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, z_1 : C_1 \rangle_\Gamma \\
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, z_1 : C_1  \\
+            \Gamma, y_1 : B_1, \dots, y_m : B_m 
             &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, z_2 : C_2[z_1 | t_1] \rangle_\Gamma \\
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, z_2 : C_2[z_1 | t_1]  \\
             \vdots \\
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m 
             &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, z_w : C_w[z_1 | t_1, \dots, z_{w-1} | t_{w-1}] \rangle_\Gamma \\
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, z_w : C_w[z_1 | t_1, \dots, z_{w-1} | t_{w-1}] \\
         \end{align*}
         then we add the section
         \[ % TODO: fix alignment
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m 
             \xrightarrow{\langle y_1, \dots, y_m, F(t_1, \dots, t_w) \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, z : C[z_1 | t_1, \dots, z_w | t_w] \rangle_\Gamma\\
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, z : C[z_1 | t_1, \dots, z_w | t_w]
         \]
-    \ruleitem{E4}{pullback} for every morphism
+    \ruleitem{E4}{pullback} For every morphism
         \[
             \langle t_1, \dots, t_{m-1} \rangle_\Gamma
-            : \langle z_1 : C_1, \dots, z_w : C_w \rangle_\Gamma
-            \to \langle y_1 : B_1, \dots, y_{m-1} : B_{m-1}\rangle_\Gamma
+            : \Gamma, z_1 : C_1, \dots, z_w : C_w 
+            \to \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}
         \]
         we construct the corresponding pullback % TODO: fix alignment
         \[
             \begin{tikzcd}
-                \langle z_1: C_1, \dots, z_w : C_w, y_m : B_m[t_1 | y_1, \dots, t_{m-1} | y_{m-1}]\rangle_\Gamma
+                \Gamma, z_1: C_1, \dots, z_w : C_w, y_m : B_m[t_1 | y_1, \dots, t_{m-1} | y_{m-1}]
                 \arrow[r, "\langle t_1{,} \dots{,} t_{m-1}{,} y_m \rangle_\Gamma"] \arrow[d, open] 
-                & \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+                & \Gamma, y_1 : B_1, \dots, y_m : B_m
                 \arrow[d, open] \\
-                \langle z_1 : C_1, \dots, z_w : C_w \rangle_\Gamma
+                \Gamma, z_1 : C_1, \dots, z_w : C_w
                 \arrow[r, "\langle t_1 {,} \dots {,} t_{m-1} \rangle_\Gamma"]
-                & \langle y_1 : B_1, \dots, y_{m-1} : B_{m-1} \rangle_\Gamma
+                & \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}
             \end{tikzcd}
         \]
         in $G_{n+1}$.
 \end{itemize} 
 
-\begin{theorem}
-    Every object and every morphism of $\mathcal{C}_A$ is constructible by expansion.
+\begin{theorem} \label{thm:exhaustivity-for-gats}
+    Every object and every morphism of $\mathcal{C}_A$ are constructible by expansion.
 \end{theorem}
-\begin{proof}
-    We will prove this result by structural induction over the 
+\begin{proof} % TODO : make structural induction more formal through depth or equivalent
+    We prove this result by structural induction over the 
     underlying derived rules corresponding to such object (context)
     or morphism (realization).
 
     Consider a context
-    $\langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma$
-    of $U$, which is the representative of an object in $C(U)$.
-    This means, by the definition of context that its underlying rule
-    \[
+    $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
+    of $U$, which is a representative of an object in $C(U)$.
+    This means, by the definition of context, that its underlying rule
+    \begin{equation}
         \dfrac{
             \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}
         }{
             B_m \type
         }
-    \] \label{eq:underlying-rule-context}
+        \label{eq:underlying-rule-context}
+    \end{equation}
     is a derived rule of $U$ and $y_m$ is a variable different to $x_1, \dots, x_n, y_1, \dots, y_{m-1}$.
-    Hence, the premise $\langle y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1} \rangle_\Gamma$
-    is a context, and by induction it is constructible by expansion,
-    i.e. there exists $n_0 \geq 0$ such that 
-    $\langle y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1} \rangle_\Gamma$
+    Hence, the premise $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$
+    i.e., there exists $n_0 \geq 0$ such that 
+    $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$
     is an object $G_{n_0}$.
     As \eqref{eq:underlying-rule-context} is a derived rule,
     it must have been derived by the only derivation rule that
@@ -986,73 +981,72 @@ of $G_n$:
             y_1 : B_1, \dots, y_{m-1} : B_{m-1}
         }{
             t_w : C_w[t_1 | z_1, \dots, t_{w-1} | z_{w-1}]
-        }
+        }.
     \end{align*}
-    By induction hypothesis their corresponding sections
+    By induction hypothesis, their corresponding sections
     \begin{multline*}
         \langle y_1, \dots, y_{m-1}, t_j \rangle_\Gamma
-        : \langle y_1 : B_1, \dots, y_{m-1} : B_{m-1} \rangle_\Gamma
+        : \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1} 
         \to \\ 
-        \langle y_1 : B_1, \dots, y_{m-1} : B_{m-1}, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_\Gamma
+        \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] 
     \end{multline*}
     are constructible by expansion, so for each $j$ there exists some $n_j$
     such that the section exists in $G_{n_j}$.
 
-    Take $n = \max \{ n_0, n_1, \dots, n_w \}$. Then, all of the objects,
-    and sections mentioned belong to $G_n$ so by the expansion rule \ref{rule:sort-symbol-intro},
+    Take $n = \max \{ n_0, n_1, \dots, n_w \}$. Then, all of the objects
+    and sections mentioned belong to $G_n$, so, by the expansion rule \ref{rule:sort-symbol-intro},
      \[
     \begin{tikzcd}
-        \langle y_1 : B_1, \dots, y_{m-1} : B_{m-1} \rangle_\Gamma
-        & \langle y_1 : B_1, \dots, y_{m-1} : B_{m-1}, y_m : S(t_1, \dots, t_w) \rangle_\Gamma
-        \arrow[l, open]
+        \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}
+        & \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}, y_m : S(t_1, \dots, t_w)
+            \arrow[l, open]
     \end{tikzcd}
     \]
     is included in $G_{n+1}$.
     And by the equivalence of intended equivalence of denotation
     \[
-        \langle y_1 : B_1, \dots, y_{m-1} : B_{m-1}, y_m : S(t_1, \dots, t_w) \rangle_A
+        \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}, y_m : S(t_1, \dots, t_w)
         \equiv
-        \langle y_1 : B_1, \dots, y_m : B_m \rangle_A
+        \Gamma, y_1 : B_1, \dots, y_m : B_m 
     \]
-    so $\langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma$
+    so $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
     is constructible by expansion.
-
-    Now consider a morphism \[
-        \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+    Now consider a realization \[
+        \Gamma, y_1 : B_1, \dots, y_m : B_m
         \xrightarrow{\langle t_1, \dots, t_w \rangle_\Gamma}
-        \langle z_1 : C_1, \dots, z_w : C_w \rangle_\Gamma
-    \] a representative of a morphism in $\mathcal{C}_A$.
-    By induction hypothesis, we know that both $\langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma$
-    and $\langle z_1 \colon C_1, \dots, z_w \colon C_w \rangle_\Gamma$
-    are constructible by extension.
+        \Gamma z_1 : C_1, \dots, z_w : C_w 
+    \] representative of a morphism in $\mathcal{C}_A$.
+    By induction hypothesis, we know that both $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
+    and $\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w$
+    are constructible by expansion.
 
     Moreover, as $\langle t_1, \dots, t_w \rangle_\Gamma$ is an operator, 
     for each $1 \leq j \leq w$, the rule
-    \[
+    \begin{equation}
         \dfrac{
-            \Gamma
+            \Gamma,
             y_1 \colon B_1, \dots, y_m \colon B_m
         }{
             t_j \colon C_j [z_1 \mid\ t_1, \dots z_{j-1} \mid\ t_{j-1}]
         }
         \label{eq:underlying-rule-operator}
-    \]
+    \end{equation}
     is a derived rule of $U$.
-    Now we will see that the following sections are constructible by expansion:
+    Now we see that the following sections are constructible by expansion:
     \begin{align*} % TODO: solve alignment
-        \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+        \Gamma, y_1 : B_1, \dots, y_m : B_m
         &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}
-        \langle y_1 : B_1, \dots, y_m : B_m, z_1 : C_1 \rangle_\Gamma \\
-        \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+        \Gamma, y_1 : B_1, \dots, y_m : B_m, z_1 : C_1  \\
+        \Gamma, y_1 : B_1, \dots, y_m : B_m 
         &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma}
-        \langle y_1 : B_1, \dots, y_m : B_m, z_2 : C_2[t_1 | z_1] \rangle_\Gamma \\
+        \Gamma, y_1 : B_1, \dots, y_m : B_m, z_2 : C_2[t_1 | z_1] \\
         &\vdots \\
-        \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+        \Gamma, y_1 : B_1, \dots, y_m : B_m
         &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_\Gamma}
-        \langle y_1 : B_1, \dots, y_m : B_m, z_w : C_w[t_1 | z_1, \dots, t_{w-1} | z_{w-1}] \rangle_\Gamma 
+        \Gamma, y_1 : B_1, \dots, y_m : B_m, z_w : C_w[t_1 | z_1, \dots, t_{w-1} | z_{w-1}].
     \end{align*}
-    To do this, we will use the way any rule \eqref{eq:underlying-rule-operator}
-    are derived. This can be done by one of the following rules: T1, CF1, CF2(b).
+    To do this, we use the way any rule \eqref{eq:underlying-rule-operator}
+    is derived. This can be done by one of the following rules: T1, CF1, CF2(b).
     Hence,
     \begin{itemize}
         \item if derived by T1, we have that both
@@ -1075,29 +1069,29 @@ of $G_n$:
             So by the first rule, due to the equivalence relation of intended equality of denotation,
             we know that
              \begin{multline*}
-                \langle y_1 : B_1, \dots, y_m : B_m, z_j : A \rangle_\Gamma
+                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : A 
                 \equiv \\
-                \langle y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_\Gamma
+                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
             \end{multline*}
-            hence, they are the same object in $\mathcal{C}_\Gamma$.
+            hence they are the same object in $\mathcal{C}_\Gamma$.
             And by the second one, applying induction, we have that
             \[
-                langle y_1 : B1, \dots, y_m : B_m \rangle_\Gamma
+                \Gamma, y_1 : B1, \dots, y_m : B_m 
                 \xrightarrow{ \langle y_1, \dots, y_m, t_j \rangle_\Gamma }
-                \langle y_1 : B_1, \dots, y_m : B_m, z_j : A \rangle_\Gamma
+                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : A 
             \]
             is constructible by expansion, so as 
-            $\langle y_1 : B_1, \dots, y_m : B_m, z_j : A \rangle_\Gamma$
+            $\Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : A$
             and 
-            $\langle y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_\Gamma$
+            $\Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]$
             are the same object in $C_A$, then
             \begin{equation*} % TODO: fix overflow
-                \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+                \Gamma, y_1 : B_1, \dots, y_m : B_m
                 \xrightarrow{ \langle y_1, \dots, y_m, t_j \rangle_\Gamma }
-                \langle y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] \rangle_\Gamma
+                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
             \end{equation*}
             is constructible by expansion.
-        \item if derived by CF1, we have that
+        \item If derived by CF1, we have that
             \[
                 \dfrac{
                     \Gamma,
@@ -1121,19 +1115,19 @@ of $G_n$:
                     y_1 \colon B_1, \dots, y_m \colon B_m
                 }{
                     y_i \colon B_i
-                }
+                }.
             \]
             Then, by induction hypothesis, the context 
-            $\langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma$
+            $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
             is constructible by expansion. By applying the expansion rule \ref{rule:variable-duplication}
-            and an arguments of equivalent to the one above, we get that
+            and an argument equivalent to the one above, we obtain that
             \[
-                \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+                \Gamma, y_1 : B_1, \dots, y_m : B_m 
                 \xrightarrow{ \langle y_1, \dots, y_m, t_j \rangle_\Gamma }
-                \langle y_1 : B_1, \dots, y_m : B_m, z_j : C_j[z_1 \mid\ t_1, \dots, z_{j-1} \mid\ t_{j-1}] \rangle_\Gamma
+                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : C_j[z_1 \mid\ t_1, \dots, z_{j-1} \mid\ t_{j-1}]
             \]
             is constructible by expansion.
-        \item if derived by CF2(b), there exists an operator symbol $F$ with a well-formed introductory rule
+        \item If derived by CF2(b), there exists an operator symbol $F$ with a well-formed introductory rule
         \[
             \dfrac{
                 v_1 \colon D_1, \dots, v_k \colon D_k
@@ -1183,66 +1177,67 @@ of $G_n$:
         By the equivalence relation of identity of denotation,
         we have to prove that the morphism
         \[ % TODO: fix overflow
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m 
             \xrightarrow{\langle y_1, \dots, y_m, F(s_1, \dots, s_k) \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, z_j : D[s_1 | c_1, \dots, s_k | v_k] \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : D[s_1 | c_1, \dots, s_k | v_k]
         \]
         is constructible by expansion.
-        By induction we have that the following morphisms are constructible by expansion:
+        By induction, we have that the following morphisms are constructible by expansion:
         \begin{align*} % TODO: fix overflow
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m 
             &\xrightarrow{\langle y_1, \dots, y_m, s_1 \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, v_1 : D_1 \rangle_\Gamma \\ 
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_A
-            &\xrightarrow{\langle y_1, \dots, y_m, s_2 \rangle_A}
-            \langle y_1 : B_1, \dots, y_m : B_m, v_2 : D_2[s_1 | v_1] \rangle_\Gamma \\
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, v_1 : D_1 \\ 
+            \Gamma, y_1 : B_1, \dots, y_m : B_m 
+            &\xrightarrow{\langle y_1, \dots, y_m, s_2 \rangle_\Gamma}
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, v_2 : D_2[s_1 | v_1] \\
             &\vdots \\
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
-            &\xrightarrow{\langle y_1, \dots, y_m, s_v \rangle_A}
-            \langle y_1 : B_1, \dots, y_m : B_m, c_v : D_k[s_1 | v_1, \dots, s_{k-1} | v_{k-1} ] \rangle_A
+            \Gamma, y_1 : B_1, \dots, y_m : B_m 
+            &\xrightarrow{\langle y_1, \dots, y_m, s_v \rangle_\Gamma}
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, c_v : D_k[s_1 | v_1, \dots, s_{k-1} | v_{k-1} ]
         \end{align*}
         Hence, by applying the expansion rule \ref{rule:operator-symbol-intro}, we have that
         \[
-            \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m
             \xrightarrow{\langle y_1, \dots, y_m, F(s_1, \dots, s_k) \rangle_\Gamma}
-            \langle y_1 : B_1, \dots, y_m : B_m, z_j : D_j[s_1 | v_1, \dots, s_k | c_k] \rangle_\Gamma
+            \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : D_j[s_1 | v_1, \dots, s_k | c_k]
         \]
-        is constructible by expansion as we wanted.
+        is constructible by expansion, as we wanted.
     \end{itemize}
-    Now we will show that the morphism 
+    Now we show that the morphism 
     \[
-        \langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma
+        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m \rangle
         \xrightarrow{\langle y_1, \dots, y_m, t_1, \dots, t_w \rangle_\Gamma}
-        \langle y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_w \colon C_w \rangle_\Gamma
+        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_w \colon C_w
     \]
-    is constructible by expansion. To do this we will prove that given a $j$, $2 < j \leq n$, if
+    is constructible by expansion. To do this, we  prove that, given $j$ with $2 < j \leq n$, if
     \[
-        \langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma
+        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
         \xrightarrow{\langle y_1, \dots, y_m, \dots, t_{j-1} \rangle_\Gamma}
-        \langle y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_{j-1} \colon C_{j-1} \rangle_\Gamma
+        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_{j-1} \colon C_{j-1}
     \]
     \[
-        \langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma 
+        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
         \xrightarrow{\langle y_1, \dots, y_m, t_j \rangle_\Gamma}
-        \langle y_1 \colon B_1, \dots, y_m \colon B_m, z_j \colon C_j[z_1 \mid\ \dots z_{j-1} \mid\ t_{j-1}] \rangle_\Gamma
+        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_j \colon C_j[z_1 \mid\ \dots z_{j-1} \mid\ t_{j-1}]
     \]
     are constructible by expansion so is
     \[
-        \langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle_\Gamma
+        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
         \xrightarrow{\langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma}
-        \langle y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_j \colon C_j \rangle_\Gamma
+        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_j \colon C_j 
     \]
     By expansion rule \ref{rule:pullback}, the following diagram is constructible by expansion:
     \[
     \begin{tikzcd} % TODO: fix overflow
-        \langle y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_j | z_j]\rangle_\Gamma
-        \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots {,} t_{j-1} {,} z_j \rangle_\Gamma"]
-        \arrow[d, open] &
-        \langle y_1 : B_1, \dots, y_m : B_m, z_1 : C_1, \dots, z_j : C_j \rangle_\Gamma
-        \arrow[d, open] \\
-        \langle y_1 : B_1, \dots, y_m : B_m \rangle_\Gamma
-        \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots{,} t_{j-1} \rangle_\Gamma"] &
-        \langle y_1 : B_1, \dots, y_m : B_m, z_1 : C_1, \dots, z_{j-1} : C_{j-1} \rangle_\Gamma
+        \Gamma y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_j | z_j]
+            \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots {,} t_{j-1} {,} z_j \rangle_\Gamma"]
+            \arrow[d, open] 
+        & \Gamma, y_1 : B_1, \dots, y_m : B_m, z_1 : C_1, \dots, z_j : C_j 
+            \arrow[d, open] 
+        \\
+        \Gamma, y_1 : B_1, \dots, y_m : B_m 
+            \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots{,} t_{j-1} \rangle_\Gamma"] &
+        \Gamma, y_1 : B_1, \dots, y_m : B_m, z_1 : C_1, \dots, z_{j-1} : C_{j-1}
     \end{tikzcd}
     \]
     and by composition we get that 
@@ -1256,57 +1251,56 @@ of $G_n$:
     is constructible by expansion.
     It remains to see that the morphism
     \[
-        \langle
+        \Gamma,
             y_1 : B_1, \dots, y_m : B_m,
             z_1 : C_1, \dots, z_w : C_w
-        \rangle_\Gamma
         \xrightarrow{\langle z_1, \dots, z_w \rangle_\Gamma}
-        \langle
+        \Gamma,
             z_1 : C_1, \dots, z_w : C_w
-        \rangle_\Gamma
     \]
     is constructible by expansion. That comes directly from the 
-    fact that $\langle z_1 \colon C_1, \dots, z_w \colon C_w \rangle_\Gamma$
-    is a context, and the repeated application of the rule \ref{rule:pullback}
+    fact that $\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w$
+    is a context, and repeated application of the rule \ref{rule:pullback}
     gives us the following diagram: 
     \[
     \begin{tikzcd}
-        \langle 
-            y_1 : B_1, \dots, y_m : B_m
-            z_1 : C_1, \dots, z_w : C_w
-        \rangle_\Gamma    
-        \arrow[r, "\langle z_1{,} \dots{,} z_w \rangle_\Gamma"]
-        \arrow[d, open] &
-        \langle
-            z_1 : C_1, \dots, z_w : C_w
-        \rangle_\Gamma
-        \arrow[d, open] \\
-        \langle 
-            y_1 : B_1, \dots, y_m : B_m
-            z_1 : C_1, \dots, z_{w-1} : C_{w-1}
-        \rangle_\Gamma  
-        \arrow[r, "\langle z_1{,} \dots{,} z_{w-1} \rangle_\Gamma"]
-        \arrow[d, open] &
-        \langle
-            z_1 : C_1, \dots, z_{w-1} : C_{w-1}
-        \rangle_\Gamma
-        \arrow[d, open] \\
-        \vdots \arrow[d, open] & \vdots \arrow[d, open]\\
-        \langle 
-            y_1 : B_1, \dots, y_m : B_m,
-            z_1 : C_1
-        \rangle_\Gamma
-        \arrow[r, "\langle z_1 \rangle_\Gamma"]
-        \arrow[d, open] &
-        \langle
-            z_1 : C_1
-        \rangle_\Gamma
-        \arrow[d, open] \\
-        \langle
-            y_1 : B_1, \dots, y_m : B_m
-        \rangle_\Gamma
-        \arrow[r, "\langle \rangle_\Gamma"] &
-        \langle \rangle_\Gamma
+        \Gamma, 
+        y_1 : B_1, \dots, y_m : B_m
+        z_1 : C_1, \dots, z_w : C_w
+            \arrow[r, "\langle z_1{,} \dots{,} z_w \rangle_\Gamma"]
+            \arrow[d, open] 
+        & \Gamma,
+        z_1 : C_1, \dots, z_w : C_w
+            \arrow[d, open] 
+        \\
+        \Gamma,
+        y_1 : B_1, \dots, y_m : B_m
+        z_1 : C_1, \dots, z_{w-1} : C_{w-1}
+            \arrow[r, "\langle z_1{,} \dots{,} z_{w-1} \rangle_\Gamma"]
+            \arrow[d, open] 
+        &
+        \Gamma,
+        z_1 : C_1, \dots, z_{w-1} : C_{w-1}
+            \arrow[d, open] 
+        \\
+        \vdots 
+            \arrow[d, open] 
+        & \vdots 
+            \arrow[d, open]
+        \\
+        \Gamma, 
+        y_1 : B_1, \dots, y_m : B_m,
+        z_1 : C_1
+            \arrow[r, "\langle z_1 \rangle_\Gamma"]
+            \arrow[d, open] 
+        & \Gamma, z_1 : C_1
+            \arrow[d, open] 
+        \\
+        \Gamma,
+        y_1 : B_1, \dots, y_m : B_m
+            \arrow[r, "\langle \rangle_\Gamma"] 
+        & \Gamma
     \end{tikzcd}
     \]
+    This completes the proof of Theorem \ref{thm:exhaustivity-for-gats}.
 \end{proof}
