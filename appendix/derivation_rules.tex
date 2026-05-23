@@ -1,0 +1,468 @@
+\chapter{Derivation Rules}
+
+We denote "from $S_1, \dots, S_n$ derive $S$", where $S_1, \dots, S_n, S$ are rules or sequents, as follows: \[
+    \dfrac{
+        S_1 \quad \dots \quad S_n
+    }{
+        S
+    }
+\] 
+Also, we write 
+\[
+    \ddoublefrac{S_1}{S_2} \text{ abbreviates } \dfrac{S_1}{S_2} \text{ and } \dfrac{S_2}{S_1}
+\]
+
+\section{Derivation Rules of Generalized Algebraic Theories} \label{app:derivation-rules-gat}
+
+In this section we present the derivation rules of Generalized Algebraic Theories as presented in \cite{cartmell1986},
+but with a more compact notation.
+
+\begin{enumerate}
+    \ruleitem{LI1}{li1} \(\dfrac{\Gamma \vdash A \type}{\Gamma \vdash A = A} \)
+    \ruleitem{LI2}{li2} \(\dfrac{\Gamma \vdash t \colon A}{\Gamma \vdash t = t \colon A} \)
+    \ruleitem{LI3}{li3} \(\dfrac{\Gamma \vdash A_1 = A_2}{\Gamma \vdash A_2 = A_1} \)
+    \ruleitem{LI4}{li4} \(\dfrac{\Gamma \vdash t_1 = t_2 \colon A}{\Gamma \vdash t_2 = t_1 \colon A}\)
+    \ruleitem{LI5}{li5} \(\dfrac{
+            \Gamma \vdash A_1 = A_2 \quad \Gamma \vdash A_2 = A_3
+        }{
+            A_1 = A_3
+        }  \)
+    \ruleitem{LI6}{li6} \(\dfrac{
+            \Gamma \vdash t_1 = t_2 \colon A \quad \Gamma \vdash t_2 = t_3 \colon A
+        }{
+            \Gamma \vdash t_1 = t_3 \colon A
+        }\)
+    \ruleitem{LI7}{li7} \(\dfrac{
+            \Gamma \vdash t_1 = t_2 \colon A_1 \quad \Gamma \vdash A_1 = A_2
+        }{
+            t_1 = t_2 \colon A_2
+        }\)
+    \ruleitem{T1}{t1} \(\dfrac{
+            \Gamma \vdash A_1 = A_2 \quad \Gamma \vdash t \colon A_1
+        }{
+            \Gamma \vdash t \colon A_2
+        }\)
+    \ruleitem{CF1}{cf1} For $n \geq 0, 1 \leq i \leq n+1$: \[
+            \dfrac{
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash A_{n+1} \type
+            }{
+                x_1 \colon A_1, \dots, x_{n+1} \colon A_{n+1} \vdash x_i \colon A_i   
+            }
+        \]
+        providing that $x_{n+1}$ is a variable distinct from all $x_1, \dots, x_n$.
+    \ruleitem{CF2(a)}{cf2a} For every sort symbol $S$ with well-formed introductory rule \[
+            x_1 \colon A_1, \dots, x_n \colon A_n 
+            \vdash
+            S(x_1, \dots, x_n) \type,
+        \] for every context $\Gamma$, \[
+            \dfrac{
+                \Gamma \vdash t_1 \colon A_1 \quad
+                \Gamma \vdash t_2 \colon A_2[x_1 \mid\ t_1] 
+                \dots
+                \Gamma \vdash t_n \colon A_n[x_1 \mid\ t_1, \dots, x_{n-1} \mid\ t_{n-1}]
+            }{
+                S(t_1, \dots, t_n) \type
+            }
+        \]
+    \ruleitem{CF2(b)}{cf2b} For every operator symbol $F$ with well-formed introductory rule \[
+            x_1 \colon A_1, \dots, x_n \colon A_n 
+            \vdash
+            F(x_1, \dots, x_n) \colon A,
+        \] for every context $P$, \[
+            \dfrac{
+                \Gamma \vdash t_1 \colon A_1 \quad 
+                \Gamma \vdash t_2 \colon A_2[x_1 \mid\ t_1] 
+                \dots
+                \Gamma \vdash t_n \colon A_n[x_1 \mid\ t_1, \dots, x_{n-1} \mid\ t_{n-1}]
+            }{
+                \Gamma \vdash F(t_1, \dots, t_n) \colon A[x_1 \mid\ t_1, \dots, x_n \mid\ t_n]
+            }
+        \]
+    \ruleitem{SI1}{si1} If $\Gamma$ is a context, then \[
+            \dfrac{
+                x_1 \colon A_1, \dots x_n \colon A_n \vdash A = A' \quad
+                \Gamma \vdash s_1 = s'_1 \colon A_1 \quad
+                \Gamma \vdash s_2 = s'_2 \colon A_2[x_1 \mid\ s_1] 
+                \dots
+                \Gamma \vdash s_m = s'_m \colon A_n[x_1 \mid\ s_1, \dots, x_{n-1} \mid\ s_{n-1}]
+            }{
+                \Gamma 
+                \vdash
+                A[x_1 \mid\ s_1, \dots, x_n \mid\ s_n]
+                =
+                A'[x_1 \mid\ s'_1, \dots, x_n \mid\ s'_n]
+            }
+        \]
+    \ruleitem{SI2}{si2} If $\Gamma$ is a context, then \[
+            \dfrac{
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash s = s' \colon A \quad
+                \Gamma \vdash s_1 = s'_1 \colon A_1 \quad
+                \Gamma \vdash s_2 = s'_2 \colon A_2 [x_1 \mid\ s_1] 
+                \dots
+                \Gamma \vdash s_n = s'_n \colon A_n[x_1 \mid\ s_1, \dots, x_{n-1} \mid\ s_{n-1}]
+            }{
+                s[x_1 \mid\ s_1, \dots, x_n \mid\ s_n]
+                = 
+                s'[x_1 \mid\ s'_1, \dots, x_n \mid\ s'_n]
+            }
+        \]
+    \ruleitem{A1}{a1} If $x_1 \colon A_1, \dots, x_n \colon A_n \vdash A = A'$ is an axiom, then \[
+            \dfrac{
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type
+                \quad
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash A' \type   
+            }{
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash A = A'
+            }
+        \]
+    \ruleitem{A2}{a2} If $x_1 \colon A_1, \dots, x_n \colon A_n \vdash t = t' \colon A$ is an axiom, then from \[
+            \dfrac{
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A 
+                \quad
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash t' \colon A
+            }{
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash t = t' \colon A
+            }
+        \]
+\end{enumerate}
+
+\section{Derivation Rules of Calculus of Constructions} \label{app:derivation-rules-coc}
+
+In this section we present all the derivation rules for CoC as presented in \cite{streicher}.
+
+Context Formation Rules:
+\begin{enumerate} % TODO: reformat this
+    \ruleitem{Empty}{empty} $\dfrac{}{\quad \ok}$
+    \ruleitem{Cont-Intro}{cont-intro} $\ddoublefrac{\Gamma \vdash A \type}{\Gamma, x \colon A \ok}$, if $x \notin \Var(\Gamma)$
+    \ruleitem{Cont-Thin}{cont-thin} $\dfrac{
+            \Gamma, \Delta \ok \quad \Gamma \vdash A \type
+        }{
+            \Gamma, x \colon A, \Delta \ok
+        }$, if $x \notin \Var(\Gamma) \cup \Var(\Delta)$
+    \ruleitem{Cont-Sub}{cont-sub} $\dfrac{
+        \Gamma, x \colon A, \Delta \ok \quad \Gamma \vdash t \colon A
+    }{
+        \Gamma, \Delta[x \mid\ t] \ok
+    }$
+\end{enumerate}
+
+Context Equality Rules
+\begin{enumerate}
+    \ruleitem{Crefl}{crefl} $\ddoublefrac{
+        \Gamma = \Gamma
+    }{
+        \Gamma \ok
+    }$
+    \ruleitem{Csym}{csym} $\dfrac{
+        \Gamma = \Delta
+    }{
+        \Delta = \Gamma
+    }$
+    \ruleitem{Ctrans}{ctrans} $\dfrac{
+        \Gamma = \Delta \quad \Delta = \Theta
+    }{
+        \Gamma = \Theta
+    }$
+    \ruleitem{Cequ}{cequ} $\dfrac{
+        \Gamma, x \colon A, \Delta \ok 
+        \quad 
+        \Gamma \vdash A = B
+    }{
+        \Gamma, x \colon A, \Delta
+        =
+        \Gamma, x : B, \Delta
+    }$
+    \ruleitem{Creflect1}{creflect1} $\dfrac{
+        \Gamma, x \colon A 
+        = 
+        \Delta, x \colon B
+    }{
+        \Gamma = \Delta
+    }$
+    \ruleitem{Creflect2}{creflect2} $\dfrac{
+        \Gamma, x \colon A 
+        = \Delta, x \colon B
+    }{
+        \Gamma \vdash A = B_1
+    }$
+\end{enumerate}
+
+Structural Rules for Judgement Formation
+\begin{enumerate}
+    \ruleitem{Ass}{ass} $\dfrac{
+        \Gamma, x \colon A, \Delta \ok
+    }{
+        \Gamma, x \colon A, \Delta 
+        \vdash 
+        x \colon A
+    }$ 
+    \ruleitem{Reflection1}{reflection1} $\dfrac{
+        \Gamma \vdash \mathcal{J}
+    }{
+        \Gamma \ok
+    }$
+    \ruleitem{Reflection2}{reflection2} $\dfrac{
+        \Gamma \vdash t : A
+    }{
+        \Gamma \vdash A \type
+    }$
+    \ruleitem{Thin}{thin} $\dfrac{
+        \Gamma, \Delta \vdash \mathcal{J}
+        \quad
+        \Gamma \vdash A \type   
+    }{
+        \Gamma, x \colon A, \Delta 
+        \vdash 
+        \mathcal{J}
+    }$, if $x \notin \Var(\Gamma) \cup \Var(\Delta)$
+    \ruleitem{Sub}{sub} $\dfrac{
+        \Gamma, x \colon A, \Delta \vdash \mathcal{J}
+        \quad
+        \Gamma \vdash t : A  
+    }{
+        \Gamma, \Delta[x \mid\ t] 
+        \vdash
+        \mathcal{J}[x \mid\ t]
+    }$
+\end{enumerate}
+
+Equality Rules:
+\begin{enumerate}
+    \ruleitem{Equ}{equ} $\dfrac{
+        \Gamma = \Delta
+        \quad
+        \Gamma \vdash \mathcal{J}
+    }{
+        \Delta \vdash \mathcal{J}
+    }$ 
+    \ruleitem{Refl-Typ}{refl-typ} $\ddoublefrac{
+        \Gamma \vdash A = A
+    }{
+        \Gamma \vdash A \type
+    }$
+    \ruleitem{Refl-Obj}{refl-obj} $\ddoublefrac{
+        \Gamma \vdash t = t : A
+    }{
+        \Gamma \vdash t : A
+    }$
+    \ruleitem{Symm-Typ}{symm-typ} $\dfrac{
+        \Gamma \vdash A = B
+    }{
+        \Gamma \vdash B = A
+    }$
+    \ruleitem{Symm-Obj}{symm-obj} $\dfrac{
+        \Gamma \vdash t = s : A
+    }{
+        \Gamma \vdash s = t : A
+    }$
+    \ruleitem{Trans-Typ}{trans-typ} $\dfrac{
+        \Gamma \vdash A = B 
+        \quad
+        \Gamma \vdash B = C
+    }{
+        \Gamma \vdash A = C
+    }$
+    \ruleitem{Trans-Obj}{trans-obj} $\dfrac{
+        \Gamma \vdash t_1 = t_2 : A 
+        \quad
+        \Gamma \vdash t_2 = t_3 : A
+    }{
+        \Gamma \vdash t_1 = t_3 : A
+    }$
+    \ruleitem{Repl1}{repl1} $\dfrac{
+        \Gamma \vdash t = s : A
+        \quad
+        \Gamma, x \colon A, \Delta \ok
+    }{
+        \Gamma, \Delta[x \mid\ t] 
+        =
+        \Gamma, \Delta[x \mid\ t]
+    }$
+    \ruleitem{Repl2}{rupl2} $\dfrac{
+        \Gamma \vdash t = s : A
+        \quad
+        \Gamma, x \colon A, \Gamma \vdash B \type
+    }{
+        \Gamma, \Delta[x \mid\ t]
+        \vdash
+        B[x \mid\ t] = B[x \mid\ s]
+    }$
+    \ruleitem{Repl3}{repl3} $\dfrac{
+        \Gamma \vdash t_1 = t_2 : A
+        \quad
+        \Gamma, x \colon A, \Delta \vdash s : B
+    }{
+        \Gamma, \Delta[ x \mid\ t_1]
+        \vdash
+        s[x \mid\ t_1] = s[x \mid\ t_2] : B[x \mid\ t_1]
+    }$
+    \ruleitem{Conv1}{conv1} $\dfrac{
+        \Gamma \vdash A = B
+        \quad
+        \Gamma \vdash t : A
+    }{
+        \Gamma \vdash t : B
+    }$
+    \ruleitem{Conv2}{conv2} $\dfrac{
+        \Gamma \vdash A = B
+        \quad
+        \Gamma \vdash t = s : A
+    }{
+        \Gamma \vdash t = s : B
+    }$
+\end{enumerate}
+
+Rules for Products of types
+
+\begin{enumerate}
+    \ruleitem{$\prod$-Form}{prod-form} $\dfrac{
+        \Gamma, x \colon A \vdash B \type
+    }{
+        \Gamma 
+        \vdash 
+        (\prod x \colon A) B \type
+    }$
+    \ruleitem{$\prod$-Equ}{prod-equ} $\dfrac{
+        \Gamma \vdash A_1 = A_2
+        \quad
+        \Gamma, x \colon A_1 \vdash B_1 = B_2
+    }{
+        \Gamma
+        \vdash
+        (\prod x \colon A_1) B_1
+        =
+        (\prod x \colon A_2) B_2
+    }$
+    \ruleitem{$\prod$-Intro}{prod-intro} $\dfrac{
+        \Gamma, x \colon A \vdash t : B
+    }{
+        \Gamma
+        \vdash
+        (\lambda x \colon A) t
+        :
+        (\prod x \colon A) B
+    }$
+    \ruleitem{$\xi$-Rule}{xi-rule} $\dfrac{
+        \Gamma, x \colon A_1 \vdash t_1 = t_2 : B
+        \quad
+        \Gamma \vdash A_1 = A_2
+    }{
+        \Gamma
+        \vdash
+        (\lambda x \colon A_1) t_1
+        =
+        (\lambda x \colon A_2) t_2
+        \colon
+        (\prod x \colon A_1) B
+    }$
+    \ruleitem{$\prod$-Elim}{prod-elim} $\dfrac{
+        \Gamma \vdash t \colon (\prod x \colon A) B
+        \quad
+        \Gamma \vdash s \colon A
+        \quad
+        \Gamma, x \colon A \vdash B \type
+    }{
+        \Gamma
+        \vdash
+        \App([x \colon A] B, t, s) 
+        \colon 
+        B[x \mid\ s]
+    }$
+    \ruleitem{$\prod$-Elim-Equ}{prod-elim-equ} $\dfrac{
+        \Gamma \vdash A_1 = A_2
+        \quad
+        \Gamma \vdash t_1 = t_2 \colon (\prod x \colon A_1) B_1
+        \quad
+        \Gamma, x \colon A_1 \vdash B_1 = B_2
+        \quad
+        \Gamma \vdash s_1 = s_2 \colon A_1
+    }{
+        \Gamma
+        \vdash
+        \App([x \colon A_1] B_1, t_1, s_1)
+        = 
+        \App([x \colon A_2] B_2, t_2, s_2)
+        \colon
+        B_1[x \mid\ s_1]
+    }$
+    \ruleitem{$\beta$-Rule}{beta-rule} $\dfrac{
+        \Gamma, x \colon A \vdash B \type
+        \quad
+        \Gamma, x \colon A \vdash t \colon B
+        \quad
+        \Gamma \vdash s \colon A
+    }{
+        \Gamma 
+        \vdash
+        \App([x \colon A] B, (\lambda x : A) t, s)
+        = 
+        t[x \mid\ s] 
+        \colon
+        B[x \mid\ s]
+    }$
+    \ruleitem{$\eta$-rule}{eta-rule} $\dfrac{
+        \Gamma, x \colon A \vdash B \type
+        \quad
+        \Gamma \vdash t \colon (\prod x \colon A) B
+    }{
+        \Gamma 
+        \vdash
+        (\lambda x \colon A) \App([x \colon A] B, t, x) 
+        = 
+        t
+        \colon
+        (\prod x \colon A) B
+    }$
+\end{enumerate}
+
+Rules for Propositions
+
+\begin{enumerate}
+    \ruleitem{Prop}{prop} $\dfrac{
+        \Gamma \ok
+    }{
+        \Gamma \vdash \Prop \type
+    }$ 
+    \ruleitem{Prop-Type}{prop-type} $\ddoublefrac{
+        \Gamma \vdash p \colon \Prop
+    }{
+        \Gamma \vdash \Proof(p) \type
+    }$
+    \ruleitem{Prop-Equ}{prop-equ} $\ddoublefrac{
+        \Gamma \vdash p_1 = p_2 \colon \Prop
+    }{
+        \Gamma \vdash \Proof(p_1) = \Proof(p_2)
+    }$
+    \ruleitem{$\forall$-Intro}{forall-intro} $\dfrac{
+        \Gamma, x \colon A 
+        \vdash
+        p \colon \Prop
+    }{
+        \Gamma
+        \vdash
+        (\forall x \colon A) p 
+        \colon \Prop
+    }$
+    \ruleitem{$\forall$-Equ}{forall-equ} $\dfrac{
+        \Gamma, x \colon A_1 \vdash p_1 = p_2 \colon \Prop
+        \quad
+        \Gamma \vdash A_1 = A_2
+    }{
+        \Gamma
+        \vdash
+        (\forall x \colon A_1) p_1
+        =
+        (\forall x \colon A_2) p_2 
+        \colon
+        \Prop
+    }$
+    \ruleitem{$\forall$-Elim}{forall-elim} $\dfrac{
+        \Gamma, x \colon A \vdash p \in \Prop
+    }{
+        \Gamma 
+        \vdash
+        \Proof((\forall x \colon A) p)
+        = 
+        (\prod x \colon A) \Proof(p)
+    }$
+\end{enumerate}
