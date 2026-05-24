@@ -5,16 +5,16 @@
 The idea of generating mathematical reasoning computationally
 is one of the most profound challenges in computer science.
 At the core of this pursuit lies the Curry-Howard correspondence,
-an isomorphism between logic and computation \cite{howard}. Under this paradigm,
+an isomorphism between logic and computation \cite{howard}:
 mathematical propositions are interpreted as types, and the proofs
 of propositions are viewed as terms (or programs) inhabiting
 those types. Consequently, the problem of proving a theorem is 
-reduced to the problem of finding a well-typed term in a formal type-theory.
+reduced to the problem of finding a well-typed term in a formal type theory.
 
-Modern proof assistants, such as Rocq (formerly Coq) \cite{coquand1988} and Lean \cite{demoura2015},
+Modern proof assistants, such as Rocq (formerly Coq) \cite{coquand1988} and Lean \cite{demoura2015}
 leverage this correspondence using rich type theories like the 
 Calculus of Inductive Constructions \cite{paulin-mohring1993}. While these environments
-enabled us to formalize complex theories, fully autonomous theorem
+enabled the formalization of highly complex mathematics, fully autonomous theorem
 proving with such rich frameworks remains an incredibly
 difficult challenge. The primary obstacle is undecidability of 
 type inhabitation in dependent type theories: attempting
@@ -22,28 +22,37 @@ to exhaustively construct a term of a given type results in a
 combinatorial explosion of the search space.
 
 Traditionally, term generation has been approached from a purely
-syntactic perspective. This has more recently been the area of work 
-of some teams using Large Language Models. But generating terms
-just from the syntax is very difficult to guide heuristically.
-Our work trying to understand the framework proposed by Laurent Lafforgue
-that connects Topos Theory \cite{lawvere1971} with artificial intelligence, lead to the following
-redefinition of the problem: leveraging the categorical
-semantics of type theories to reframe autonomous theorem proving
-as a structural graph exploration problem. By translating the 
-syntax of Generalized Algebraic Theories (GATs) and the Calculus
-of Constructions (CoC) into categorical structures ---namely
-Contextual Categories and Doctrines of Constructions--- we obtain
-term models that inherently posses a rich, geometric graph structure.
-The soundness of this translation is guaranteed by the term model being 
-the initial object of the category of models of the underlying type theory.
-These result is known as the \textit{initiality conjecture} from Voevodsky \cite{voevodsky2017}.
-It was first proven by Streicher in \cite{streicher} for CoC, and more recently 
-for a full-featured Martin-L\"of type theory in September 2020 by Brunerie and Lumsdaine
-in \cite{bruneire2020}.
+syntactic perspective, and more recently through Large Language Models. 
+However, generating terms from syntax alone is difficult to guide heuristically,
+and the linear nature of language model generation forces early commitments 
+that can prevent a proof from ever being found. Similar limitations 
+have been observed by the Logical Intelligence team in \cite{logicalintelligence}.
+
+This work grew out of an attempt to understand the framework
+proposed by Laurent Lafforgue, which connects Topos Theory 
+\cite{lawvere1971} with artificial intelligence. 
+While studying this connection, we found that Toposes, 
+despite offering a strong theoretical foundation, 
+were too abstract to serve directly as a practical 
+representation for our purposes. This led us to categorical 
+semantics as a more tractable alternative. 
+Our central idea is to leverage the categorical semantics 
+of type theories to reframe autonomous theorem proving as a 
+structural graph exploration problem. By translating the 
+syntax of Generalized Algebraic Theories (GATs) and the 
+Calculus of Constructions (CoC) into categorical structures 
+---namely Contextual Categories and Doctrines of Constructions--- 
+we obtain term models that carry a rich geometric graph structure. 
+The soundness of this translation is guaranteed by the term 
+model being the initial object of the category of models of 
+the underlying type theory, a result known as the initiality
+conjecture, due to Voevodsky \cite{voevodsky2017}. 
+It was first proved by Streicher [17] for CoC, and later for
+full Martin-Löf type theory by Brunerie and Lumsdaine \cite{bruneire2020}.
 
 Withing this categorical framework, the problem of finding a proof
-translates to finding a specific section (a morphism) withing a relativized
-contextual category. 
+translates to finding a specific section ---a specific morphism--- 
+withing a relativized contextual category. 
 With these idea in mind of using categories and neural networks, we formalized 
 an expansion algorithm 
 ---a deterministic process that exhaustively builds the finite subcategories
@@ -62,12 +71,14 @@ autonomous theorem proving.
 
 \section*{Objectives}
 
+The main goals of this work are the following.
 In this work we first aim to provide a proof of the initiality conjecture for GATs, together with an extension of Streicher's
 proof for CoC together with a GAT signature.
 Then, once established the mathematical significance of objects and morphisms in the term model,
 we then present the expansion algorithm, an algorithm to construct any object or morphism in a Contextual 
 Category or Contextual Doctrine, and that is designed to work together with a graph neural network to efficiently
 solve the problem in hand.
+In order to do this we will extend the concept of relativization from Context Categories to Doctrines of Constructions.
 Then we implement the expansion algorithm for simply typed combinatory logic, as a simple example to give intuition
 about how the expansion process works. 
 Finally we give a proposal of a GNN-based model thought to optimize term generation.

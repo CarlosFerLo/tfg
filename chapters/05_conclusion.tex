@@ -1,2 +1,57 @@
 % !TEX root = ../main.tex
-\chapter{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+\chapter*{Conclusion}
+
+This thesis develops a categorical approach to autonomous 
+theorem proving, grounded in the translation of type 
+inhabitation problems into geometric graph exploration 
+problems over term models.
+
+Our investigation began with the study of Lafforgue's 
+framework connecting Topos Theory \cite{lawvere1971} with artificial 
+intelligence. While Toposes offered a compelling 
+theoretical foundation, they proved too abstract for direct 
+application. This led us to Cartmell's Generalized Algebraic
+Theories and contextual categories \cite{cartmell1978} \cite{cartmell1986}, whose term models
+sit close enough to the syntax of a theory to be
+computationally manageable, while still carrying the 
+geometric structure needed for a GNN-based approach. 
+We proved the initiality conjecture for GATs in Section 1.6, 
+establishing C(U) as the canonical categorical representation 
+of the semantics of a theory, and designed the Expansion Algorithm 
+to construct sections within it, equivalent to generating terms 
+of a given type.
+
+To handle a more expressive type theory, we turned to Streicher's 
+work on the Calculus of Constructions and Doctrines of Constructions [17], 
+which provided both a proof of the initiality conjecture for CoC 
+and a framework for extending type theories beyond the GAT signature. 
+In Section 2.5, we extended this framework 
+to CoC enriched with a GAT signature, constructed the corresponding 
+term model, and proved its initiality following ideas 
+from \cite{bezem2021}. We then extended the Expansion Algorithm to this 
+richer setting, to do this we extend the concept of relativization to Doctrines of Constructions. 
+In the course of this work, we also identified a 
+connection between the concept of collections of types in Doctrines 
+of Constructions and the topos-theoretic notion of subobject 
+classifier \cite{maclane1992}, which we leave as a direction for further 
+investigation.
+
+Several directions remain open. On the theoretical side, 
+it remains to formally extend the term model construction
+and prove the initiality conjecture for Doctrines of 
+Constructions with Σ-types, identity types, and a universe 
+hierarchy, as described in \cite{streicher}, and ultimately for the full 
+Calculus of Inductive Constructions \cite{coquand1990} and the Lean type 
+theory \cite{demoura2015}. The initiality conjecture for full Martin-Löf type theory 
+has been formalized in Agda by Brunerie and Lumsdaine \cite{bruneire2020}, 
+and a similar formalization effort for our extended setting 
+would be a natural next step.
+
+On the practical side, the full implementation of the GNN-based 
+Conjecturer-Prover model for guiding the Expansion Algorithm 
+remains the primary target for future work. We believe this 
+architecture, by combining the geometric structure of categorical 
+term models with the pruning power of graph neural networks, 
+offers a principled and promising alternative to purely syntactic 
+approaches to autonomous theorem proving.
