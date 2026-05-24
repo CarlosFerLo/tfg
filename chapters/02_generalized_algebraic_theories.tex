@@ -558,7 +558,8 @@ where:
 \end{enumerate}
 
 Now we see that any morphism $f \colon B \to A$ in $\mathcal{C}$ induces a pullback functor 
-$f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which is a contextual functor.
+$f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which is a contextual functor. The proof of the following 
+theorems is included in \cite{streicher}.
 This functor can be thought of as a way of generalizing knowledge we have in one part of the category to the rest 
 of the category.
 
@@ -590,9 +591,8 @@ of the category.
     we obtain a contextual functor $f^* \colon \mathcal{C}_A \to \mathcal{C}_B$
     called \textit{reindexing along} $f$.
 \end{theorem}
-% TODO: add reference of proof
 
-\begin{theorem} % TODO: see if it is used elsewhere or delete
+\begin{theorem}
     Let $\mathcal{C}$ be a contextual category and $f \colon B \to A$, $g \colon C \to B$ be morphisms in $\mathcal{C}$.
     Then, \[
         g^* \circ f^* = (f \circ g)^* 
@@ -601,9 +601,8 @@ of the category.
     \]
     for objects $D \geq A$.
 \end{theorem}
-% TODO: add reference of proof
 
-\begin{definition}
+\begin{definition} \cite{streicher}
     Let $\mathcal{C}$ be a contextual category, $A$ and $B$ be objects of $\mathcal{C}$ such that $A \lhd B$.
     The set of \textbf{sections} of $B$ is defined as 
     \begin{equation*}
@@ -720,26 +719,26 @@ is a mapping $\mathcal{M}$ from the $T$- and $\in$-rules of $U$ to the $\mathcal
             }
         \) then $\mathcal{M}[R_t]$ is section of $\mathcal{M}[R]$.
 
-    \item if $\Gamma \Rightarrow A = A'$ is a derived $T=$rule, then if \[
-            R \equiv \Gamma \Rightarrow A \type
+    \item if $\Gamma \vdash A = A'$ is a derived $T=$rule, then if \[
+            R \equiv \Gamma \vdash A \type
             \quad \text{ and } \quad
-            R' \equiv \Gamma \Rightarrow A' \type,
+            R' \equiv \Gamma \vdash A' \type,
         \] then $\mathcal{M}[R] = \mathcal{M}[R']$.
-    \item if $\Gamma \Rightarrow t = t' \colon A$ is a derived $\in=$rule, then if \[
-            R_t \equiv \Gamma \Rightarrow t \colon A, \quad
-            R_{t'} \equiv \Gamma \Rightarrow t' \colon A, \quad
-            R \equiv \Gamma \Rightarrow A \type,
+    \item if $\Gamma \vdash t = t' \colon A$ is a derived $\in=$rule, then if \[
+            R_t \equiv \Gamma \vdash t \colon A, \quad
+            R_{t'} \equiv \Gamma \vdash t' \colon A, \quad
+            R \equiv \Gamma \vdash A \type,
         \] then both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$.
         and $\mathcal{M}[R_t] = \mathcal{M}[R_{t'}]$
 \end{enumerate}
 
 There is a canonical interpretation $\mathcal{M}$ of $U$ in $\mathcal{C}(U)$, defined as follows:
 \begin{enumerate}
-    \item if $R \equiv x_1 \colon A_1, \dots, x_n \colon A_n \Rightarrow A \type$ is a derived $T$-judgement, 
+    \item if $R \equiv x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type$ is a derived $T$-judgement, 
             then we define \[
                 \mathcal{M}[R] = [x_1 \colon A_1, \dots, x_n \colon A_n, x_{n+1} \colon A];
             \]
-    \item if $R_t \equiv x_1 \colon A_1, \dots, x_n \colon A_n \Rightarrow t \colon A$ is a derived $\in$-judgement,
+    \item if $R_t \equiv x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A$ is a derived $\in$-judgement,
             then we define \[
                 \mathcal{M}[R_t] = [\langle x_1, \dots, x_n, t \rangle]
             \] a section of $\mathcal{M}[R]$.
@@ -783,9 +782,9 @@ is equivalent to the initial morphism $F$ we just defined.
 \section{Definition of the Problem}
 
 In this section we introduce a formal definition of our 
-problem, proposed at the beginning of the {\color{red} thesis}, % TODO: What do I put here?
+problem, proposed at the beginning of the thesis,
 and reformulate it to an equivalent problem easier to solve
-with artificial intelligence. % TODO: rephrase this better
+with artificial intelligence.
 
 Our problem might be formalized in the following manner:
 Given a theory $U$ and a derived rule of $U$ of the form 

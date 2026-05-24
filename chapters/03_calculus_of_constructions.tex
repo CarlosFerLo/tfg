@@ -63,11 +63,9 @@ Contexts are ranged over by capital greek letters.
 We define $\Var(\Gamma)$ as the set of variables declared in $\Gamma$.
 We will not distinguish expressions which are equivalent up to renaming of variables
 ($\alpha$-conversion), to do this we will be using \textit{deBruijn indices}
-\footnote{ % TODO: try to remove footnote
-    \textit{deBruijn indices} are a method to refer to declarations not by name (variables)
-    but by numbers which tell how far one has to go back into the current context of an expression
-    to find the declaration of the thing it refers to.   
-}.
+They are a method to refer to declarations not by name (variables)
+but by numbers which tell how far one has to go back into the current context of an expression
+to find the declaration of the thing it refers to.
 We define a \textit{pre-judgment} to be a syntactic expression of one of the following forms:
 \[
 \begin{array}{ll}
@@ -413,7 +411,7 @@ If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible contex
 \[
     \father[\Gamma] = [ v_1 \colon A_1, \dots, v_{n-1} \colon A_{n-1} ],
 \]
-that is well defined according to rule \textsc{Crefl1} % TODO : this rule does not exists jajajaja
+that is well defined according to rule \ref{rule:crefl}1.
 
 If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta \equiv v_1 \colon B_1, \dots, v_m \colon B_m$
 are admissible contexts, a morphism from $[\Gamma]$ to $[\Delta]$ is given by a $m$-tuple $\langle t_1, \dots, t_m \rangle$
@@ -430,7 +428,7 @@ iff for $i$, $1 \leq i \leq m$
 \[
     \Gamma \vdash t_i = s_i : B_i[v_1 \mid\ s_1, \dots, v_{i-1} \mid\ s_{i-1}]
 \] is derivable,
-according to rules \textsc{Crefl1} and \textsc{Crefl2} the definition is independent from the choice of representatives.
+according to rules \ref{rule:crefl}1 and \ref{rule:crefl}2 the definition is independent from the choice of representatives.
 We write $[\langle t_1, \dots, t_m \rangle] : [\Gamma] \to [\Delta]$ for the class of $m$-tuples equatable to $\langle t_1, \dots, t_m \rangle$.
 If we consider $\Theta \equiv v_1 \colon C_1, \dots, v_k \colon C_k$ is another admissible context and 
 $[\langle s_1, \dots, s_k\rangle]: [\Delta] \to [\Theta]$, then the composition of $[\langle t_1, \dots, t_m \rangle]$
@@ -520,8 +518,7 @@ It can be also shown that $\mathcal{C}_I$ is the initial object of the category 
 structure preserving functors, named $\mathbf{DoC}$. Hence tha term model satisfies the properties of soundness, 
 completeness and initiality that we wanted.
 
-% TODO : avoid line split
-\section{Extending Calculus of Constructions and its Interpretation} \label{sect:extending-calculus-of-constructions-and-its-interpretation}
+\section{Extending Calculus of Constructions and its \\Interpretation} \label{sect:extending-calculus-of-constructions-and-its-interpretation}
 
 In this section we show how to add symbols to Calculus of Constructions, the same thing that we could do in 
 GATs. We need to understand the current CoC as just as a minimal starting point, same as the empty theory for GATs. 
@@ -627,7 +624,7 @@ by considering the category over a base object. To do it we need the following r
     The relativization $\mathcal{C}_A$ of a doctrine of constructions $\mathcal{C}$ to an object $A$ is a doctrine of constructions.
 \end{theorem}
 \begin{proof}
-    We already know from the (TODO: add reference) that $\mathcal{C}_A$ is a contextual category. Let us check if it is also a 
+    We already know from the first chapter that $\mathcal{C}_A$ is a contextual category. Let us check if it is also a 
     doctrine of constructions with these extra structure we introduce.
 
     It is clear that $\mathcal{C}_A$ is a contextual category with products of families of types as for any object $B$ of $\mathcal{C}_A$ 
@@ -706,7 +703,7 @@ by considering the category over a base object. To do it we need the following r
                &= \prod((q(p(A), \Prop) \circ f)^*T) \\
                &= \prod(f^*(q(p(A), \Prop)^*T)) = \prod_A(f^*T_A)
     \end{align*}
-    This concludes the proof.
+    This concludes the proof as $g$ is a morphism over $A$.
 \end{proof}
 
 
