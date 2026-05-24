@@ -118,7 +118,7 @@ they are needed to the definition of universal quantification.
     together with two mappings $\prod$ and $\eval$ defined over the collection of objects $B$ of 
     $\mathcal{C}$ with $level(B) \geq 2$, such that:
     \begin{enumerate}
-        \item Whenever $1 \lhd A \lhd B$, then $1 \lhd \prod(B)$ and $eval_B \colon p(A)^*\prod(B) \to B$
+        \item Whenever $I \lhd A \lhd B$, then $I \lhd \prod(B)$ and $eval_B \colon p(A)^*\prod(B) \to B$
               is a morphism over $A$
               \[
               \begin{tikzcd}
@@ -130,17 +130,17 @@ they are needed to the definition of universal quantification.
               with $\eval_B \circ p(A)^*t = s$. This unique section $t$ is called $\curry(s)$.
               \[
                 \begin{tikzcd}
-                A \arrow[rr, open] \arrow[ddd, "\id_A"', bend right=85] \arrow[d, "p(A)^*t"] \arrow[dd, "s"', bend right=80] &  & 1 \arrow[d, "t"'] \arrow[ddd, "\id_1", bend left=80]   \\
+                A \arrow[rr, open] \arrow[ddd, "\id_A"', bend right=85] \arrow[d, "p(A)^*t"] \arrow[dd, "s"', bend right=80] &  & I \arrow[d, "t"'] \arrow[ddd, "\id_I", bend left=80]   \\
                 p(A)^*\prod(B) \arrow[d, "\eval_B"] \arrow[rr, "{q(p(A), \prod(B))}"']                                       &  & \prod(B) \arrow[dd, open]                              \\
                 B \arrow[d, open]                                                                                                  &  &                                                  \\
-                A \arrow[rr, open]                                                                                                 &  & 1                                               
+                A \arrow[rr, open]                                                                                                 &  & I                                               
                 \end{tikzcd}
               \]
               \begin{observation}
                 as any section $t$ of $\prod(B)$ gives a section $eval_B \circ p(A)^*t$ of $B$, hence we have a
                 canonical 1-1-correspondence of $\Sections(B)$ and $\Sections(\prod(B))$. 
               \end{observation}
-        \item For any object $J$ and any morphism $f : J \to 1$, the following conditions are satisfied:
+        \item For any object $J$ and any morphism $f : J \to I$, the following conditions are satisfied:
               \[
                 f^*(\prod(B)) = \prod(f^*B) 
                 \quad \text{and} \quad 
@@ -152,7 +152,7 @@ they are needed to the definition of universal quantification.
 It follows from the definition that substitution preserves functional abstraction or currying:
 \begin{lemma}
     Let $\mathcal{C}$ be a contextual category with products of families of types.
-    Let $1 \lhd A \lhd B$ be objects and $f \colon J \to 1$ a morphism in $\mathcal{C}$.
+    Let $I \lhd A \lhd B$ be objects and $f \colon J \to I$ a morphism in $\mathcal{C}$.
     If $t$ is a section of $B$, then 
     \[
         f^*(\curry(B)) = \curry(f^*B).
@@ -174,39 +174,6 @@ Contextual Categories with products correspond to $\lambda$-calculus with depend
     of types} if for $1 \lhd A \lhd B$ in $\mathcal{C}$, \[
         F\prod(B) = \prod(F B) \quad \text{ and } \quad F \eval_B = \eval_{F B}
     \]
-\end{definition}
-
-NOTE: this definition is better for actually proving relativization on the section on Problem Redefinition
-An alternative definition of contextual categories with products of families of types is given by Voevodsky in this INSERT REF % TODO: insert reference
-\begin{definition}
-    Let $\mathcal{C}$ be a category. Let $g \colon Z \to Y$, $f \colon Y \to X$ be a pair of morphisms such that for any $U \to X$ there 
-    exists a pullback $U \times_X Y$. A pair \[
-        (w \colon W \to X, h \colon W \times_X Y \to Z)
-    \] such that $g \circ h = pr$ is called a universal pair for $(f, g)$ if for any $U \to X$ the map 
-    \begin{align*}
-        \Hom_X(U, W) & \longrightarrow \Hom_Y(U \times_X Y, Z) \\
-        u & \longmapsto h \circ (u \times \id_Y)
-    \end{align*}
-    is a bijection.
-\end{definition}
-\begin{definition}
-    A contextual category with products of families of types (or a $\prod$-contextual category in the reference) consist of a 
-    contextual category $\mathcal{C}$ together with:
-    \begin{enumerate}
-        \item for each object $Y$ of $\mathcal{C}$, with $\level(Y) \geq 2$, an object $\prod(Y)$ of $\mathcal{C}$ 
-              such that $\father(\prod(Y)) = \father^2(Y)$;
-        \item for each object $Y$ of $\mathcal{C}$, with $\level(Y) \geq 2$, a morphism \[
-                \eval_y \colon p(\father(Y))^*\prod(Y) \to Y
-            \] over $\father(Y)$ such that:
-            \begin{enumerate}
-                \item for any $f \colon Z \to \father^2(Y)$ \[
-                    f^*\prod(Y) = \prod(f^*Y) 
-                        \quad \text{ and } \quad
-                    f^*\eval_Y = \eval_{f^*Y},
-                \]
-                \item $(\prod(Y), \eval_Y)$ is a universal pair for $(p(Y), p(\father(Y)))$.
-            \end{enumerate}
-    \end{enumerate}
 \end{definition}
 
 Now we add the type of propositions. To do it, we find objects in our category whose sections, 
@@ -660,12 +627,91 @@ by considering the category over a base object. To do it we need the following r
     The relativization $\mathcal{C}_A$ of a doctrine of constructions $\mathcal{C}$ to an object $A$ is a doctrine of constructions.
 \end{theorem}
 \begin{proof}
-    % TODO: write proof
+    We already know from the (TODO: add reference) that $\mathcal{C}_A$ is a contextual category. Let us check if it is also a 
+    doctrine of constructions with these extra structure we introduce.
+
+    It is clear that $\mathcal{C}_A$ is a contextual category with products of families of types as for any object $B$ of $\mathcal{C}_A$ 
+    with $\level_A(B) \geq 2$, we have that $\level(B) \geq 2$ and as $\mathcal{C}$ is a contextual category with products of families of 
+    types, $\prod_A(B) = \prod(B)$ is defined and $\father(\prod (B)) = \father^2 (B)$, and hence $\prod_A(B) \rhd A$, hence it is well defined.
+    Then for $\eval_B^A = \eval_B \colon p(\father(B))^*\prod(B) \to B$ is a morphism in $\mathcal{C}_A$ as by definition the following 
+    diagram commutes: \[
+        \begin{tikzcd}
+            p(\father(B))^*\prod(B) 
+                \arrow[rr, "{\eval^A_B = \eval_B}"]
+                \arrow[rd, open]
+                \arrow[rdd, open]
+            & & B 
+                \arrow[ld, open]
+                \arrow[ldd, open]
+            \\
+            & \father(B) \arrow[d, open] & \\
+            & A &
+        \end{tikzcd}
+    \]
+    Now, if $s$ is a section of $B$ in $\mathcal{C}_A$, it is a section of $B$ in $\mathcal{C}$. Hence there exists a unique section $t$ of $\prod(B)$
+    in $\mathcal{C}$ such that $eval_B \circ p(A)^*t = s$, as $p(\prod(B)) \circ t = \id_{\father(\prod(B))}$, it is clear that $t$ is a section of $\prod_A(B)$
+    in $\mathcal{C}_A$.
+    Now if $J$ is an object and $f \colon J \to \father^2(B)$ is a morphism in $\mathcal{C}_A$, in particular, they belong to $\mathcal{C}$.
+    So we have that $\prod(f^*B) = f^*\prod(B)$ and $\eval_{f^*B} = f^*\eval_B$, but by definition of $\prod_A$ and $\eval_A$ we have that
+    $\prod_A(f^*B) = f^*\prod_A(B)$ and $\eval^A_{f^*B} = f^*\eval^A_B$. With this we conclude that $\mathcal{C}_A$ is a contextual category with
+    products of families of types.
+
+    Now we see that $T_A = p(A)^*T$ is indeed a collection of types of $\mathcal{C}_A$. Consider then two morphisms $f, g \colon J \to \father(T_A)$,
+    for some object $A$ in $\mathcal{C}_A$, such that $f^*T_A = g^*T_A$. We want to see that indeed $f = g$. We have that $f^*(q(p(A),\Prop)^*T) = g^*(q(p(A), \Prop)^*T)$
+    and we derive that $(q(p(A), \Prop) \circ f)^*T = (q(p(A), \Prop) \circ g)^*T$. As $T$ is a collection of types in $\mathcal{C}$,
+    $q(p(A), \Prop) \circ f = q(p(A), \Prop) \circ g$. And finally $f = g$ as both make the following pullback diagram commute: \[
+        \begin{tikzcd}[column sep=3cm]
+            J 
+                \arrow[rd, "{f = g}"]
+                \arrow[rrd, "{q(p(A), \Prop) \circ f}", bend left = 10]
+                \arrow[rdd, open, bend right = 10] 
+            & & \\
+            & \Prop_A 
+                \arrow[r, "{q(p(A), \Prop)}"]
+                \arrow[d, open]
+            & \Prop
+                \arrow[d, open]
+            \\
+            & A 
+                \arrow[r, open]
+            & 1
+        \end{tikzcd}
+    \]
+
+    Finally, let $B, C$ be objects of $\mathcal{C}_A$ and $f \colon C \to \Prop_A$ a morphism over $A$. Then we want to see that there exists a
+    necessarily unique morphism $g \colon B \to \Prop_A$ such that $g^*T_A = \prod_A(f^*T_A)$.
+    As $\mathcal{C}$ holds this property, we consider $q(p(A), \Prop) \circ f \colon C \to \Prop$, hence there exists a necessarily unique $g' \colon B \to \Prop$
+    such that $g'^*T = \prod ((q(p(A), \Prop) \circ f)^* T) = \prod (f^*T_A)$, and by considering $g$ the unique function that makes the following pullback diagram commute:  \[
+        \begin{tikzcd}[column sep=3cm]
+            B
+                \arrow[rd, "g"]
+                \arrow[rrd, "g'", bend left = 10]
+                \arrow[rdd, open, bend right = 10] 
+            & & \\
+            & \Prop_A 
+                \arrow[r, "{q(p(A), \Prop)}"]
+                \arrow[d, open]
+            & \Prop
+                \arrow[d, open]
+            \\
+            & A 
+                \arrow[r, open]
+            & 1
+        \end{tikzcd}
+    \] we then have that $g' = q(p(A), \Prop) \circ g$, hence: 
+    \begin{align*}
+        g^*T_A &= g^*(q(p(A), \Prop)^*T)  \\
+               &= (q(p(A), \Prop) \circ g)^*T \\
+               &= g'^*T  \\
+               &= \prod((q(p(A), \Prop) \circ f)^*T) \\
+               &= \prod(f^*(q(p(A), \Prop)^*T)) = \prod_A(f^*T_A)
+    \end{align*}
+    This concludes the proof.
 \end{proof}
 
 
 With this result, and with the notation of $\Gamma$ subscript introduced in the second chapter, we reduce our problem to 
-finding a section of $[\langle x \colon A \rangle_\Gamma]$ in $\mathcal{C}_{\Sigma, \Gamma}$, the relativization of $\mathcal{C}_\Sigma$
+finding a section of $[ \Gamma, x \colon A ]$ in $\mathcal{C}_{\Sigma, \Gamma}$, the relativization of $\mathcal{C}_\Sigma$
 to $\Gamma$.
 
 \section{Expansion Algorithm}
