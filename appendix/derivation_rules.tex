@@ -316,32 +316,32 @@ Equality Rules:
 Rules for Products of types
 
 \begin{enumerate}
-    \ruleitem{$\prod$-Form}{prod-form} $\dfrac{
+    \ruleitem{$\Pi$-Form}{prod-form} $\dfrac{
         \Gamma, x \colon A \vdash B \type
     }{
         \Gamma 
         \vdash 
-        (\prod x \colon A) B \type
+        (\Pi x \colon A) B \type
     }$
-    \ruleitem{$\prod$-Equ}{prod-equ} $\dfrac{
+    \ruleitem{$\Pi$-Equ}{prod-equ} $\dfrac{
         \Gamma \vdash A_1 = A_2
         \quad
         \Gamma, x \colon A_1 \vdash B_1 = B_2
     }{
         \Gamma
         \vdash
-        (\prod x \colon A_1) B_1
+        (\Pi x \colon A_1) B_1
         =
-        (\prod x \colon A_2) B_2
+        (\Pi x \colon A_2) B_2
     }$
-    \ruleitem{$\prod$-Intro}{prod-intro} $\dfrac{
+    \ruleitem{$\Pi$-Intro}{prod-intro} $\dfrac{
         \Gamma, x \colon A \vdash t : B
     }{
         \Gamma
         \vdash
         (\lambda x \colon A) t
         :
-        (\prod x \colon A) B
+        (\Pi x \colon A) B
     }$
     \ruleitem{$\xi$-Rule}{xi-rule} $\dfrac{
         \Gamma, x \colon A_1 \vdash t_1 = t_2 : B
@@ -354,10 +354,10 @@ Rules for Products of types
         =
         (\lambda x \colon A_2) t_2
         \colon
-        (\prod x \colon A_1) B
+        (\Pi x \colon A_1) B
     }$
-    \ruleitem{$\prod$-Elim}{prod-elim} $\dfrac{
-        \Gamma \vdash t \colon (\prod x \colon A) B
+    \ruleitem{$\Pi$-Elim}{prod-elim} $\dfrac{
+        \Gamma \vdash t \colon (\Pi x \colon A) B
         \quad
         \Gamma \vdash s \colon A
         \quad
@@ -369,10 +369,10 @@ Rules for Products of types
         \colon 
         B[x \mid\ s]
     }$
-    \ruleitem{$\prod$-Elim-Equ}{prod-elim-equ} $\dfrac{
+    \ruleitem{$\Pi$-Elim-Equ}{prod-elim-equ} $\dfrac{
         \Gamma \vdash A_1 = A_2
         \quad
-        \Gamma \vdash t_1 = t_2 \colon (\prod x \colon A_1) B_1
+        \Gamma \vdash t_1 = t_2 \colon (\Pi x \colon A_1) B_1
         \quad
         \Gamma, x \colon A_1 \vdash B_1 = B_2
         \quad
@@ -404,7 +404,7 @@ Rules for Products of types
     \ruleitem{$\eta$-rule}{eta-rule} $\dfrac{
         \Gamma, x \colon A \vdash B \type
         \quad
-        \Gamma \vdash t \colon (\prod x \colon A) B
+        \Gamma \vdash t \colon (\Pi x \colon A) B
     }{
         \Gamma 
         \vdash
@@ -412,7 +412,7 @@ Rules for Products of types
         = 
         t
         \colon
-        (\prod x \colon A) B
+        (\Pi x \colon A) B
     }$
 \end{enumerate}
 
@@ -464,6 +464,6 @@ Rules for Propositions
         \vdash
         \Proof((\forall x \colon A) p)
         = 
-        (\prod x \colon A) \Proof(p)
+        (\Pi x \colon A) \Proof(p)
     }$
 \end{enumerate}

@@ -12,7 +12,7 @@ theory powering modern proof assistants like Rocq (formerly Coq).
 
 The primary additions in CoC, compared to Generalized Algebraic Theories (GATs), are: 
 \begin{enumerate}
-    \item \textbf{Product Types ($\prod$-types):} These are first-class citizens,
+    \item \textbf{Product Types ($\Pi$-types):} These are first-class citizens,
         meaning dependent function types exist at the base level rather than just
         in the theory's signature.
     \item \textbf{The Universe of Propositions ($\Prop$):} A type universe whose terms are themselves
@@ -113,34 +113,34 @@ they are needed to the definition of universal quantification.
 
 \begin{definition}
     A \textit{contextual category with products of families of types} is a category $\mathcal{C}$
-    together with two mappings $\prod$ and $\eval$ defined over the collection of objects $B$ of 
+    together with two mappings $\Pi$ and $\eval$ defined over the collection of objects $B$ of 
     $\mathcal{C}$ with $level(B) \geq 2$, such that:
     \begin{enumerate}
-        \item Whenever $I \lhd A \lhd B$, then $I \lhd \prod(B)$ and $eval_B \colon p(A)^*\prod(B) \to B$
+        \item Whenever $I \lhd A \lhd B$, then $I \lhd \Pi(B)$ and $eval_B \colon p(A)^*\Pi(B) \to B$
               is a morphism over $A$
               \[
               \begin{tikzcd}
-                p(A)^*\prod(B) \arrow[rr, "\eval_B"] \arrow[dr, "p(p(A)^*\prod(B))"', open]&& B \arrow[dl, "p(B)", open] \\
+                p(A)^*\Pi(B) \arrow[rr, "\eval_B"] \arrow[dr, "p(p(A)^*\Pi(B))"', open]&& B \arrow[dl, "p(B)", open] \\
                 & A &
               \end{tikzcd}
               \]
-              such that for all $s \in \Sections(B)$ there is a unique section $t \in \Sections(\prod (B))$
+              such that for all $s \in \Sections(B)$ there is a unique section $t \in \Sections(\Pi (B))$
               with $\eval_B \circ p(A)^*t = s$. This unique section $t$ is called $\curry(s)$.
               \[
                 \begin{tikzcd}
                 A \arrow[rr, open] \arrow[ddd, "\id_A"', bend right=85] \arrow[d, "p(A)^*t"] \arrow[dd, "s"', bend right=80] &  & I \arrow[d, "t"'] \arrow[ddd, "\id_I", bend left=80]   \\
-                p(A)^*\prod(B) \arrow[d, "\eval_B"] \arrow[rr, "{q(p(A), \prod(B))}"']                                       &  & \prod(B) \arrow[dd, open]                              \\
+                p(A)^*\Pi(B) \arrow[d, "\eval_B"] \arrow[rr, "{q(p(A), \Pi(B))}"']                                       &  & \Pi(B) \arrow[dd, open]                              \\
                 B \arrow[d, open]                                                                                                  &  &                                                  \\
                 A \arrow[rr, open]                                                                                                 &  & I                                               
                 \end{tikzcd}
               \]
               \begin{observation}
-                as any section $t$ of $\prod(B)$ gives a section $eval_B \circ p(A)^*t$ of $B$, hence we have a
-                canonical 1-1-correspondence of $\Sections(B)$ and $\Sections(\prod(B))$. 
+                as any section $t$ of $\Pi(B)$ gives a section $eval_B \circ p(A)^*t$ of $B$, hence we have a
+                canonical 1-1-correspondence of $\Sections(B)$ and $\Sections(\Pi(B))$. 
               \end{observation}
         \item For any object $J$ and any morphism $f : J \to I$, the following conditions are satisfied:
               \[
-                f^*(\prod(B)) = \prod(f^*B) 
+                f^*(\Pi(B)) = \Pi(f^*B) 
                 \quad \text{and} \quad 
                 f^*(eval_B) = eval_{f^*B}.
               \]
@@ -170,7 +170,7 @@ Contextual Categories with products correspond to $\lambda$-calculus with depend
     Let $\mathcal{C}, \mathcal{C}'$ be two contextual categories with products of families of types,
     we a contextual functor $F \colon \mathcal{C} \to \mathcal{C}'$ \textit{preserves products of families
     of types} if for $1 \lhd A \lhd B$ in $\mathcal{C}$, \[
-        F\prod(B) = \prod(F B) \quad \text{ and } \quad F \eval_B = \eval_{F B}
+        F\Pi(B) = \Pi(F B) \quad \text{ and } \quad F \eval_B = \eval_{F B}
     \]
 \end{definition}
 
@@ -196,7 +196,7 @@ And finally, by wrapping everything up and adding universal quantification we ha
     there exists a necessarily unique morphism $g \colon A \to \Prop$ also denoted by $\forall(f)$
     such that
     \[
-        g^*T = \forall(f)^*T = \prod(f^*T).
+        g^*T = \forall(f)^*T = \Pi(f^*T).
     \]
 \end{definition}
 
@@ -239,7 +239,7 @@ We want to build this function by induction. We need an auxiliary definition:
     \[\depth[x] = 1\]
     \[\depth[\Prop] = 1\]
     \[\depth[\Proof(A)] = \depth[A] + 1\]
-    \[\depth[(\prod x \colon A) B] = \depth[A] + \depth[B] + 1\]
+    \[\depth[(\Pi x \colon A) B] = \depth[A] + \depth[B] + 1\]
     \[\depth[(\lambda x \colon A) t] = \depth[A] + \depth[t] + 1\]
     \[\depth[(\forall x \colon A) t] =  \depth[A] + \depth[t] + 1\]
     \[\depth[\App([x \colon A] B, t, s)] = \depth[A] + \depth[B] + \depth[t] + \depth[s] + 1\]
@@ -257,7 +257,7 @@ by the following clauses:
 \begin{enumerate}
     \item $\mathcal{M}[\space] = 1$;
     \item $\mathcal{M}[\Gamma, x \colon A] = \mathcal{M}[\Gamma; A]$;
-    \item $\mathcal{M}[\Gamma, (\prod x \colon A) B] = \prod(\mathcal{M}[\Gamma, x \colon A; B])$
+    \item $\mathcal{M}[\Gamma, (\Pi x \colon A) B] = \Pi(\mathcal{M}[\Gamma, x \colon A; B])$
           if $\mathcal{M}[\Gamma, x \colon A ; B]$ is defined;
     \item $\mathcal{M}[\Gamma, \Prop] = p(\mathcal{M}, 1)^*\Prop$
           if $\mathcal{M}[\Gamma]$ is defined;
@@ -313,7 +313,7 @@ by the following clauses:
           \) \\
           provided that $\mathcal{M}[\Gamma ; t]$, $\mathcal{M}[\Gamma; s]$, $\mathcal{M}[\Gamma, x \colon A; B]$
           are defined, and $\mathcal{M}[\Gamma; s]$ is a section of $\mathcal{M}[\Gamma; A]$
-          and $\mathcal{M}[\Gamma; t]$ is a section of $\prod(\mathcal{M}[\Gamma, x \colon A; B])$
+          and $\mathcal{M}[\Gamma; t]$ is a section of $\Pi(\mathcal{M}[\Gamma, x \colon A; B])$
           \[
           \begin{tikzcd}[column sep=3cm]
             \mathcal{M}[\Gamma] 
@@ -459,12 +459,12 @@ an admissible context, then
 If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n, v_{n+1} \colon B, v_{n+2} \colon C$ is an admissible context
 we define 
 \[
-    \prod([\Gamma]) = [\Gamma, v_{n+1} \colon (\prod v_{n+1} \colon B) C]
+    \Pi([\Gamma]) = [\Gamma, v_{n+1} \colon (\Pi v_{n+1} \colon B) C]
 \]
 \[
     ev_{[\Gamma]} = [\langle v_1, \dots, v_n, v_{n+1}, \App([v_{n+1} \colon B]C, v_{n+2}, v_{n+1})\rangle].
 \]
-which can be seen to be a morphism from $[\Gamma, v_{n+1} \colon B, v_{n+2} \colon (\prod v_{n+1} B) C]$ to $[\Gamma]$
+which can be seen to be a morphism from $[\Gamma, v_{n+1} \colon B, v_{n+2} \colon (\Pi v_{n+1} B) C]$ to $[\Gamma]$
 over the object $[v_1 \colon A_1, \dots, v_n \colon A_n]$.
 The object $\Prop$ of $C_I$ is defined as $[v_1 \colon \Prop]$ and the object $T$ of $C_I$ is defined as the object
 $[v_1 \colon \Prop, v_2 \colon \Proof(v_1)]$.
@@ -611,7 +611,7 @@ by considering the category over a base object. To do it we need the following r
               \]
         \item for $B$ in $\mathcal{C}$ with $\level_A(B) \geq 2$,
               \[
-                \prod_A(B) = \prod(B) \quad \text{ and } \quad \eval^A_B = \eval_B;
+                \Pi_A(B) = \Pi(B) \quad \text{ and } \quad \eval^A_B = \eval_B;
               \]
         \item if $T$ is the collection of types of $\mathcal{C}$, then 
               \[
@@ -629,11 +629,11 @@ by considering the category over a base object. To do it we need the following r
 
     It is clear that $\mathcal{C}_A$ is a contextual category with products of families of types as for any object $B$ of $\mathcal{C}_A$ 
     with $\level_A(B) \geq 2$, we have that $\level(B) \geq 2$ and as $\mathcal{C}$ is a contextual category with products of families of 
-    types, $\prod_A(B) = \prod(B)$ is defined and $\father(\prod (B)) = \father^2 (B)$, and hence $\prod_A(B) \rhd A$, hence it is well defined.
-    Then for $\eval_B^A = \eval_B \colon p(\father(B))^*\prod(B) \to B$ is a morphism in $\mathcal{C}_A$ as by definition the following 
+    types, $\Pi_A(B) = \Pi(B)$ is defined and $\father(\Pi (B)) = \father^2 (B)$, and hence $\Pi_A(B) \rhd A$, hence it is well defined.
+    Then for $\eval_B^A = \eval_B \colon p(\father(B))^*\Pi(B) \to B$ is a morphism in $\mathcal{C}_A$ as by definition the following 
     diagram commutes: \[
         \begin{tikzcd}
-            p(\father(B))^*\prod(B) 
+            p(\father(B))^*\Pi(B) 
                 \arrow[rr, "{\eval^A_B = \eval_B}"]
                 \arrow[rd, open]
                 \arrow[rdd, open]
@@ -645,12 +645,12 @@ by considering the category over a base object. To do it we need the following r
             & A &
         \end{tikzcd}
     \]
-    Now, if $s$ is a section of $B$ in $\mathcal{C}_A$, it is a section of $B$ in $\mathcal{C}$. Hence there exists a unique section $t$ of $\prod(B)$
-    in $\mathcal{C}$ such that $eval_B \circ p(A)^*t = s$, as $p(\prod(B)) \circ t = \id_{\father(\prod(B))}$, it is clear that $t$ is a section of $\prod_A(B)$
+    Now, if $s$ is a section of $B$ in $\mathcal{C}_A$, it is a section of $B$ in $\mathcal{C}$. Hence there exists a unique section $t$ of $\Pi(B)$
+    in $\mathcal{C}$ such that $eval_B \circ p(A)^*t = s$, as $p(\Pi(B)) \circ t = \id_{\father(\Pi(B))}$, it is clear that $t$ is a section of $\Pi_A(B)$
     in $\mathcal{C}_A$.
     Now if $J$ is an object and $f \colon J \to \father^2(B)$ is a morphism in $\mathcal{C}_A$, in particular, they belong to $\mathcal{C}$.
-    So we have that $\prod(f^*B) = f^*\prod(B)$ and $\eval_{f^*B} = f^*\eval_B$, but by definition of $\prod_A$ and $\eval_A$ we have that
-    $\prod_A(f^*B) = f^*\prod_A(B)$ and $\eval^A_{f^*B} = f^*\eval^A_B$. With this we conclude that $\mathcal{C}_A$ is a contextual category with
+    So we have that $\Pi(f^*B) = f^*\Pi(B)$ and $\eval_{f^*B} = f^*\eval_B$, but by definition of $\Pi_A$ and $\eval_A$ we have that
+    $\Pi_A(f^*B) = f^*\Pi_A(B)$ and $\eval^A_{f^*B} = f^*\eval^A_B$. With this we conclude that $\mathcal{C}_A$ is a contextual category with
     products of families of types.
 
     Now we see that $T_A = p(A)^*T$ is indeed a collection of types of $\mathcal{C}_A$. Consider then two morphisms $f, g \colon J \to \father(T_A)$,
@@ -676,9 +676,9 @@ by considering the category over a base object. To do it we need the following r
     \]
 
     Finally, let $B, C$ be objects of $\mathcal{C}_A$ and $f \colon C \to \Prop_A$ a morphism over $A$. Then we want to see that there exists a
-    necessarily unique morphism $g \colon B \to \Prop_A$ such that $g^*T_A = \prod_A(f^*T_A)$.
+    necessarily unique morphism $g \colon B \to \Prop_A$ such that $g^*T_A = \Pi_A(f^*T_A)$.
     As $\mathcal{C}$ holds this property, we consider $q(p(A), \Prop) \circ f \colon C \to \Prop$, hence there exists a necessarily unique $g' \colon B \to \Prop$
-    such that $g'^*T = \prod ((q(p(A), \Prop) \circ f)^* T) = \prod (f^*T_A)$, and by considering $g$ the unique function that makes the following pullback diagram commute:  \[
+    such that $g'^*T = \Pi ((q(p(A), \Prop) \circ f)^* T) = \Pi (f^*T_A)$, and by considering $g$ the unique function that makes the following pullback diagram commute:  \[
         \begin{tikzcd}[column sep=3cm]
             B
                 \arrow[rd, "g"]
@@ -700,8 +700,8 @@ by considering the category over a base object. To do it we need the following r
         g^*T_A &= g^*(q(p(A), \Prop)^*T)  \\
                &= (q(p(A), \Prop) \circ g)^*T \\
                &= g'^*T  \\
-               &= \prod((q(p(A), \Prop) \circ f)^*T) \\
-               &= \prod(f^*(q(p(A), \Prop)^*T)) = \prod_A(f^*T_A)
+               &= \Pi((q(p(A), \Prop) \circ f)^*T) \\
+               &= \Pi(f^*(q(p(A), \Prop)^*T)) = \Pi_A(f^*T_A)
     \end{align*}
     This concludes the proof as $g$ is a morphism over $A$.
 \end{proof}
@@ -798,20 +798,19 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
     \ruleitem{E5}{product-formation-2}
         If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, v_{m+1} \colon C, v_{n+2} \colon D$
         we add \[
-            \prod([\Delta]) = [
+            \Pi([\Delta]) = [
                 \Gamma,
                 v_1 \colon B_1, \dots, v_m \colon B_m,
-                v_{m+1} \colon (\prod v_{m+1} \colon C) D
+                v_{m+1} \colon (\Pi v_{m+1} \colon C) D
             ]
         \]
         \[
-            \eval_{[\Delta]} = [
-                \Gamma,
+            \eval_{[\Delta]} = [ \langle
                 v_1, \dots, v_{m+1},
                 \App([v_{m+1} \colon C]D, v_{m+2}, v_{m+1})
-            ].
+            \rangle_\Gamma].
         \]
-        a morphism from $[\Gamma, v_1 \colon A_1, \dots, v_m \colon B_m, v_{n+1} \colon C, v_{n+2} \colon (\prod v_{n+1} \colon B)C ]$
+        a morphism from $[\Gamma, v_1 \colon A_1, \dots, v_m \colon B_m, v_{n+1} \colon C, v_{n+2} \colon (\Pi v_{n+1} \colon B)C ]$
         to $[\Delta]$, and the corresponding projections.
     \ruleitem{E6}{proof-forall-intro-2}
         If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, v_{m+1} \colon C$,
@@ -826,16 +825,24 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
             [\Delta, x \colon \Proof(p)]
         \]
         and its corresponding projection. 
+    \ruleitem{E7}{application-2}
+        If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m$, for every morphism of the form 
+        $\langle v_1, \dots, v_m, t \rangle_\Gamma \colon [\Delta] \to [\Delta, f \colon (\Pi \colon A)B]$
+        and every morphism $\langle v_1, \dots, v_m, s \rangle_\Gamma \colon [\Delta] \to [\Delta, x \colon A]$,
+        such that $[\Delta, y \colon B[x \mid\ s]]$ exists in $G_n$, add \[
+            [\langle v_1, \dots, v_m, \App([x \colon A] B, t, s)\rangle_\Gamma]
+            \colon [\Delta] \to [\Delta, y \colon B[x \mid\ s]]
+        \]
 \end{enumerate}
 After each expansion, we complete the category in the following way:
 for every product object, i.e., for each object $[\Delta]$ with $\Delta$
-of the form $\Omega, (\prod x \colon A) B$, and every section 
+of the form $\Omega, (\Pi x \colon A) B$, and every section 
 $s = \langle x, a \rangle_\Omega$ of $[\Omega, x \colon A, y \colon B]$
 we add $\curry(s) = \langle (\lambda x \colon A) a \rangle_\Omega$
 as a section of $[\Delta]$.
 Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it as a subcategory of $\mathcal{C}_{\Sigma, \Gamma}$.
 
-\begin{theorem}
+\begin{theorem} \label{thm:exhaustivity-for-docs}
     Every object and every morphism of $\mathcal{C}_{\Sigma, \Gamma}$ are constructible by expansion.
 \end{theorem}
 \begin{proof} % TODO: how do Thin and Sub rules affect?
@@ -851,7 +858,7 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
         \item[\ref{rule:empty}] This is the base case, when $\Delta$ is the empty context.
             This may only happen when $\Gamma = \Delta = \langle \rangle$ and $m = 0$, and as the object $[\Gamma]$
             is included in $G$, it is always constructible by expansion.
-        \item[\ref{rule:cont-intro}] This means that the sequent $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1} \vdash A_m \type$
+        \item[\ref{rule:cont-intro}] This means that the sequent $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1} \vdash B_m \type$
             is derivable. 
             Which itself can % TODO: marked as ? by Carles
             only be derived using the following rules: 
@@ -860,7 +867,7 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
             The derivation from rules \ref{rule:cont-intro} and \ref{rule:refl-typ} are trivial, as they both enforce the existence of the object $[\Delta]$ by premise,
             hence we will consider the other cases:
             \begin{enumerate}
-                \item[\ref{rule:prod-form}] Then, we have that $A_m$ is a pre-type-expression of the form $(\prod x \colon N)M$ 
+                \item[\ref{rule:prod-form}] Then, we have that $B_m$ is a pre-type-expression of the form $(\Pi x \colon N)M$ 
                     for some variable $x$ and two pre-type-expressions $N, M$ such that the sequent 
                     $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}, x \colon N \vdash M \type$ is derivable.
                     By induction hypothesis, the object 
@@ -880,7 +887,7 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
                      is constructible by expansion. By the expansion rule \ref{rule:product-formation-2}
                      applied to that object, gives us that 
                      \begin{multline*}
-                        \prod([
+                        \Pi([
                             \Gamma,
                             y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1},
                             x \colon N, y \colon M
@@ -889,12 +896,12 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
                         [
                             \Gamma,
                             y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1},
-                            x \colon (\prod x \colon N) M
+                            x \colon (\Pi x \colon N) M
                         ] 
                      \end{multline*}
                      is constructible, that is equal to $[\Delta]$ as they just differ by the naming of bound variables.
                      Hence, $[\Delta]$ is constructible by expansion.
-                \item[\ref{rule:prop}] Then we have that $A_m$ is equal to $\Prop$ as a pre-type-expression, and 
+                \item[\ref{rule:prop}] Then we have that $B_m$ is equal to $\Prop$ as a pre-type-expression, and 
                      and, with $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$, $\Delta' \ok$ is a derivable sequent.
                      By induction hypothesis, we know that $[\Delta']$ 
                      is constructible by expansion. Also, as $G$ contains $[\Gamma, x \colon \Prop]$ and it's projection to 
@@ -915,7 +922,7 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
                      \end{tikzcd}
                      \]
                      and $[\Delta', x \colon \Prop] = [\Delta]$ as they only differ by the naming of the variables.
-                \item[\ref{rule:prop-type}] Then we have that there is a pre-object-expression $p$ such that $A_m$ equals $\Proof(p)$ as a pre-type-expression
+                \item[\ref{rule:prop-type}] Then we have that there is a pre-object-expression $p$ such that $B_m$ equals $\Proof(p)$ as a pre-type-expression
                      and the sequent $\Delta' \vdash p \colon \Prop$, with $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$, is derivable.
                      By induction hypothesis, $[\Delta']$ is constructible by expansion.
                      Moreover, by applying induction hypothesis,
@@ -927,7 +934,7 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
                      we get that $[\Delta] = [\Delta', x \colon \Proof(p)]$ is constructible by expansion.
                 \item[\textsc{Introductory Rule}] Consider a sort symbol $S$ with the corresponding introductory rule $\Omega \vdash S$,
                      with $\Omega \equiv z_1 \colon C_1, \dots, z_k \colon C_k$, and $t_1, \dots, t_k$ pre-object-symbols
-                     such that $A_m = S[z_1 \mid\ t_1, \dots, z_k \mid\ t_k]$.
+                     such that $B_m = S[z_1 \mid\ t_1, \dots, z_k \mid\ t_k]$.
                      Then, for each $i$, $1 \leq i \leq k$, $\Delta' \vdash t_i \colon C_i [z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}]$
                      are derivable judgments, where $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$.
                      Hence, by inductive hypothesis, the sections \[
@@ -947,7 +954,7 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
             then there exists an $k$, $1 \leq k \leq m$ such that $\Gamma, y_1 \colon B_1, \dots, y_{k-1} \colon B_{k-1}, y_{k+1} \colon B_{k+1}, \dots, y_m \colon B_m$
             is a context and $\Gamma, y_1 \colon B_1, \dots, y_{k-1} \colon B_{k-1} \vdash B_k \type$ is a derivable sequent.
             By induction hypothesis, if $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{k-1}$, $[\Delta']$ is constructible by expansion,
-            and by the same argument in the last point, so is $[\Delta', y_k \colon B_k]$.
+            and by the same argument in the last case, so is $[\Delta', y_k \colon B_k]$.
             Finally, by considering the expansion rule \ref{rule:pullback-2} on $[\Delta', y_{k+1} \colon B_{k+1}, \dots, y_m \colon B_m]$
             and the projection morphism of $[\Delta', y_k \colon B_k]$ onto $[\Delta']$, we get that the pullback diagram
             \[
@@ -1007,11 +1014,11 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
         We consider the ways the mentioned sequents are derived. 
         They must be derived by one of the following rules:
         \ref{rule:ass}, \ref{rule:refl-obj}, \ref{rule:conv1}, \ref{rule:prod-intro}, \ref{rule:prod-elim}, \ref{rule:prop-type} and \ref{rule:forall-intro}. 
-        The cases of \ref{rule:refl-obj} and \ref{rule:conv1} are trivial. Hence, we consider the other cases:
+        The cases of \ref{rule:refl-obj}, \ref{rule:conv1} and \ref{rule:prop-type} are trivial. Hence, we consider the other cases:
         \begin{enumerate}
             \item[\ref{rule:ass}] There exists an $1 \leq j \leq m$ or $1 \leq k \leq n$ such that 
                 \begin{align*}
-                    t_i = y_j \quad \text{ orange } \quad t_i = x_k.
+                    t_i = y_j \quad \text{ or } \quad t_i = x_k.
                 \end{align*}
                 We suppose that $t_i = y_j$ for some $j$, and the other case is equivalent.
                 In that case $B_j = C_i [z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}]$.
@@ -1024,7 +1031,7 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
                 \] is constructible by expansion, and it is equal to $[\langle y_1, \dots, y_m, t_i \rangle_\Gamma]$,
                 hence the least is also constructible by expansion.
             \item[\ref{rule:prod-intro}] Then there exists one pre-object-expression $t$ and two pre-type-expression $A, B$
-                such that $t_i = (\lambda x \colon A) t$ and $C_i[z_1 \mid\ t_1, \dots z_{i-1} \mid\ t_{i-1}] = (\prod x \colon A) B$,
+                such that $t_i = (\lambda x \colon A) t$ and $C_i[z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}] = (\Pi x \colon A) B$,
                 for some variable $x$. Moreover, as $\level[\Delta; (\lambda x \colon A) t] = \level[\Delta, x \colon A ; t] + 1$,
                 by induction hypothesis, the section \[
                     [\langle y_1, \dots, y_m, x, t\rangle_\Gamma]
@@ -1032,15 +1039,34 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
                     \to [ \Delta, x \colon A, y \colon B]
                 \] is constructible by expansion.
                 Applying the expansion rule \ref{rule:product-formation-2} to $[\Delta, x \colon A, y \colon B]$,
-                we get that $[\Delta, f \colon (\prod x \colon A) B]$ is constructible by expansion.
+                we get that $[\Delta, f \colon (\Pi x \colon A) B]$ is constructible by expansion.
                 Finally, by the curry completion condition, we get that \[
                     \curry(\langle y_1, \dots, y_m, x, t \rangle_\Gamma) = \langle y_1, \dots, y_m, (\lambda x \colon A) t \rangle_\Gamma
                 \] is constructible by expansion.
             \item[\ref{rule:prod-elim}] Then there exists one variable $x$, two pre-type-expressions $A, B$ and two pre-term-expressions $t, s$ such that
-                $\Delta' \vdash t \colon (\prod x \colon A) B$, $\Delta' \vdash s \colon A$, $\Delta', x \colon A \vdash B \type$ and $B_m = \App([x \colon A] B, t, s)$.
-                TODO: finish this, photo of partial proof 
-
-            \item[\ref{rule:prop-type}] TODO
-            \item[\ref{rule:forall-intro}] TODO  
+                $\Delta \vdash t \colon (\Pi x \colon A) B$, $\Delta \vdash s \colon A$, $\Delta, x \colon A \vdash B \type$, $t_i = \App([x \colon A] B, t, s)$ and $C_i[z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}] = B[x \mid\ s]$.
+                By induction hypothesis $[\langle y_1, \dots, y_m, t \rangle_\Gamma] \colon [\Delta] \to [\Delta, f \colon (\Pi x \colon A) B]$, 
+                $[\langle y_1, \dots, y_m, s \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A]$ and
+                $[\Delta, x \colon A, t \colon B]$ are constructible by expansion. 
+                By applying the expansion rule \ref{rule:pullback-2} to the morphism $[\langle y_1, \dots, y_m, s \rangle_\Gamma]$ and the object $[\Delta, x \colon A, y \colon B]$
+                we have that the object $[\Delta, y \colon B[x \mid\ s]]$ is constructible by expansion.
+                Hence by applying the expansion rule \ref{rule:application-2} to the object $[\Delta]$ we get that 
+                $[\langle y_1, \dots, y_m, \App([x \colon A] B, t, s) \rangle_\Gamma] : [\Delta] \to [\Delta, y \colon B[x \mid\ s]]$ is constructible by expansion, and as it differs from 
+                $[\langle y_1, \dots, y_m, t_i \rangle_\Gamma] \colon [\Delta] \to [\Delta, z_i \colon C_i [z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}]]$ by the naming of bound variables,
+                the latter is also constructible by expansion.
+            \item[\ref{rule:forall-intro}] Then there exists a variable $x$, a pre-type-expression $A$ and a pre-term-expression $p$ such that
+                $\Delta, x \colon A \vdash p \colon \Prop$, $t_i = (\forall x \colon A) p$ and $C_i[z_1 \mid\ t_1, \dots, z_{i-1} \mid\ t_{i-1}] = \Prop$ as pre-term and pre-type expressions respectively.
+                By induction hypothesis, $[\langle y_1, \dots, y_m, x, p \rangle_\Gamma] \colon [\Delta, x \colon A] \to [\Delta, x \colon A, q \colon \Prop]$ is constructible by expansion.
+                Then, if we apply the expansion rule \ref{rule:pullback-2} to the projection morphism of $[\Delta, x \colon A]$ into $[\Gamma]$ and the object $[\Gamma, q \colon \Prop]$, we get that the morphism 
+                $[\langle q \rangle_\Gamma] \colon [\Delta, x \colon A, q \colon \Prop] \to [\Gamma, q \colon \Prop]$ is constructible by expansion.
+                Moreover, the composition $[\langle q \rangle_\Gamma] \circ [\langle y_1, \dots, y_m, x, p \rangle_\Gamma] = [\langle p \rangle_\Gamma]$ is constructible by expansion.
+                Finally, by applying the expansion rule \ref{rule:proof-forall-intro-2} to the object $[\Delta, x \colon A]$ and the composition morphism, 
+                we get that \[
+                    \forall([\langle p \rangle_\Gamma]) = [\langle (\forall x \colon A) p \rangle_\Gamma]
+                \]
+                is constructible by expansion.
         \end{enumerate}
+        Now by the same argument as in the proof of Theorem \ref{thm:exhaustivity-for-gats} we have that the morphism \[
+            [\langle t_1, \dots t_w \rangle_\Gamma] \colon [\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m] \to [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]
+        \] is constructible by expansion, finalizing the proof for Theorem \ref{thm:exhaustivity-for-docs}
 \end{proof}
