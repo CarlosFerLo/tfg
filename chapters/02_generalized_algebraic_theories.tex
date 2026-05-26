@@ -875,9 +875,15 @@ of $G_n$:
         and its projection to $G_{n+1}$.
     \ruleitem{E2}{variable-duplication} Add the morphisms \[
             \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
-            \xrightarrow{\langle y_1, \dots, y_m, y_i\rangle_\Gamma}
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, y \colon B_i 
-        \] and their corresponding projections for each $0 \leq i \leq n$.
+            \xrightarrow{\langle y_1, \dots, y_m, x_i\rangle_\Gamma}
+            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, x \colon A_i 
+        \] \[
+            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
+            \xrightarrow{\langle y_1, \dots, y_m, y_j \rangle_\Gamma}
+            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, y \colon B_j
+        \]
+        
+        and their corresponding projections for each $1 \leq i \leq n$ and each $1 \leq j \leq m$.
     \ruleitem{E3}{operator-symbol-intro} For every operator symbol $F$ with a well-formed
         introductory rule \[
             \dfrac{
@@ -925,282 +931,141 @@ of $G_n$:
         in $G_{n+1}$.
 \end{itemize} 
 
+Now we will prove that every object and every morphism of $\mathcal{C}_A$ are constructible by expansion.
+But to do so, we will introduce the concept of $\depth$ of an expression in order to 
+prove a the result by induction. This definition is inspired to the one in the next chapter taken from \cite{streicher}.
+
+\begin{definition}
+    By structural induction of expressions we define a function \textit{depth} mapping 
+    the set of expressions and premisses to $\omega$:
+    \begin{enumerate}
+        \item if $x$ is a variable, then $\depth[x] = 1$;
+        \item if $A$ is a sort symbol, and $t_1, \dots, t_n$ are expressions, then \[
+            \depth[A(t_1, \dots, t_n)] = 1 + \sum_{i = 1}^n \depth[t_i];
+        \]
+        \item if $F$ is an operator symbol, and $t_1, \dots, t_n$ are expressions, then \[
+            \depth[F(t_1, \dots, t_n)] = 1 + \sum_{i=1}^n \depth[t_i];
+        \]
+        \item if $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$ is a premise, then \[
+            \depth[\Gamma] = \sum_{i = 1}^n \depth[A_i].
+        \]
+    \end{enumerate}
+\end{definition}
+
+\begin{lemma}
+    Every object and every section of $\mathcal{C}_\Gamma$ are constructible by expansion.
+\end{lemma}
+\begin{proof}
+    We perform this proof by induction over the $\degree$ of the objects and sections, where
+    \begin{enumerate}
+        \item if $\Delta$ is a context over $\Gamma$, then \[
+            \degree[\Delta] = \depth[\Delta] - \depth[\Gamma];
+        \]
+        \item if $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$ is a context and 
+            $[\langle y_1, \dots, y_m, t \rangle_\Gamma]$ is a section of $[\Delta, x \colon A]$, then \[
+                \degree[\langle y_1, \dots, y_m, t \rangle_\Gamma] = \degree[\Delta] + \depth[t].
+            \]
+    \end{enumerate}
+
+    Consider then a context $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. We want to see that $[\Delta]$ is constructible by expansion.
+    As $\Delta$ is a context, if we denote $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$, we have that \[
+        \Delta' \vdash B_m \type
+    \] is a derived rule of $U$. This implies that $\Delta'$ is itself a context, and by induction hypothesis, as \[
+        \degree[\Delta] = \degree[\Delta'] + \depth[B_m] \geq \degree[\Delta'] + 1 > \degree[\Delta'],
+    \] we have that $[\Delta']$ is constructible by expansion.
+    Moreover, as the rule $\Delta' \vdash B_m \type$ can only be derived by \ref{rule:cf2a}, there exists a sort symbol $S$
+    with a well-formed introductory rule \[
+        z_1 \colon C_1, \dots, z_w \colon C_w \vdash A(z_1, \dots, z_w) \type
+    \] and derived rules
+    \begin{align*}
+        \Delta' \vdash t_1 \colon& C_1 \\
+        \Delta' \vdash t_2 \colon& C_2[z_1 \mid\ t_1] \\
+        & \vdots \\
+        \Delta' \vdash t_w \colon& C_w[z_1 \mid\ t_1, \dots, z_{w-1} \mid\ t_{w-1}]
+    \end{align*}
+    such that $B_m = A(t_1, \dots, t_m)$ as expressions. 
+    This means that these are sections:
+    \begin{align*}
+        [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_1 \colon C_1] \\
+        [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_2 \colon C_2[z_1 \mid\ t_1]] \\
+        &\vdots \\
+        [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_w \colon C_w[z_1 \mid\ t_1, \dots, z_{w-1} \mid\ t_{w-1}]] 
+    \end{align*}
+    And clearly, as \begin{multline*}
+        \degree[\Delta] = \degree[\Delta'] + \depth[A(t_1, \dots, t_m)] > \\ 
+        > \degree[\Delta'] + \depth[t_j] = \degree[\langle y_1, \dots, y_m \rangle_\Gamma]
+    \end{multline*}
+    for every $j$, with $1 \leq j \leq w$, they are all constructible by expansion by induction hypothesis.
+    Finally, by applying the expansion rule \ref{rule:sort-symbol-intro}, we have that $[\Delta]$ is constructible by expansion.
+    
+    Now, consider a section $[\langle y_1, \dots, y_m, t \rangle_\Gamma]$ of $[\Delta, x \colon A]$, hence the rule 
+    \begin{equation}
+        \Delta \vdash t \colon A \label{eq:underlying-rule-operator}
+    \end{equation} 
+    is a derived rule of $U$. We have that $\degree[\langle y_1, \dots, y_m, t \rangle_\Gamma] = \degree[\Delta] + \depth[t]$, hence 
+    by induction hypothesis $[\Delta]$ is constructible by expansion. 
+    We now study how the rule \eqref{eq:underlying-rule-operator} was derived. 
+    As it is a $\in$-rule, it must have been derived by either \ref{rule:t1}, \ref{rule:cf1} or \ref{rule:cf2a}.
+    We treat each case separately:
+    \begin{enumerate}
+        \item[\ref{rule:t1}] TODO
+        \item[\ref{rule:cf1}] Then, there exists an $i$, with $1 \leq i \leq n$, such that $t = x_i$ and $A = A_i$;
+            or there exists a $j$, with $1 \leq j \leq m$, such that $t = y_j$ and $A = B_j$.
+            We just prove the first case as the other proof is equivalent. So as $[\Delta]$ is constructible by expansion,
+            by applying the expansion rule \ref{rule:variable-duplication} to it, we get that the section \[
+                [\langle y_1, \dots, y_m, x_i \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A]
+            \] is constructible by expansion.
+        \item[\ref{rule:cf2a}]  Then, there is an operator symbol $F$, with a well-formed introductory rule \[
+                z_1 \colon C_1, \dots, z_w \colon C_w \vdash F(z_1, \dots, z_w) \colon B
+            \] and derived rules:
+            \begin{align*}
+                \Delta \vdash t_1 \colon& C_1 \\
+                \Delta \vdash t_2 \colon& C_2[z_1 \mid\ t_1] \\
+                &\vdots \\
+                \Delta \vdash t_w \colon& C_w[z_1 \mid\ t_1, \dots, z_{w-1} \mid\ t_{w-1}] 
+            \end{align*}
+            such that $t = F(t_1, \dots, t_w)$ and $A = B[z_1 \mid\ t_1, \dots, z_w \mid\ t_w]$.
+            Then, as 
+            \begin{multline*}
+                \degree[\langle y_1, \dots, y_m, F(t_1, \dots, t_m) \rangle_\Gamma] = \degree[\Delta] + \depth[F(t_1, \dots, t_w)] > \\
+                    > \degree[\Delta] + \depth[t_j] = \degree[\langle y_1, \dots, y_m, t_j \rangle_\Gamma]
+            \end{multline*}
+            for all $j$, with $1 \leq j \leq w$, by the induction hypothesis, the following sections are constructible by expansion: 
+            \begin{align*}
+                [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_1 \colon C_1] \\
+                [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_2 \colon C_2[z_1 \mid\ t_1]] \\
+                &\vdots \\
+                [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_w \colon C_w[z_1 \mid\ t_1, \dots, z_{w-1} \mid\ t_{w-1}]] 
+            \end{align*}
+            Then by applying the expansion rule \ref{rule:operator-symbol-intro}, we get that the section \[
+                [\langle y_1, \dots, y_m, t \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A]
+            \] is constructible by expansion.
+    \end{enumerate}
+\end{proof}
+
 \begin{theorem} \label{thm:exhaustivity-for-gats}
     Every object and every morphism of $\mathcal{C}_A$ are constructible by expansion.
 \end{theorem}
-\begin{proof} % TODO : make structural induction more formal through depth or equivalent
-    We prove this result by structural induction over the 
-    underlying derived rules corresponding to such object (context)
-    or morphism (realization).
-
-    Consider a context
-    $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
-    of $U$, which is a representative of an object in $C(U)$.
-    This means, by the definition of context, that its underlying rule
-    \begin{equation}
-        \dfrac{
-            \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}
-        }{
-            B_m \type
-        }
-        \label{eq:underlying-rule-context}
-    \end{equation}
-    is a derived rule of $U$ and $y_m$ is a variable different to $x_1, \dots, x_n, y_1, \dots, y_{m-1}$.
-    Hence, the premise $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$
-    i.e., there exists $n_0 \geq 0$ such that 
-    $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$
-    is an object $G_{n_0}$.
-    As \eqref{eq:underlying-rule-context} is a derived rule,
-    it must have been derived by the only derivation rule that
-    has a $T$-rule as a conclusion: CF2(a).
-    Hence, there exists a sort symbol $S$ with a well formed 
-    introductory rule \(
-        \dfrac{
-            z_1 \colon C_1, \dots, z_w \colon C_w
-        }{
-            S(z_1, \dots, z_w) \type
-        }
-    \) and derived rules
+\begin{proof} 
+    From the last lemma we have that both objects and sections are constructible by expansion.
+    We now have to prove that any morphism is constructible by expansion.
+    Let $[\langle t_1, \dots, t_m \rangle_\Gamma]: [\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m] \to [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]$
+    be a morphism on $\mathcal{C}_\Gamma$.  We will denote $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$.
+    Then we know that the following rules
     \begin{align*}
-        \dfrac{
-            \Gamma,
-            y_1 : B_1, \dots, y_{m-1} : B_{m-1}
-        }{
-            t_1 : C_1
-        }, \\
-        \dfrac{
-            \Gamma,
-            y_1 : B_1, \dots, y_{m-1} : B_{m-1}
-        }{
-            t_2 : C_2[t_1 | z_1]
-        }, \\ \vdots \\ % TODO: solve alignment
-        \dfrac{
-            \Gamma
-            y_1 : B_1, \dots, y_{m-1} : B_{m-1}
-        }{
-            t_w : C_w[t_1 | z_1, \dots, t_{w-1} | z_{w-1}]
-        }.
-    \end{align*}
-    By induction hypothesis, their corresponding sections
-    \begin{multline*}
-        \langle y_1, \dots, y_{m-1}, t_j \rangle_\Gamma
-        : \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1} 
-        \to \\ 
-        \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}] 
-    \end{multline*}
-    are constructible by expansion, so for each $j$ there exists some $n_j$
-    such that the section exists in $G_{n_j}$.
+        \Delta \vdash t_1 \colon& C_1 \\
+        \Delta \vdash t_2 \colon& C_2 [z_1 \mid\ t_1] \\ 
+        & \vdots \\ 
+        \Delta \vdash t_w \colon& C_2 [z_1 \mid\ t_1, \dots, z_{w-1} \mid\ t_{w-1}]
+    \end{align*} 
+    are derivable rules of $U$. So, by applying the lemma, we have that the following sections are constructible by expansion: 
+    \begin{align*}
+        [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_1 \colon C_1] \\
+        [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_2 \colon C_2[z_1 \mid\ z_2]] \\
+        & \vdots \\
+        [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_w \colon C_w[z_1 \mid\ t_1, \dots, z_{w-1} \mid\ t_{w-1}]]
+    \end{align*} 
 
-    Take $n = \max \{ n_0, n_1, \dots, n_w \}$. Then, all of the objects
-    and sections mentioned belong to $G_n$, so, by the expansion rule \ref{rule:sort-symbol-intro},
-     \[
-    \begin{tikzcd}
-        \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}
-        & \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}, y_m : S(t_1, \dots, t_w)
-            \arrow[l, open]
-    \end{tikzcd}
-    \]
-    is included in $G_{n+1}$.
-    And by the equivalence of intended equivalence of denotation
-    \[
-        \Gamma, y_1 : B_1, \dots, y_{m-1} : B_{m-1}, y_m : S(t_1, \dots, t_w)
-        \equiv
-        \Gamma, y_1 : B_1, \dots, y_m : B_m 
-    \]
-    so $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
-    is constructible by expansion.
-    Now consider a realization \[
-        \Gamma, y_1 : B_1, \dots, y_m : B_m
-        \xrightarrow{\langle t_1, \dots, t_w \rangle_\Gamma}
-        \Gamma z_1 : C_1, \dots, z_w : C_w 
-    \] representative of a morphism in $\mathcal{C}_A$.
-    By induction hypothesis, we know that both $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
-    and $\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w$
-    are constructible by expansion.
-
-    Moreover, as $\langle t_1, \dots, t_w \rangle_\Gamma$ is an operator, 
-    for each $1 \leq j \leq w$, the rule
-    \begin{equation}
-        \dfrac{
-            \Gamma,
-            y_1 \colon B_1, \dots, y_m \colon B_m
-        }{
-            t_j \colon C_j [z_1 \mid\ t_1, \dots z_{j-1} \mid\ t_{j-1}]
-        }
-        \label{eq:underlying-rule-operator}
-    \end{equation}
-    is a derived rule of $U$.
-    Now we see that the following sections are constructible by expansion:
-    \begin{align*} % TODO: solve alignment
-        \Gamma, y_1 : B_1, \dots, y_m : B_m
-        &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}
-        \Gamma, y_1 : B_1, \dots, y_m : B_m, z_1 : C_1  \\
-        \Gamma, y_1 : B_1, \dots, y_m : B_m 
-        &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma}
-        \Gamma, y_1 : B_1, \dots, y_m : B_m, z_2 : C_2[t_1 | z_1] \\
-        &\vdots \\
-        \Gamma, y_1 : B_1, \dots, y_m : B_m
-        &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_\Gamma}
-        \Gamma, y_1 : B_1, \dots, y_m : B_m, z_w : C_w[t_1 | z_1, \dots, t_{w-1} | z_{w-1}].
-    \end{align*}
-    To do this, we use the way any rule \eqref{eq:underlying-rule-operator}
-    is derived. This can be done by one of the following rules: T1, CF1, CF2(b).
-    Hence,
-    \begin{itemize}
-        \item if derived by T1, we have that both
-            \[
-                \dfrac{
-                    \Gamma,
-                    y_1 \colon B_1, \dots, y_m \colon B_m
-                }{
-                    A = C_j[z_1 \mid\ t_1, \dots, z_{j-1}]
-                }
-                \quad \text{ and } \quad
-                \dfrac{
-                    \Gamma,
-                    y_1 \colon B_1, \dots, y_m \colon B_m
-                }{
-                    t_j \colon A
-                }
-            \]
-            are derived rules of $U$.
-            So by the first rule, due to the equivalence relation of intended equality of denotation,
-            we know that
-             \begin{multline*}
-                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : A 
-                \equiv \\
-                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
-            \end{multline*}
-            hence they are the same object in $\mathcal{C}_\Gamma$.
-            And by the second one, applying induction, we have that
-            \[
-                \Gamma, y_1 : B1, \dots, y_m : B_m 
-                \xrightarrow{ \langle y_1, \dots, y_m, t_j \rangle_\Gamma }
-                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : A 
-            \]
-            is constructible by expansion, so as 
-            $\Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : A$
-            and 
-            $\Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]$
-            are the same object in $C_A$, then
-            \begin{equation*} % TODO: fix overflow
-                \Gamma, y_1 : B_1, \dots, y_m : B_m
-                \xrightarrow{ \langle y_1, \dots, y_m, t_j \rangle_\Gamma }
-                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
-            \end{equation*}
-            is constructible by expansion.
-        \item If derived by CF1, we have that
-            \[
-                \dfrac{
-                    \Gamma,
-                    y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}
-                }{
-                    B_m \type
-                }
-            \]
-            is a derived rule of $U$, where $y_m$ is a variable distinct from all $x_1, \dots, x_n$, $y_1, \dots, y_{m-1}$,
-            and that there exists an $i$, $1 \leq i \leq m$, such that
-            \[
-                \dfrac{
-                    \Gamma,
-                    y_1 \colon B_1, \dots, y_m \colon B_m
-                }{
-                    t_j \colon C[z_1 \mid\ t_1, \dots z_{j-1} \mid\ t_{j-1}]
-                }
-                \equiv
-                \dfrac{
-                    \Gamma,
-                    y_1 \colon B_1, \dots, y_m \colon B_m
-                }{
-                    y_i \colon B_i
-                }.
-            \]
-            Then, by induction hypothesis, the context 
-            $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
-            is constructible by expansion. By applying the expansion rule \ref{rule:variable-duplication}
-            and an argument equivalent to the one above, we obtain that
-            \[
-                \Gamma, y_1 : B_1, \dots, y_m : B_m 
-                \xrightarrow{ \langle y_1, \dots, y_m, t_j \rangle_\Gamma }
-                \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : C_j[z_1 \mid\ t_1, \dots, z_{j-1} \mid\ t_{j-1}]
-            \]
-            is constructible by expansion.
-        \item If derived by CF2(b), there exists an operator symbol $F$ with a well-formed introductory rule
-        \[
-            \dfrac{
-                v_1 \colon D_1, \dots, v_k \colon D_k
-            }{
-                F(v_1, \dots, v_k) \colon D
-            }
-        \] and derived rules 
-        \begin{align*}
-            \dfrac{
-                \Gamma,
-                y_1 : B_1, \dots, y_m : B_m
-            }{
-                s_1 : D_1
-            } \\
-            \dfrac{
-                \Gamma,
-                y_1 : B_1, \dots, y_m : B_m
-            }{
-                s_2 : D_2[v_1 | s_1]
-            } \\
-            \vdots \\
-            \dfrac{
-                \Gamma,
-                y_1 : B_1, \dots, y_m : B_m
-            }{
-                s_v : D_k[v_1 | s_1, \dots, v_{k-1} | s_{k-1}]
-            }
-        \end{align*}
-        such that 
-        \begin{align*}
-            \dfrac{
-                \Gamma,
-                y_1 : B_1, \dots, y_m : B_m
-            }{
-                D[s_1 | c_1, \dots, s_v | c_v] 
-                = C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
-            } 
-                \\
-            \dfrac{
-                \Gamma,
-                y_1 : B_1, \dots, y_m : B_m
-            }{
-                t_j = F(s_1, \dots, s_v) : C_j[t_1 | z_1, \dots, t_{j-1} | z_{j-1}]
-            }
-        \end{align*}
-        are derived rules of $U$.
-        By the equivalence relation of identity of denotation,
-        we have to prove that the morphism
-        \[ % TODO: fix overflow
-            \Gamma, y_1 : B_1, \dots, y_m : B_m 
-            \xrightarrow{\langle y_1, \dots, y_m, F(s_1, \dots, s_k) \rangle_\Gamma}
-            \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : D[s_1 | c_1, \dots, s_k | v_k]
-        \]
-        is constructible by expansion.
-        By induction, we have that the following morphisms are constructible by expansion:
-        \begin{align*} % TODO: fix overflow
-            \Gamma, y_1 : B_1, \dots, y_m : B_m 
-            &\xrightarrow{\langle y_1, \dots, y_m, s_1 \rangle_\Gamma}
-            \Gamma, y_1 : B_1, \dots, y_m : B_m, v_1 : D_1 \\ 
-            \Gamma, y_1 : B_1, \dots, y_m : B_m 
-            &\xrightarrow{\langle y_1, \dots, y_m, s_2 \rangle_\Gamma}
-            \Gamma, y_1 : B_1, \dots, y_m : B_m, v_2 : D_2[s_1 | v_1] \\
-            &\vdots \\
-            \Gamma, y_1 : B_1, \dots, y_m : B_m 
-            &\xrightarrow{\langle y_1, \dots, y_m, s_v \rangle_\Gamma}
-            \Gamma, y_1 : B_1, \dots, y_m : B_m, c_v : D_k[s_1 | v_1, \dots, s_{k-1} | v_{k-1} ]
-        \end{align*}
-        Hence, by applying the expansion rule \ref{rule:operator-symbol-intro}, we have that
-        \[
-            \Gamma, y_1 : B_1, \dots, y_m : B_m
-            \xrightarrow{\langle y_1, \dots, y_m, F(s_1, \dots, s_k) \rangle_\Gamma}
-            \Gamma, y_1 : B_1, \dots, y_m : B_m, z_j : D_j[s_1 | v_1, \dots, s_k | c_k]
-        \]
-        is constructible by expansion, as we wanted.
-    \end{itemize}
     Now we show that the morphism 
     \[
         \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m \rangle
@@ -1224,18 +1089,19 @@ of $G_n$:
         \xrightarrow{\langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma}
         \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_j \colon C_j 
     \]
-    By expansion rule \ref{rule:pullback}, the following diagram is constructible by expansion:
+    By the previous lemma, the object $[\Delta, z_1 \colon C_1, \dots, z_j \colon C_j]$ is constructible by expansion,
+    and by applying the expansion rule \ref{rule:pullback} on it, the following diagram is constructible by expansion:
     \[
     \begin{tikzcd} % TODO: fix overflow
-        \Gamma y_1 : B_1, \dots, y_m : B_m, z_j : C_j[t_1 | z_1, \dots, t_j | z_j]
+        \Delta, z_j : C_j[t_1 | z_1, \dots, t_j | z_j]
             \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots {,} t_{j-1} {,} z_j \rangle_\Gamma"]
             \arrow[d, open] 
-        & \Gamma, y_1 : B_1, \dots, y_m : B_m, z_1 : C_1, \dots, z_j : C_j 
+        & \Delta, z_1 : C_1, \dots, z_j : C_j 
             \arrow[d, open] 
         \\
-        \Gamma, y_1 : B_1, \dots, y_m : B_m 
+        \Delta
             \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots{,} t_{j-1} \rangle_\Gamma"] &
-        \Gamma, y_1 : B_1, \dots, y_m : B_m, z_1 : C_1, \dots, z_{j-1} : C_{j-1}
+        \Delta, z_1 : C_1, \dots, z_{j-1} : C_{j-1}
     \end{tikzcd}
     \]
     and by composition we get that 
@@ -1257,8 +1123,8 @@ of $G_n$:
             z_1 : C_1, \dots, z_w : C_w
     \]
     is constructible by expansion. That comes directly from the 
-    fact that $\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w$
-    is a context, and repeated application of the rule \ref{rule:pullback}
+    fact that $[\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]$
+    is constructible by expansion, and repeated application of the rule \ref{rule:pullback}
     gives us the following diagram: 
     \[
     \begin{tikzcd}
