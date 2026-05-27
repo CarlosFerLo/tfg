@@ -2,6 +2,8 @@
 \addcontentsline{toc}{chapter}{Introduction}
 \chapter*{Introduction}
 
+Our ultimate goal in this thesis is to translate the syntactical problem of theorem proving into a geometrical graph-exploration problem.
+
 The idea of generating mathematical reasoning computationally
 is one of the most profound challenges in computer science.
 At the core of this pursuit lies the Curry-Howard correspondence,
@@ -17,7 +19,7 @@ Calculus of Inductive Constructions \cite{paulin-mohring1993}. While these envir
 enabled the formalization of highly complex mathematics, fully autonomous theorem
 proving with such rich frameworks remains an incredibly
 difficult challenge. The primary obstacle is undecidability of 
-type inhabitation in dependent type theories: attempting
+type inhabitation in dependent type theories, and even for inhabited types, attempting
 to exhaustively construct a term of a given type results in a 
 combinatorial explosion of the search space.
 
@@ -50,7 +52,7 @@ conjecture, due to Voevodsky \cite{voevodsky2017}.
 It was first proved by Streicher [17] for CoC, and later for
 full Martin-Löf type theory by Brunerie and Lumsdaine \cite{bruneire2020}.
 
-Withing this categorical framework, the problem of finding a proof
+Within this categorical framework, the problem of finding a proof
 translates to finding a specific section ---a specific morphism--- 
 withing a relativized contextual category. 
 With these idea in mind of using categories and neural networks, we formalized 
@@ -64,7 +66,7 @@ Graph Neural Networks are used to navigate and prune the categorical search spac
 Considering our finite subcategories that form
 the known search space as graphs, they are the perfect inputs 
 for message-passing neural networks. By training a GNN to classify
-nodes in the context graph (deciding witch paths to expand, keep
+nodes in the context graph (deciding which paths to expand, keep
 or delete), we can effectively guide the expansion algorithm,
 bypassing the combinatorial explosion and paving the way for efficient,
 autonomous theorem proving.
