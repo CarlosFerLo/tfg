@@ -2,9 +2,8 @@
 \chapter{The Syntax and Semantics of Generalized Algebraic Theories}
 
 In this chapter, we introduce Generalized Algebraic Theories (GATs), a framework for working with 
-dependent types. Our ultimate goal in this thesis is to translate the syntactical problem of theorem proving
-into a geometrical graph-exploration problem. GATs allow us to construct the concept of \textit{contextual category},
-the foundational categorical structure to deal with dependent types. We use this structure as a baseline 
+dependent types. GATs allow us to construct the concept of \textit{contextual category},
+the foundational categorical structure to deal with dependent types. We use contextual categories as a baseline 
 for interpreting the more complex Calculus of Constructions in Chapter 2.
 
 \section{Generalized Algebraic Theories}
@@ -19,8 +18,9 @@ are constant types, interpreted as sets, in generalized
 algebraic theories sorts might be constant or variable,
 over a specified range of types. Variable types
 are interpreted as families of sets. 
+We will start by giving some intuition, and we will later give the formal definition.
 
-Formally, a generalized
+Informally, a generalized
 algebraic theory consists of:
 \begin{enumerate}
     \item a set of sorts, that can be constant or variable;
@@ -51,7 +51,7 @@ This notation is discussed in the original paper \cite{cartmell1986}.
 Now we introduce the notation we will be using when talking 
 about terms and types. This notation will be formally defined
 in a later section. Given a set of variables $V$,
-we associate terms to variables as required.
+we associate types to variables as required.
 When asserting that a term $t$ is of type $A$, we will write
 $t \colon A$, but if $t$ has variables $x_1, \dots, x_n$ occurring in it, this assertion
 does not make sense unless we assign some types to $x_1, \dots, x_m$.
@@ -75,11 +75,9 @@ then $A$ is a type, we can write: $x_1 \colon A_1, \dots, x_n \colon A_n \vdash 
         A \type
     }
 \end{equation*}
-Such assertions are called rules or sequents.
-Rules are used to express which expressions are well-formed.
-We work with rules as units instead of the base expressions.
-This is because terms and types do not make sense by themselves
-but they need to be thought of in a context. 
+Such assertions are called rules or sequents. 
+Instead of considering expressions or judgments as basic units, we will use rules, 
+as both expressions and judgments make sense only within a context.
 
 Axioms are also written as rules. The conclusion of those rules
 are equalities between types or between terms of the same type.
@@ -108,20 +106,22 @@ and read as: if $x_1$ is a variable of type $A_1$, \dots and $x_n$ is a variable
 then $A = A'$, or $t = t'$ as terms of type $A$, respectively.
 We will be using both shorthand and fraction notation as needed.
 
+% TODO: add comments on x, y: A <-> x : A, y : A
+
 % TODO: fix alignment
 To continue with the previous example, we can write the axioms
 of category theory as follows:
 \begin{alignat*}{2}
-    &x, y : Ob, f : Hom(x, y),  \vdash  \circ(id(x), f) = f \\
-    &x, y : Ob, f : Hom(x, y),  \vdash  \circ(f, id(y)) = f \\
+    &x, y : Ob, f : Hom(x, y)  \vdash  \circ(id(x), f) = f, \\
+    &x, y : Ob, f : Hom(x, y)  \vdash  \circ(f, id(y)) = f, \\
     &w, x, y, z : Ob, f : Hom(w, x), g : Hom(x, y), h : Hom(y, z) \\ 
-        &\qquad\vdash \circ(\circ(f, g), h) = \circ(f, \circ(g, h))
+        &\qquad\vdash \circ(\circ(f, g), h) = \circ(f, \circ(g, h)).
 \end{alignat*}
 
 When presenting a theory's language i.e., the sets of sorts and operators,
 we must present each symbol with a rule specifying the role
 of this symbol, either as a sort symbol or as specifically typed operator symbol. 
-These rules are called introductory rules.
+These rules are called \textit{introductory rules}.
 In the case of a sort symbol $A$, the rule should be like 
 \begin{equation*}
     \dfrac{
@@ -148,20 +148,20 @@ will address in the following section.}
 So now we can give a formal presentation of the theory of categories:
 
 \begin{tabular}{ll}
-\textit{Symbol} & \textit{Introductory Rule} \\[6pt]
-Ob  & Ob is a type. \\[4pt]
-Hom & $x, y \in \mathrm{Ob} : \mathrm{Hom}(x, y)$ is a type. \\[4pt]
-$\circ$ & $x, y, z \in \mathrm{Ob},\, f \in \mathrm{Hom}(x, y),\, g \in \mathrm{Hom}(y, z) : \circ(f, g) \in \mathrm{Hom}(x, z).$ \\[4pt]
-id  & $x \in \mathrm{Ob} : \mathrm{id}(x) \in \mathrm{Hom}(x, x).$ \\
+\textit{Symbol} & \textit{Introductory Rule} \\
+$\Ob$  & $\vdash Ob \type$. \\
+$\Hom$ & $x, y \colon \Ob \vdash \Hom(x, y) \type$. \\
+$\circ$ & $x, y, z \colon \Ob, f \colon \Hom(x, y), g \colon \Hom(y, z) \vdash \circ(f, g) \in \Hom(x, z).$ \\
+$\id$  & $x \in \Ob \vdash \id(x) \colon \Hom(x, x).$ \\
 \end{tabular}
 
 \begin{tabular}{ll}
-\textit{Axioms} \\[6pt]
-$\circ(\mathrm{id}(x), f) = f,$ & whenever $x, y \in \mathrm{Ob}$ and $f \in \mathrm{Hom}(x, y).$ \\[4pt]
-$\circ(f, \mathrm{id}(y)) = f,$ & whenever $x, y \in \mathrm{Ob}$ and $f \in \mathrm{Hom}(x, y).$ \\[4pt]
+\textit{Axioms} \\
+$\circ(\id(x), f) = f,$ & whenever $x, y \colon \Ob$ and $f \colon \Hom(x, y).$ \\
+$\circ(f, \mathrm{id}(y)) = f,$ & whenever $x, y \in \mathrm{Ob}$ and $f \in \mathrm{Hom}(x, y).$ \\
 $\circ(\circ(f, g), h) = \circ(f, \circ(g, h)),$ 
-  & whenever $w, x, y, z \in \mathrm{Ob},\, f \in \mathrm{Hom}(w, x),$ \\
-  & \hspace{4.5em} $g \in \mathrm{Hom}(x, y)$ and $h \in \mathrm{Hom}(y, z).$ \\
+  & whenever $w, x, y, z \colon \Ob, f \colon \Hom(w, x),$ \\
+  & \hspace{4.5em} $g \colon \Hom(x, y)$ and $h \colon \Hom(y, z).$ \\
 \end{tabular}
 
 \section{Formal Definition}
@@ -966,6 +966,7 @@ prove a the result by induction. This definition is inspired to the one in the n
                 \degree[\langle y_1, \dots, y_m, t \rangle_\Gamma] = \degree[\Delta] + \depth[t].
             \]
     \end{enumerate}
+    Together with a secondary induction on derivation length.
 
     Consider then a context $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. We want to see that $[\Delta]$ is constructible by expansion.
     As $\Delta$ is a context, if we denote $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$, we have that \[
@@ -1008,7 +1009,9 @@ prove a the result by induction. This definition is inspired to the one in the n
     As it is a $\in$-rule, it must have been derived by either \ref{rule:t1}, \ref{rule:cf1} or \ref{rule:cf2a}.
     We treat each case separately:
     \begin{enumerate}
-        \item[\ref{rule:t1}] TODO
+        \item[\ref{rule:t1}] Then, there exists an expression $A'$ such that both $\Delta \vdash t \colon A'$ and $\Delta \vdash A = A'$ are derived rules of $U$.
+            The latter rule gives us that $[\Delta, x \colon A] = [\Delta, x \colon A']$, hence we have to see that the section $[\langle y_1, \dots, y_m, t \rangle_\Gamma]$ of $[\Delta, x \colon A']$ is constructible by expansion.
+            As the length of the derivation of $\Delta \vdash t \colon A'$ is at least one \ref{rule:t1} application shorter that the derivation length of $\Delta \vdash t \colon A$, by secondary induction, we have that the section is constructible by expansion.
         \item[\ref{rule:cf1}] Then, there exists an $i$, with $1 \leq i \leq n$, such that $t = x_i$ and $A = A_i$;
             or there exists a $j$, with $1 \leq j \leq m$, such that $t = y_j$ and $A = B_j$.
             We just prove the first case as the other proof is equivalent. So as $[\Delta]$ is constructible by expansion,
