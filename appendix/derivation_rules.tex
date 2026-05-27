@@ -184,7 +184,7 @@ Context Equality Rules
         \Gamma, x \colon A 
         = \Delta, x \colon B
     }{
-        \Gamma \vdash A = B_1
+        \Gamma \vdash A = B
     }$
 \end{enumerate}
 
@@ -279,10 +279,10 @@ Equality Rules:
         =
         \Gamma, \Delta[x \mid\ t]
     }$
-    \ruleitem{Repl2}{rupl2} $\dfrac{
+    \ruleitem{Repl2}{repl2} $\dfrac{
         \Gamma \vdash t = s : A
         \quad
-        \Gamma, x \colon A, \Gamma \vdash B \type
+        \Gamma, x \colon A, \Delta \vdash B \type
     }{
         \Gamma, \Delta[x \mid\ t]
         \vdash
