@@ -6,9 +6,9 @@ take a theory, translate its syntax into a Contextual Category, and reframe proo
 as the geometric problem of finding a section in a graph.
 
 In this chapter, we scale up the complexity to the Calculus of Constructions (CoC).
-Introduced by Coquand and Huet \cite{coquand1988}, CoC is a powerful high-order typed lambda calculus.
+Introduced by Coquand and Huet \cite{coquand1988}, CoC is a powerful higher-order typed lambda calculus.
 It serves as the foundation for the Calculus of Inductive Constructions, the type 
-theory powering modern proof assistants like Rocq (formerly Coq).
+theory powering modern proof assistants like Rocq (formerly Coq) \cite{coquand1988}.
 
 The primary additions in CoC, compared to Generalized Algebraic Theories (GATs), are: 
 \begin{enumerate}
@@ -30,32 +30,37 @@ In this section, we formally define the syntax of Calculus of Constructions.
 We use the approach of Streicher in \cite{streicher}, since the original 
 definition in \cite{coquand1988} is characterized by its syntax overloading, 
 making it much harder to follow.
-They just use $[x: A]B$ to present product types, functional abstraction and 
+The latter just use $[x: A]B$ to present product types, functional abstraction and 
 universal quantification. Also, properties are presented as terms of type $\Prop$
-and as types themselves. To solve the latter, we will be using a type constructor
+and as types themselves. To make our notation more readable, we will be using a type constructor
 $\Proof$ that, given a proposition $p : \Prop$, yields $\Proof(p)$ the type of 
 proofs of proposition $p$.
 
 First, we define the class of \textit{pre-well-formed type expressions},
 ranged over by capital letters, 
 and the class of \textit{pre-well-formed object expressions},
-ranged over by lower case letters, by mutual recursion in a BMF-like way: % TODO: add definition of BMF 
+ranged over by lower case letters, by mutual recursion using Backus-Naur form \cite{aho2007}: 
 \[
 \begin{array}{lll}
   E \Coloneqq & (\Pi x : E)\, E & \text{product of types} \\
-        &  \leftarrow  \Prop & \text{type of propositions} \\
-        &  \leftarrow  \Proof(t) & \text{type of proofs of proposition } t
+        &  \mid\  \Prop & \text{type of propositions} \\
+        &  \mid\  \Proof(t) & \text{type of proofs of proposition } t
 \end{array}
 \]
 \[
 \begin{array}{lll}
     t \Coloneqq & x & \text{variable} \\
-        &  \leftarrow  (\lambda x \colon E) t & \text{functional abstraction} \\
-        &  \leftarrow  \App([x \colon E ] E, t, t) & \text{function application} \\
-        &  \leftarrow  (\forall x \colon E) t & \text{universal quantification} 
+        &  \mid\  (\lambda x \colon E) t & \text{functional abstraction} \\
+        &  \mid\  \App([x \colon E ] E, t, t) & \text{function application} \\
+        &  \mid\  (\forall x \colon E) t & \text{universal quantification} 
 
 \end{array}
 \]
+\begin{observation}
+    We write $\App([x \colon E] E, t, t)$ in order to keep track of the types involved in the application of the two terms, 
+    and it kept explicit in order to make applying structural induction over the expressions easier. 
+    This notation is discussed further in \cite{streicher}.  
+\end{observation}
 We say a \textit{pre-context} is a syntactical expression of the form 
 $x_1 : A_1, \dots, x_n : A_n$, where $x_1, \dots, x_n$ are pairwise 
 syntactically different variables. 
@@ -131,7 +136,7 @@ This is the case of the Lemma \ref{lemma:exhaustivity-for-docs}.
 
 \section{Doctrines of Constructions}
 
-We leverage the concept of context categories introduced in the earlier chapter
+We leverage the concept of Context Categories introduced in the earlier chapter
 to serve as a basic structure for handling dependent types, and add more conditions
 so that it can handle products of families of types, universal quantification and the type of properties, in
 order to develop a categorical structure that captures the interpretation of the
