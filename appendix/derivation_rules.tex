@@ -58,9 +58,9 @@ but with a more compact notation.
         \] for every context $\Gamma$, \[
             \dfrac{
                 \Gamma \vdash t_1 \colon A_1 \quad
-                \Gamma \vdash t_2 \colon A_2[x_1 \mid\ t_1] 
+                \Gamma \vdash t_2 \colon A_2[x_1  \leftarrow  t_1] 
                 \dots
-                \Gamma \vdash t_n \colon A_n[x_1 \mid\ t_1, \dots, x_{n-1} \mid\ t_{n-1}]
+                \Gamma \vdash t_n \colon A_n[x_1  \leftarrow  t_1, \dots, x_{n-1}  \leftarrow  t_{n-1}]
             }{
                 \Gamma \vdash S(t_1, \dots, t_n) \type
             }
@@ -72,39 +72,39 @@ but with a more compact notation.
         \] for every context $P$, \[
             \dfrac{
                 \Gamma \vdash t_1 \colon A_1 \quad 
-                \Gamma \vdash t_2 \colon A_2[x_1 \mid\ t_1] 
+                \Gamma \vdash t_2 \colon A_2[x_1  \leftarrow  t_1] 
                 \dots
-                \Gamma \vdash t_n \colon A_n[x_1 \mid\ t_1, \dots, x_{n-1} \mid\ t_{n-1}]
+                \Gamma \vdash t_n \colon A_n[x_1  \leftarrow  t_1, \dots, x_{n-1}  \leftarrow  t_{n-1}]
             }{
-                \Gamma \vdash F(t_1, \dots, t_n) \colon A[x_1 \mid\ t_1, \dots, x_n \mid\ t_n]
+                \Gamma \vdash F(t_1, \dots, t_n) \colon A[x_1  \leftarrow  t_1, \dots, x_n  \leftarrow  t_n]
             }
         \]
     \ruleitem{SI1}{si1} If $\Gamma$ is a context, then \[
             \dfrac{
                 x_1 \colon A_1, \dots x_n \colon A_n \vdash A = A' \quad
                 \Gamma \vdash s_1 = s'_1 \colon A_1 \quad
-                \Gamma \vdash s_2 = s'_2 \colon A_2[x_1 \mid\ s_1] 
+                \Gamma \vdash s_2 = s'_2 \colon A_2[x_1  \leftarrow  s_1] 
                 \dots
-                \Gamma \vdash s_m = s'_m \colon A_n[x_1 \mid\ s_1, \dots, x_{n-1} \mid\ s_{n-1}]
+                \Gamma \vdash s_m = s'_m \colon A_n[x_1  \leftarrow  s_1, \dots, x_{n-1}  \leftarrow  s_{n-1}]
             }{
                 \Gamma 
                 \vdash
-                A[x_1 \mid\ s_1, \dots, x_n \mid\ s_n]
+                A[x_1  \leftarrow  s_1, \dots, x_n  \leftarrow  s_n]
                 =
-                A'[x_1 \mid\ s'_1, \dots, x_n \mid\ s'_n]
+                A'[x_1  \leftarrow  s'_1, \dots, x_n  \leftarrow  s'_n]
             }
         \]
     \ruleitem{SI2}{si2} If $\Gamma$ is a context, then \[
             \dfrac{
                 x_1 \colon A_1, \dots, x_n \colon A_n \vdash s = s' \colon A \quad
                 \Gamma \vdash s_1 = s'_1 \colon A_1 \quad
-                \Gamma \vdash s_2 = s'_2 \colon A_2 [x_1 \mid\ s_1] 
+                \Gamma \vdash s_2 = s'_2 \colon A_2 [x_1  \leftarrow  s_1] 
                 \dots
-                \Gamma \vdash s_n = s'_n \colon A_n[x_1 \mid\ s_1, \dots, x_{n-1} \mid\ s_{n-1}]
+                \Gamma \vdash s_n = s'_n \colon A_n[x_1  \leftarrow  s_1, \dots, x_{n-1}  \leftarrow  s_{n-1}]
             }{
-                s[x_1 \mid\ s_1, \dots, x_n \mid\ s_n]
+                s[x_1  \leftarrow  s_1, \dots, x_n  \leftarrow  s_n]
                 = 
-                s'[x_1 \mid\ s'_1, \dots, x_n \mid\ s'_n]
+                s'[x_1  \leftarrow  s'_1, \dots, x_n  \leftarrow  s'_n]
             }
         \]
     \ruleitem{A1}{a1} If $x_1 \colon A_1, \dots, x_n \colon A_n \vdash A = A'$ is an axiom, then \[
@@ -143,7 +143,7 @@ Context Formation Rules:
     \ruleitem{Cont-Sub}{cont-sub} $\dfrac{
         \Gamma, x \colon A, \Delta \ok \quad \Gamma \vdash t \colon A
     }{
-        \Gamma, \Delta[x \mid\ t] \ok
+        \Gamma, \Delta[x  \leftarrow  t] \ok
     }$
 \end{enumerate}
 
@@ -221,9 +221,9 @@ Structural Rules for Judgement Formation
         \quad
         \Gamma \vdash t : A  
     }{
-        \Gamma, \Delta[x \mid\ t] 
+        \Gamma, \Delta[x  \leftarrow  t] 
         \vdash
-        \mathcal{J}[x \mid\ t]
+        \mathcal{J}[x  \leftarrow  t]
     }$
 \end{enumerate}
 
@@ -275,27 +275,27 @@ Equality Rules:
         \quad
         \Gamma, x \colon A, \Delta \ok
     }{
-        \Gamma, \Delta[x \mid\ t] 
+        \Gamma, \Delta[x  \leftarrow  t] 
         =
-        \Gamma, \Delta[x \mid\ t]
+        \Gamma, \Delta[x  \leftarrow  t]
     }$
     \ruleitem{Repl2}{repl2} $\dfrac{
         \Gamma \vdash t = s : A
         \quad
         \Gamma, x \colon A, \Delta \vdash B \type
     }{
-        \Gamma, \Delta[x \mid\ t]
+        \Gamma, \Delta[x  \leftarrow  t]
         \vdash
-        B[x \mid\ t] = B[x \mid\ s]
+        B[x  \leftarrow  t] = B[x  \leftarrow  s]
     }$
     \ruleitem{Repl3}{repl3} $\dfrac{
         \Gamma \vdash t_1 = t_2 : A
         \quad
         \Gamma, x \colon A, \Delta \vdash s : B
     }{
-        \Gamma, \Delta[ x \mid\ t_1]
+        \Gamma, \Delta[ x  \leftarrow  t_1]
         \vdash
-        s[x \mid\ t_1] = s[x \mid\ t_2] : B[x \mid\ t_1]
+        s[x  \leftarrow  t_1] = s[x  \leftarrow  t_2] : B[x  \leftarrow  t_1]
     }$
     \ruleitem{Conv1}{conv1} $\dfrac{
         \Gamma \vdash A = B
@@ -367,7 +367,7 @@ Rules for Products of types
         \vdash
         \App([x \colon A] B, t, s) 
         \colon 
-        B[x \mid\ s]
+        B[x  \leftarrow  s]
     }$
     \ruleitem{$\Pi$-Elim-Equ}{prod-elim-equ} $\dfrac{
         \Gamma \vdash A_1 = A_2
@@ -384,7 +384,7 @@ Rules for Products of types
         = 
         \App([x \colon A_2] B_2, t_2, s_2)
         \colon
-        B_1[x \mid\ s_1]
+        B_1[x  \leftarrow  s_1]
     }$
     \ruleitem{$\beta$-Rule}{beta-rule} $\dfrac{
         \Gamma, x \colon A \vdash B \type
@@ -397,9 +397,9 @@ Rules for Products of types
         \vdash
         \App([x \colon A] B, (\lambda x : A) t, s)
         = 
-        t[x \mid\ s] 
+        t[x  \leftarrow  s] 
         \colon
-        B[x \mid\ s]
+        B[x  \leftarrow  s]
     }$
     \ruleitem{$\eta$-rule}{eta-rule} $\dfrac{
         \Gamma, x \colon A \vdash B \type
