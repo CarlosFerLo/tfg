@@ -747,6 +747,7 @@ to $\Gamma$.
 
 \section{Expansion Algorithm}
 
+% TODO: explain that projections are allways included.
 Now we extend the expansion algorithm from the previous chapter. We reintroduce the rules in order to match the syntax we are 
 using for Calculus of Constructions.
 First, consider $G$ to be a finite subcategory of $\mathcal{C}_{\Sigma, \Gamma}$ containing $[\Gamma]$,
@@ -848,12 +849,11 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
         to $[\Delta]$, and the corresponding projections.
     \ruleitem{E6}{proof-forall-intro-2}
         If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, v_{m+1} \colon C$,
-        for any morphism $[\langle p \rangle_\Gamma] \colon [\Delta] \to [\langle v_1 \colon \Prop \rangle_\Gamma]$
+        for any morphism $[\langle v_1, \dots, v_m, v_{m+1}, p \rangle_\Gamma] \colon [\Delta] \to [ \Delta, x \colon \Prop]$
         we add \[ 
-            \forall([\langle p \rangle_\Gamma]) 
-            = [ \langle (\forall v_{m+1} C)p \rangle_\Gamma]
+            [ \langle v_1, \dots, v_m, (\forall \colon v_{m+1} C)p \rangle_\Gamma]
             \colon [\Gamma, v_1 \colon B_1, \dots, v_m \colon B_m]
-            \to [ \langle v_1 \colon \Prop \rangle_\Gamma]
+            \to [ \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, x \colon \Prop]
         \]
         \[
             [\Delta, x \colon \Proof(p)]
@@ -861,7 +861,7 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
         and its corresponding projection. 
     \ruleitem{E7}{application-2}
         If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m$, for every morphism of the form 
-        $\langle v_1, \dots, v_m, t \rangle_\Gamma \colon [\Delta] \to [\Delta, f \colon (\Pi \colon A)B]$
+        $\langle v_1, \dots, v_m, t \rangle_\Gamma \colon [\Delta] \to [\Delta, f \colon (\Pi x\colon A)B]$
         and every morphism $\langle v_1, \dots, v_m, s \rangle_\Gamma \colon [\Delta] \to [\Delta, x \colon A]$,
         such that $[\Delta, y \colon B[x  \leftarrow  s]]$ exists in $G_n$, add \[
             [\langle v_1, \dots, v_m, \App([x \colon A] B, t, s)\rangle_\Gamma]
@@ -876,10 +876,52 @@ we add $\curry(s) = \langle (\lambda x \colon A) a \rangle_\Omega$
 as a section of $[\Delta]$.
 Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it as a subcategory of $\mathcal{C}_{\Sigma, \Gamma}$.
 
-We will prove the exhaustivity theorem using the same method as for Theorem \ref{thm:exhaustivity-for-gats}. 
-We start by expanding the concept of $\depth$ to this new syntax:
+Now we prove the exhaustivity theorem. In order to do it we will have to prove some previous lemmas:
 
-\begin{definition}
+\begin{lemma} \label{lemma:t-rule-cases}
+    Given a derivable sequent of the form $\Gamma \vdash A \type$ there are 4 possible cases:
+    \begin{enumerate}
+        \item $A$ is equal to $\Prop$;
+        \item $A$ is equal to $\Proof(p)$ for some pre-object-expression $p$;
+        \item $A$ is equal to $(\Pi x \colon B) C$ for pre-type-expressions $B, C$ and a variable $x$;
+        \item There exists a sort symbol $S$ in $\Sigma$ with an introductory rule $y_1 \colon B_1, \dots, y_m \colon B_m \vdash S \type$ and sequents 
+            \begin{align*}
+                \Gamma \vdash t_1 &\colon B_1 \\
+                \Gamma \vdash t_2 &\colon B_2[y_1 \leftarrow t_1] \\
+                &\vdots \\
+                \Gamma \vdash t_m &\colon B_m[y_1 \leftarrow t_1, \dots, y_{m-1} \leftarrow t_{m-1}]
+            \end{align*}
+            such that $A$ is equal to $S[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    TODO
+\end{proof}
+
+\begin{lemma} \label{lemma:in-rule-cases}
+    Given a derivable sequent of the form $\Gamma \vdash t \colon A$ there are 5 possible cases:
+    \begin{enumerate}
+        \item there exists a variable $x$ in $\Var(\Gamma)$, such that $t$ equals $x$;
+        \item $t$ is equal to $(\lambda x \colon B) s$ and $A$ is equal to $(\Pi x \colon B) C$ for some pre-type-expressions $B, C$, a pre-object-expression $s$ and variable $x$;
+        \item $t$ is equal to $\App([x \colon B] C, s, r)$ and $A$ is equal to $C[x \leftarrow r]$ for some pre-type-expressions $B, C$, pre-object-expressions $s, r$ and variable $x$;
+        \item $t$ is equal to $(\forall x \colon B) s$ and $A$ is equal to $\Prop$ for some pre-type-expression $B$, pre-object-expression $s$ and variable $x$;
+        \item there exist an operator symbol $F$ in $\Sigma$ with an introductory rule $y_1 \colon B_1, \dots, y_m \colon B_m \vdash F : B$ and sequents
+             \begin{align*}
+                \Gamma \vdash t_1 &\colon B_1 \\
+                \Gamma \vdash t_2 &\colon B_2[y_1 \leftarrow t_1] \\
+                &\vdots \\
+                \Gamma \vdash t_m &\colon B_m[y_1 \leftarrow t_1, \dots, y_{m-1} \leftarrow t_{m-1}]
+            \end{align*}
+            such that $t$ is equal to $F[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    TODO
+\end{proof}
+
+Now we expand the concept of $\depth$ to this new syntax:
+
+\begin{definition} 
     By structural induction of expressions we define a function $\depth$ mapping pre-well-formed expressions and pre-contexts to $\omega$:
     \begin{enumerate}
         \item if $x$ is a variable, then $\depth[x] = 1$;
@@ -889,7 +931,7 @@ We start by expanding the concept of $\depth$ to this new syntax:
             \begin{align*}
                 \depth[(\Pi x \colon A) B] &= \depth[A] + \depth[B] + 1 \\
                 \depth[(\lambda x \colon A) t] &= \depth[A] + \depth[t] + 1 \\
-                \depth[(\forall \colon x)] &= \depth[A] + \depth[t] + 1 \\
+                \depth[(\forall x \colon A) t] &= \depth[A] + \depth[t] + 1 \\
                 \depth[\App[x \colon A]B, t, s] &= \depth[A] + \depth[B] + \depth[t] + \depth[s] + 1;
             \end{align*}
         \item if $S$ is a sort symbol from $\Sigma$ with an introductory rule $z_1 \colon C_1, \dots z_w \colon C_w \vdash S \type$,
@@ -903,9 +945,7 @@ We start by expanding the concept of $\depth$ to this new syntax:
     \end{enumerate}
 \end{definition}
 
-% TODO: am I taking signatures into account?
-% TODO: check if thin, sub and equ are taken into account everywhere they are valid
-Now we prove the intermediate lemma:
+We use it to prove the following lemma:
 \begin{lemma} \label{lemma:exhaustivity-for-docs}
     Every object and every section in $\mathcal{C}_{\Sigma, \Gamma}$ are constructible by expansion.
 \end{lemma}
@@ -920,283 +960,105 @@ Now we prove the intermediate lemma:
                 \degree[\langle y_1, \dots, y_m, t \rangle_\Gamma] = \degree[\Delta] + \depth[t]
             \]
     \end{enumerate}
-    Together with secondary induction over the length of the derivations of sequents.
 
     Consider then a context $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. We want to see that $[\Delta]$
     is constructible by expansion. 
     If $\degree[\Delta] = 0$, then it is the case $\Delta = \Gamma$, and hence it is constructible by expansion. 
     Consider now the case $\degree[\Delta] > 0$.
-    We consider how the sequent $\Delta \ok$ was derived.
-    It has to be derived by one of the following rules: \ref{rule:empty}, \ref{rule:cont-intro}, \ref{rule:cont-thin}, \ref{rule:cont-sub}, \ref{rule:crefl} and \ref{rule:reflection1}.
-    We consider each case separately:
+    As the sequent $\Delta \ok$ is derivable, by the rule \ref{rule:cont-intro}, we have that $\Delta' \vdash B_m \type$ is derivable, where $\Delta' = \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$. 
+    By Lemma \ref{lemma:t-rule-cases}, we have to consider four cases:
     \begin{enumerate}
-        \item[\ref{rule:empty}] This implies that $\Delta = \Gamma = \langle \rangle$ hence $\degree[\Delta] = 0$, a contradiction with our hypothesis. 
-        \item[\ref{rule:cont-intro}] This means that the sequent $\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1} \vdash B_m \type$ is derivable.
-            Which itself can only be derived by using the following rules \ref{rule:cont-intro} (in the reverse form), 
-            \ref{rule:refl-typ}, \ref{rule:prod-form}, \ref{rule:prop}, \ref{rule:prop-type} and any introductory rule for a sort symbol in $\Sigma$.
-            We consider all of the possible cases:
-            \begin{enumerate}
-                \item[\ref{rule:cont-intro}] This means that $\Delta \ok$ is derivable with less steps, hence by secondary induction, $[\Delta]$ is constructible by expansion. 
-                \item[\ref{rule:refl-typ}] This means that $\Delta' \vdash B_m = B_m$, for $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$. That rule can be derived by the following rules: \ref{rule:creflect2}, \ref{rule:symm-typ}, \ref{rule:trans-typ}, \ref{rule:repl2}, \ref{rule:prod-equ} and \ref{rule:prop-equ}.
-                    We consider each alternative separately:
-                    \begin{enumerate}
-                        \item[\ref{rule:creflect2}] Then $\Delta', x \colon B_m = \Delta', x \colon B_m$ is derivable. 
-                            It can only be derived by \ref{rule:crefl}, \ref{rule:csym}, \ref{rule:ctrans}, \ref{rule:cequ}, \ref{rule:creflect1} and \ref{rule:repl1}. We again consider each possible case: 
-                            \begin{enumerate}
-                                \item[\ref{rule:crefl}] Then, the rule $\Delta', x \colon B_m \ok$ is derivable in fewer derivations that $\Delta$ and they have the same $\degree$, by induction hypothesis, $[\Delta', x \colon B_m]$ is constructible by expansion, which means that $[\Delta]$ is constructible by expansion, as they only differ from the naming of bound variables.
-                                \item[\ref{rule:csym}] Then, it is derived from $\Delta', x \colon B_m = \Delta', x \colon B_m$, so by secondary induction, we have that $[\Delta]$ is constructible by expansion.
-                                \item[\ref{rule:ctrans}] Then, there exists a pre-context $\Omega$ such that the sequents $\Delta', x \colon B_m = \Omega$ and $\Omega = \Delta', x \colon B_m$ are derivable.
-                                    TODO
-                                \item[\ref{rule:cequ}] Then, the rule $\Delta', x \colon B_m$ is derivable, so by the same reasoning as in \ref{rule:crefl} we have that $[\Delta]$ is constructible by expansion.
-                                \item[\ref{rule:creflect1}] Then, there exist pre-type-expressions $A, B$ such that $\Delta', x \colon B_m, y \colon A = \Delta', x \colon B_, y \colon B$ is a derivable sequent. 
-                                    TODO 
-                                \item[\ref{rule:repl1}] TODO
-                            \end{enumerate}
-                        \item[\ref{rule:symm-typ}] We have the same judgement with a lower number of derivation steps, hence, by secondary induction, $[\Delta]$ is constructible by expansion.
-                        \item[\ref{rule:trans-typ}] The, there exists a pre-type-expression $A$ such that $\Delta' \vdash B_m = A$ and $\Delta' \vdash A = B_m$ are derivable sequents. 
-                            TODO
-                        \item[\ref{rule:repl2}] TODO
-                        \item[\ref{rule:prod-equ}] Then, there exist two pre-term-expressions $A, B$ and a variable $x$ such that $B_m = (\Pi x \colon A) B$, and $\Delta' \vdash A = A$ and $\Delta' x \colon A_1 \vdash B = B$ are derivable sequents.
-                            By \ref{rule:refl-typ}, we have that both $\Delta' \vdash A \type$ and $\Delta', x \colon A \vdash B \type$ are derivable sequents. Then by the argument on \ref{rule:prod-form}, $[\Delta]$ is constructible by expansion.
-                        \item[\ref{rule:prop-equ}] Then, there exists a pre-object-expression $p$ such that $B_m = \Proof(p)$ and $\Delta' \vdash p = p \colon \Prop$ is a derivable sequent.
-                            By \ref{rule:refl-obj}, we have that $\Delta' \vdash p \colon \Prop$ is a derivable sequent, and by the same argument as in \ref{rule:prop-type}, $[\Delta]$ is constructible by expansion.
-                    \end{enumerate}
-                \item[\ref{rule:prod-form}] Then, we have that $B_m$ is a pre type expression of the form $(\Pi x \colon N) M$ 
-                    for some variable $x$ and two pre-type-expressions $N, M$ such that the sequent \[
-                        \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}, x \colon N \vdash M \type
-                    \] is derivable. We also have that, with $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$,
-                    \begin{align*}
-                        \degree[\Delta] &= \degree[\Delta'] + \depth[(\Pi x \colon N) M] =  \\
-                        &= \degree[\Delta'] + \depth[N] + \depth[M] + 1 > \\
-                        &> \degree[\Delta'] + \depth[N] + \depth[M] = \degree[\Delta', x \colon N, y ] 
-                    \end{align*}
-                    so by induction hypothesis $[\Delta', x \colon N, y \colon M]$ is constructible by expansion.
-                    By applying the expansion rule \ref{rule:product-formation-2} applied to that object, gives us that
-                    \[
-                        \Pi([\Delta', x \colon N, y \colon M]) = 
-                        [\Delta', x \colon (\Pi x \colon N) M]
-                    \] is constructible by expansion, that is equal to $[\Delta]$ as they just differ by the naming of the 
-                    bound variables. Hence $[\Delta]$ is constructible by expansion.
-                \item[\ref{rule:prop}] Then we have that $B_m$ is equal to $\Prop$ as a pre-type-expression, and with $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$,
-                    $\Delta' \ok$ is a derivable sequent. By induction hypothesis, we know that $[\Delta']$ is constructible by expansion. 
-                    Also, as $G$ contains $[\Gamma, x \colon \Prop]$ and its projection to $[\Gamma]$, by applying the expansion rule \ref{rule:pullback-2}
-                    to $[\Gamma, x \colon \Prop]$ with the projection morphism from $[\Delta']$ to $[\Gamma]$, we get that the following pullback diagram 
-                    is constructible by expansion: \[
-                        \begin{tikzcd}
-                            {[\Delta', x \colon \Prop]}
-                                \arrow[r, "{\langle x \rangle_\Gamma}"]
-                                \arrow[d, open] 
-                            & {[\Gamma, x \colon \Prop]}
-                                \arrow[d, open]
-                            \\
-                            {[\Delta']}
-                                \arrow[r, open] 
-                            & {[\Gamma]}
-                        \end{tikzcd}
-                    \] and $[\Delta', x \colon \Prop] = [\Delta]$ as they only differ by the naming of the bound variables.
-                \item[\ref{rule:prop-type}] Then we have that there is a pre-object-expression $p$ such that $B_m$ equals $\Prop(p)$ as pre-type-expressions and the 
-                    sequent $\Delta' \vdash p \colon \Prop$, with $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$, is derivable.
-                    By induction hypothesis, $[\Delta']$ is constructible by expansion. Moreover, as 
-                    \begin{align*}
-                        \degree[\Delta] &= \degree[\Delta'] + \depth[\Proof(p)] = \\    
-                            &= \degree[\Delta'] + \depth[p] + 1 > \\ 
-                            &> \degree[\Delta'] + \depth[p] = \degree[\langle y_1, \dots, y_{m-1}, p \rangle_\Gamma],
-                    \end{align*}
-                    by induction hypothesis, $\langle y_1, \dots, y_{m-1}, p \rangle_\Gamma$ is constructible by expansion.
-                    Finally, by applying the expansion rule \ref{rule:proof-forall-intro-2} to the object $[\Delta']$ and morphism $[\langle y_1, \dots, y_{m-1}, p \rangle_\Gamma]$, and 
-                    we get that $[\Delta', x \colon \Proof(p)] = [\Delta]$ is constructible by expansion.
-                \item[\textsc{Introductory Rule}] Then there exists a sort symbol $S$ with introductory rule $\Omega \vdash S \type$, with $\Omega \equiv z_1 \colon C_1, \dots, z_w \colon C_w$, in $\Sigma$,
-                    and $t_1, \dots, t_w$ pre-object-expressions such that $B_m = S[z_1  \leftarrow  t_1, \dots, z_k  \leftarrow  t_k]$ as pre-type-expressions, and for each $j$, $1 \leq j \leq w$,
-                    $\Delta' \vdash t_j \colon C_j[z_1  \leftarrow  t_1, \dots, z_{j-1}  \leftarrow  t_{j-1}]$ are derivable judgments, where $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$.
-                    As for all $j$, $1 \leq j \leq w$, 
-                    \begin{align*}
-                        \degree[\Delta] &= \degree[\Delta] + \depth[S[z_1  \leftarrow  t_1, \dots, z_k  \leftarrow  t_k]] > \\
-                            &> \degree[\Delta'] + \depth[t_j] = \degree[\langle y_1, \dots, y_{m-1}, t_j \rangle_\Gamma],
-                    \end{align*} 
-                    the following sections are constructible by expansion: 
-                    \begin{align*}
-                        [\langle y_1, \dots, y_{m-1}, t_1 \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_1 \colon C_1] \\
-                        [\langle y_1, \dots, y_{m-1}, t_2 \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_2 \colon C_2[z_1  \leftarrow  t_1]] \\
-                        & \vdots \\
-                        [\langle y_1, \dots, y_{m-1}, t_w \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]] 
-                    \end{align*}
-                    Then, by expansion rule \ref{rule:sort-symbol-intro-2}, $[\Delta] = [\Delta', y \colon S[z_1  \leftarrow  t_1, \dots, z_w  \leftarrow  t_w]]$ is constructible by expansion.       
-            \end{enumerate}
-        \item[\ref{rule:cont-thin}] As from proposition \ref{prop:cont-thin-elim} we do not need to consider this case.
-        \item[\ref{rule:cont-sub}] As from proposition \ref{prop:cont-sub-elim} we do not need to consider this case.
-        \item[\ref{rule:crefl}] Then we have that $\Delta = \Delta$ is a derivable sequent. It can only be derived from: 
-            \ref{rule:crefl}, \ref{rule:csym}, \ref{rule:ctrans}, \ref{rule:cequ} and \ref{rule:repl1}. We consider each case separately: 
-            \begin{enumerate}
-                \item[\ref{rule:crefl}] This means that $\Delta \ok$ is derivable with less steps, hence by secondary induction, $[\Delta]$ is constructible by expansion.
-                \item[\ref{rule:csym}] Then, it is derived from $\Delta = \Delta$, by secondary induction, $[\Delta]$ is constructible by expansion.
-                \item[\ref{rule:ctrans}] TODO
-                \item[\ref{rule:cequ}] Then, the sequent $\Delta \ok$ is derivable with less derivation length that the first one, hence, by induction hypothesis, $[\Delta]$ is constructible by expansion.
-                \item[\ref{rule:repl1}] TODO     
-            \end{enumerate}
-        % TODO: is this really the best way to do this?
-        \item[\ref{rule:reflection1}] Then, there exists a pre-judgement $\mathcal{J}$ such that $\Delta \vdash \mathcal{J}$ is a derivable sequent. Then there are four possibilities:
-            \begin{enumerate}
-                \item There exists a pre-type-expression $A$ such that $\mathcal{J} \equiv A \type$. In that case, we have that $\Delta \vdash A \type$ must have been derived from: \ref{rule:reflection2}, \ref{rule:thin}, \ref{rule:sub}, \ref{rule:equ}, \ref{rule:refl-typ}, \ref{rule:prod-form}, \ref{rule:prop}, \ref{rule:prop-type} or an introductory rule of a sort symbol in $\Sigma$.
-                    We study each case separately:
-                    \begin{enumerate}
-                        \item[\ref{rule:reflection2}] Then, we have $\Delta \vdash t \colon A$ for some pre-object-expression $t$. As these new sequent has a shorter derivation, by induction hypothesis we have that $[\Delta]$ is constructible by expansion.
-                        \item[\ref{rule:thin}] TODO
-                        \item[\ref{rule:sub}] TODO 
-                        \item[\ref{rule:equ}] TODO
-                        \item[\ref{rule:refl-typ}] TODO
-                        \item[\ref{rule:prod-form}] TODO
-                        \item[\ref{rule:prop}] TODO
-                        \item[\ref{rule:prop-type}] TODO
-                        \item[\textsc{Introductory Rule}] TODO      
-                    \end{enumerate}
-                \item There exist pre-type-expressions $A, B$ such that $\mathcal{J} \equiv A = B$. In that case, we have that $\Delta \vdash A = B$ must have been derived from: \ref{rule:creflect2}, \ref{rule:thin}, \ref{rule:sub}, \ref{rule:equ}, \ref{rule:refl-typ}, \ref{rule:symm-typ}, \ref{rule:trans-typ}, \ref{rule:repl2}, \ref{rule:prod-equ}, \ref{rule:prop-equ}, \ref{rule:forall-elim} or an axiom in $\Sigma$.
-                    We study each case separately:
-                    \begin{enumerate}
-                        \item[\ref{rule:creflect2}] TODO
-                        \item[\ref{rule:thin}] TODO 
-                        \item[\ref{rule:sub}] TODO 
-                        \item[\ref{rule:equ}] TODO 
-                        \item[\ref{rule:refl-typ}] TODO
-                        \item[\ref{rule:symm-typ}] TODO
-                        \item[\ref{rule:trans-typ}] TODO
-                        \item[\ref{rule:repl2}] TODO
-                        \item[\ref{rule:prod-equ}] TODO
-                        \item[\ref{rule:prop-equ}] TODO
-                        \item[\ref{rule:forall-elim}] TODO
-                        \item[\textsc{Axiom}] TODO         
-                    \end{enumerate}
-                \item There exists a pre-type-expression $A$ and a pre-object-expression $t$ such that $\mathcal{J} \equiv t \colon A$. In that case, we have that $\Delta \vdash t \colon A$ must have been derived from: \ref{rule:ass}, \ref{rule:thin}, \ref{rule:sub}, \ref{rule:equ}, \ref{rule:refl-obj}, \ref{rule:conv1}, \ref{rule:prod-intro}, \ref{rule:prod-elim}, \ref{rule:prop-type}, \ref{rule:forall-intro} or an introductory rule of an operator symbol in $\Sigma$.
-                    We study each case separately:
-                    \begin{enumerate}
-                        \item[\ref{rule:ass}] TODO
-                        \item[\ref{rule:thin}] TODO
-                        \item[\ref{rule:sub}] TODO
-                        \item[\ref{rule:equ}] TODO
-                        \item[\ref{rule:refl-obj}] TODO
-                        \item[\ref{rule:conv1}] TODO
-                        \item[\ref{rule:prod-intro}] TODO
-                        \item[\ref{rule:prod-elim}] TODO
-                        \item[\ref{rule:prop-type}] TODO
-                        \item[\ref{rule:forall-intro}] TODO
-                        \item[\textsc{Introductory Rule}] TODO           
-                    \end{enumerate}
-                \item There exists a pre-type-expression $A$ and two pre-object-expressions $t, s$ such that $\mathcal{J} \equiv t = s \colon A$. In that case, we have that $\Delta \vdash t = s \colon A$ must have been derived from: \ref{rule:thin}, \ref{rule:sub}, \ref{rule:equ}, \ref{rule:symm-obj}, \ref{rule:trans-obj}, \ref{rule:repl3}, \ref{rule:conv2}, \ref{rule:xi-rule}, \ref{rule:prod-elim-equ}, \ref{rule:beta-rule}, \ref{rule:eta-rule}, \ref{rule:prop-equ}, \ref{rule:forall-equ} or an axiom in $\Sigma$.
-                    We study each case separately:
-                    \begin{enumerate}
-                        \item[\ref{rule:thin}] TODO
-                        \item[\ref{rule:sub}] TODO
-                        \item[\ref{rule:equ}] TODO
-                        \item[\ref{rule:symm-obj}] TODO
-                        \item[\ref{rule:trans-obj}] TODO
-                        \item[\ref{rule:repl3}] TODO
-                        \item[\ref{rule:conv2}] TODO
-                        \item[\ref{rule:xi-rule}] TODO
-                        \item[\ref{rule:prod-elim-equ}] TODO
-                        \item[\ref{rule:beta-rule}] TODO
-                        \item[\ref{rule:eta-rule}] TODO
-                        \item[\ref{rule:prop-equ}] TODO
-                        \item[\ref{rule:forall-equ}] TODO
-                        \item[\textsc{Axiom}] TODO              
-                    \end{enumerate}
-            \end{enumerate}
+        \item We have that $B_m = \Prop$. By induction hypothesis, $[\Delta']$ is constructible by expansion, also we have that $[\Gamma]$ and $[\Gamma, p: \Prop]$ are constructible by expansion.
+            Then by applying the rule \ref{rule:pullback-2} on the object $[\Gamma, p \colon \Prop]$ and the projection morphism of $[\Delta']$ on $[\Gamma]$, we have that the following pullback diagram is constructible by expansion: \[
+                \begin{tikzcd}
+                    {[\Delta', x \colon \Prop]}
+                        \arrow[r, "{\langle x \rangle_\Gamma}"]
+                        \arrow[d, open] 
+                    & {[\Gamma, x \colon \Prop]}
+                        \arrow[d, open]
+                    \\
+                    {[\Delta']}
+                        \arrow[r, open] 
+                    & {[\Gamma]}
+                \end{tikzcd}
+            \] and $[\Delta', x \colon \Prop] = [\Delta]$ as they only differ by the naming of the bound variables.
+        \item We have that $B_m = \Proof(p)$ for some pre-type-expression $p$. By rule \ref{rule:prop-type}, we have that $\Delta' \vdash p \colon \Prop$.
+            By induction hypothesis, $[\Delta', x \colon \Prop]$ and the section $[\langle y_1, \dots, y_{m-1}, p \rangle_\Gamma] \colon [\Delta'] \to [\Delta', x \colon \Prop]$ are constructible by expansion.
+            Then, by applying expansion rule \ref{rule:proof-forall-intro-2}, we have that $[\Delta', x \colon \Proof(p)]$ is constructible by expansion, and so it is $[\Delta] = [\Delta', x \colon \Proof(p)]$ as they differ only by the naming of the bound variables.
+        \item We have that $B_m = (\Pi x \colon A) B$ for pre-type-expressions $A, B$ and a variable $x$.
+            By induction hypothesis, \[
+                \begin{tikzcd}
+                    {[\Delta']} & {[\Delta', x \colon A]} \arrow[l, open] & {[\Delta', x \colon A, y \colon B]} \arrow[l, open]
+                \end{tikzcd}
+            \] is constructible by expansion. By applying expansion rule \ref{rule:product-formation-2} to $[\Delta', x \colon A, y \colon B]$ we have that \[
+                \Pi([\Delta, x \colon A, y \colon B]) = [\Delta', x \colon (\Pi x \colon A) B]
+            \] is constructible by expansion. Then, so is $[\Delta] = [\Delta', x \colon (\Pi x \colon A) B]$ as they only differ on the naming of bound variables.
+        \item We have that there exists a sort symbol $S$ in $\Sigma$ with an introductory rule $z_1 \colon C_1, \dots, z_w \colon C_w \vdash S \type$ and sequents
+            \begin{align*}
+                \Gamma \vdash t_1 &\colon C_1 \\
+                \Gamma \vdash t_2 &\colon C_2[z_1 \leftarrow t_1] \\
+                &\vdots \\
+                \Gamma \vdash t_w &\colon C_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]
+            \end{align*}
+            such that $B_m$ is equal to $S[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]$.
+            By induction hypothesis, we have that the following sections are constructible by expansion:
+            \begin{align*}
+                [\langle y_1, \dots, y_{m-1}, t_1 \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_1 \colon C_1] \\
+                [\langle y_1, \dots, y_{m-1}, t_2 \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_2 \colon C_2[z_1 \leftarrow t_1]] \\
+                & \vdots \\
+                [\langle y_1, \dots, y_{m-1}, t_w \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_w \colon C_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]] 
+            \end{align*}
+            So by applying the expansion rule \ref{rule:sort-symbol-intro-2} to $[\Delta']$, we have that $[\Delta', x \colon S[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]]$ is constructible by expansion.
+            Hence, so is $[\Delta] = [\Delta', x \colon S[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]]$ as they differ only in the naming of bound variables.
     \end{enumerate}
 
     Now consider the section \[
         [\langle y_1, \dots, y_m, t \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A].
     \] 
-    We want to see that it is constructible by expansion.
-    As it is a section, we have that the sequent $\Delta \vdash t \colon A$ is derivable. It must have been derived by 
-    \ref{rule:ass}, \ref{rule:thin}, \ref{rule:sub}, \ref{rule:equ}, \ref{rule:refl-obj}, \ref{rule:conv1}, \ref{rule:prod-intro}, \ref{rule:prod-elim}, \ref{rule:prop-type}, \ref{rule:forall-intro} 
-    or an introductory rule of an operator symbol in $\Sigma$. We consider all of the different cases: 
+    We want to see that it is constructible by expansion. We have that $\Delta \vdash t \colon A$ is derivable.
+    By Lemma \ref{lemma:in-rule-cases} we have the following cases:
     \begin{enumerate}
-        \item[\ref{rule:ass}] TODO
-        \item[\ref{rule:thin}] TODO
-        \item[\ref{rule:sub}] TODO
-        \item[\ref{rule:equ}] TODO
-        \item[\ref{rule:refl-obj}] TODO
-        \item[\ref{rule:conv1}] TODO
-        \item[\ref{rule:prod-intro}] TODO
-        \item[\ref{rule:prod-elim}] TODO
-        \item[\ref{rule:prop-type}] TODO
-        \item[\ref{rule:forall-intro}] TODO
-        \item[\textsc{Introductory Rule}] TODO           
-    \end{enumerate}
+        \item Then, there is an $i$, $1 \leq i \leq m$, such that $t = y_i$. By induction hypothesis, $[\Delta]$ is constructible by expansion. 
+            By applying the expansion rule \ref{rule:variable-duplication-2} to $[\Delta]$, we have that the section $[\langle y_1, \dots, y_m, y_i \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon B_i]$ is constructible by expansion,
+            and so is $[\langle y_1, \dots, y_m, t \rangle_\Gamma] = [\langle y_1, \dots, y_m-1, y_i \rangle_\Gamma]$.
+        \item We have that $t = (\lambda x \colon B) s$ and $A = (\Pi x \colon B) C$ for some pre-type-expressions $B, C$, a pre-object-expression $s$ and a variable $x$.
+            By induction hypothesis, we have that $[\Delta, x \colon A, y \colon B]$ and its section $[\langle y_1, \dots, y_m, x, s \rangle_\Gamma]$ are constructible by expansion.
+            Then, by applying $\curry$ completion, we have that $[\langle y_1, \dots, y_m, (\lambda x \colon B) s \rangle_\Gamma] = [\langle y_1, \dots, y_m, t \rangle_\Gamma]$.
+        \item We have that $t = \App([x \colon B] C, s, r)$ and $A = C[x \leftarrow r]$ for some pre-type-expressions $B, C$, pre-object-expressions $s, r$ and a variable $x$.
+            By induction hypothesis, we have that $[\langle y_1, \dots, y_m, s \rangle_\Gamma] : [\Delta] \to [\Delta, f \colon (\Pi x \colon B)C]$ and $[\langle y_1, \dots, y_m, r \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon B]$
+            are constructible by expansion. Then, by applying the expansion rule \ref{rule:application-2} we have that \[
+                [\langle y_1, \dots, y_m, t \rangle_\Gamma] = [\langle y_1, \dots, y_m, \App([x \colon B]C, s, r)\rangle_\Gamma] \colon [\Delta] \to [\Delta, y \colon B[x \leftarrow r]]
+            \]
+            is constructible by expansion.
+        \item We have that $t = (\forall x \colon B) s$ and $A = \Prop$ for some pre-type-expression $B$, pre-object-expression $s$ and variable $x$.
+            By induction hypothesis, we have that $[\langle y_1, \dots, y_m, x, s \rangle_\Gamma] \colon [\Delta, x \colon B] \to [\Delta, x \colon B, p \colon \Prop]$ is constructible by expansion.
+            And by applying the expansion rule \ref{rule:proof-forall-intro-2} the morphism \[
+                [\langle y_1, \dots, y_m, (\forall x \colon B) \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon \Prop]
+            \] is constructible by expansion.
+        \item Then, there exists an operator symbol $F$ in $\Sigma$ with an introductory rule $z_1 \colon C_1, \dots, z_m \colon C_m \vdash F \colon B$ and sequents 
+            \begin{align*}
+                \Gamma \vdash t_1 &\colon C_1 \\
+                \Gamma \vdash t_2 &\colon C_2[z_1 \leftarrow t_1] \\
+                &\vdots \\
+                \Gamma \vdash t_w &\colon C_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]
+            \end{align*}
+            such that $t$ is equal to $F[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]$.
+            By induction hypothesis, we have that the following sections are constructible by expansion:
+            \begin{align*}
+                [\langle y_1, \dots, y_{m-1}, t_1 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_1 \colon C_1] \\
+                [\langle y_1, \dots, y_{m-1}, t_2 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_2 \colon C_2[z_1 \leftarrow t_1]] \\
+                & \vdots \\
+                [\langle y_1, \dots, y_{m-1}, t_w \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_w \colon C_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]] 
+            \end{align*}
+            So by applying the expansion rule \ref{rule:operator-symbol-intro-2} to $[\Delta]$, we have that
+            $[\langle y_1, \dots, y_m, F[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w] \rangle_\Gamma] = [\langle y_1, \dots, y_m, t \rangle_\Gamma]$ 
+            is constructible by expansion.
+    \end{enumerate}         
 \end{proof}
 
 \begin{theorem} \label{thm:exhaustivity-for-docs}
     Every object and every morphism of $\mathcal{C}_{\Sigma, \Gamma}$ are constructible by expansion.
 \end{theorem}
-\begin{proof} % TODO: how do Thin and Sub rules affect?
-        Now consider a morphism \[
-            [\langle t_1, \dots, t_w \rangle_\Gamma]
-            \colon [\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m]
-            \to [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]
-        \] in $\mathcal{C}_{\Sigma, \Gamma}$. 
-        We denote $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. 
-        Then for $i$, $1 \leq i \leq w$, \[
-            \Delta \vdash t_i \colon C_i[z_1  \leftarrow  t_1, \dots, z_{i-1}  \leftarrow  t_{i-1}]
-        \] are derivable sequents of $\text{CoC}_\Sigma$. Now we want to see that,
-        for each $i$, the following section is constructible by expansion: \[
-            [\langle y_1, \dots, y_m, t_i \rangle_\Gamma]
-            \colon [\Delta] 
-            \to [\Delta, z_i \colon C_i[z_1  \leftarrow  t_1, \dots, z_{i-1}  \leftarrow  t_{i-1}]].
-        \]
-        We consider the ways the mentioned sequents are derived. 
-        They must be derived by one of the following rules:
-        \ref{rule:ass}, \ref{rule:refl-obj}, \ref{rule:conv1}, \ref{rule:prod-intro}, \ref{rule:prod-elim}, \ref{rule:prop-type} and \ref{rule:forall-intro}. 
-        The cases of \ref{rule:refl-obj}, \ref{rule:conv1} and \ref{rule:prop-type} are trivial. Hence, we consider the other cases:
-        \begin{enumerate}
-            \item[\ref{rule:ass}] There exists an $1 \leq j \leq m$ or $1 \leq k \leq n$ such that 
-                \begin{align*}
-                    t_i = y_j \quad \text{ or } \quad t_i = x_k.
-                \end{align*}
-                We suppose that $t_i = y_j$ for some $j$, and the other case is equivalent.
-                In that case $B_j = C_i [z_1  \leftarrow  t_1, \dots, z_{i-1}  \leftarrow  t_{i-1}]$.
-                We know that $\Delta$ is a context, hence by inductive hypothesis we have that $[\Delta]$ is constructible by expansion.
-                When applying the expansion rule \ref{rule:variable-duplication-2}, we obtain that the 
-                section \[
-                    [\langle y_1, \dots, y_m, y_j \rangle_\Gamma] 
-                    \colon [\Delta] 
-                    \to [\Delta, y \colon B_j] 
-                \] is constructible by expansion, and it is equal to $[\langle y_1, \dots, y_m, t_i \rangle_\Gamma]$,
-                hence the least is also constructible by expansion.
-            \item[\ref{rule:prod-intro}] Then there exists one pre-object-expression $t$ and two pre-type-expression $A, B$
-                such that $t_i = (\lambda x \colon A) t$ and $C_i[z_1  \leftarrow  t_1, \dots, z_{i-1}  \leftarrow  t_{i-1}] = (\Pi x \colon A) B$,
-                for some variable $x$. Moreover, as $\level[\Delta; (\lambda x \colon A) t] = \level[\Delta, x \colon A ; t] + 1$,
-                by induction hypothesis, the section \[
-                    [\langle y_1, \dots, y_m, x, t\rangle_\Gamma]
-                    \colon [ \Delta, x \colon A]
-                    \to [ \Delta, x \colon A, y \colon B]
-                \] is constructible by expansion.
-                Applying the expansion rule \ref{rule:product-formation-2} to $[\Delta, x \colon A, y \colon B]$,
-                we get that $[\Delta, f \colon (\Pi x \colon A) B]$ is constructible by expansion.
-                Finally, by the curry completion condition, we get that \[
-                    \curry(\langle y_1, \dots, y_m, x, t \rangle_\Gamma) = \langle y_1, \dots, y_m, (\lambda x \colon A) t \rangle_\Gamma
-                \] is constructible by expansion.
-            \item[\ref{rule:prod-elim}] Then there exists one variable $x$, two pre-type-expressions $A, B$ and two pre-term-expressions $t, s$ such that
-                $\Delta \vdash t \colon (\Pi x \colon A) B$, $\Delta \vdash s \colon A$, $\Delta, x \colon A \vdash B \type$, $t_i = \App([x \colon A] B, t, s)$ and $C_i[z_1  \leftarrow  t_1, \dots, z_{i-1}  \leftarrow  t_{i-1}] = B[x  \leftarrow  s]$.
-                By induction hypothesis $[\langle y_1, \dots, y_m, t \rangle_\Gamma] \colon [\Delta] \to [\Delta, f \colon (\Pi x \colon A) B]$, 
-                $[\langle y_1, \dots, y_m, s \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A]$ and
-                $[\Delta, x \colon A, t \colon B]$ are constructible by expansion. 
-                By applying the expansion rule \ref{rule:pullback-2} to the morphism $[\langle y_1, \dots, y_m, s \rangle_\Gamma]$ and the object $[\Delta, x \colon A, y \colon B]$
-                we have that the object $[\Delta, y \colon B[x  \leftarrow  s]]$ is constructible by expansion.
-                Hence by applying the expansion rule \ref{rule:application-2} to the object $[\Delta]$ we get that 
-                $[\langle y_1, \dots, y_m, \App([x \colon A] B, t, s) \rangle_\Gamma] : [\Delta] \to [\Delta, y \colon B[x  \leftarrow  s]]$ is constructible by expansion, and as it differs from 
-                $[\langle y_1, \dots, y_m, t_i \rangle_\Gamma] \colon [\Delta] \to [\Delta, z_i \colon C_i [z_1  \leftarrow  t_1, \dots, z_{i-1}  \leftarrow  t_{i-1}]]$ by the naming of bound variables,
-                the latter is also constructible by expansion.
-            \item[\ref{rule:forall-intro}] Then there exists a variable $x$, a pre-type-expression $A$ and a pre-term-expression $p$ such that
-                $\Delta, x \colon A \vdash p \colon \Prop$, $t_i = (\forall x \colon A) p$ and $C_i[z_1  \leftarrow  t_1, \dots, z_{i-1}  \leftarrow  t_{i-1}] = \Prop$ as pre-term and pre-type expressions respectively.
-                By induction hypothesis, $[\langle y_1, \dots, y_m, x, p \rangle_\Gamma] \colon [\Delta, x \colon A] \to [\Delta, x \colon A, q \colon \Prop]$ is constructible by expansion.
-                Then, if we apply the expansion rule \ref{rule:pullback-2} to the projection morphism of $[\Delta, x \colon A]$ into $[\Gamma]$ and the object $[\Gamma, q \colon \Prop]$, we get that the morphism 
-                $[\langle q \rangle_\Gamma] \colon [\Delta, x \colon A, q \colon \Prop] \to [\Gamma, q \colon \Prop]$ is constructible by expansion.
-                Moreover, the composition $[\langle q \rangle_\Gamma] \circ [\langle y_1, \dots, y_m, x, p \rangle_\Gamma] = [\langle p \rangle_\Gamma]$ is constructible by expansion.
-                Finally, by applying the expansion rule \ref{rule:proof-forall-intro-2} to the object $[\Delta, x \colon A]$ and the composition morphism, 
-                we get that \[
-                    \forall([\langle p \rangle_\Gamma]) = [\langle (\forall x \colon A) p \rangle_\Gamma]
-                \]
-                is constructible by expansion.
-        \end{enumerate}
-        Now by the same argument as in the proof of Theorem \ref{thm:exhaustivity-for-gats} we have that the morphism \[
-            [\langle t_1, \dots t_w \rangle_\Gamma] \colon [\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m] \to [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]
-        \] is constructible by expansion, finalizing the proof for Theorem \ref{thm:exhaustivity-for-docs}
+\begin{proof} 
+    Follows directly from \ref{lemma:exhaustivity-for-docs} and the proof of \ref{thm:exhaustivity-for-gats}.
 \end{proof}
