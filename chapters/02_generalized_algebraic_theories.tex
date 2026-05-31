@@ -1,12 +1,13 @@
 % !TEX root = ../main.tex
-\chapter{The Syntax and Semantics of Generalized Algebraic Theories}
+\chapter{Generalized Algebraic Theories}
 
 In this chapter, we introduce Generalized Algebraic Theories (GATs), a framework for working with 
 dependent types. GATs allow us to construct the concept of \textit{contextual category},
 the foundational categorical structure to deal with dependent types. We use contextual categories as a baseline 
 for interpreting the more complex Calculus of Constructions in Chapter 2.
+Finally, we formalize the term generation problem and introduce the expansion algorithm, our approach to term generation.
 
-\section{Generalized Algebraic Theories}
+\section{Syntax of GATs}
 
 Generalized Algebraic Theories, originally presented by J. Cartmell 
 in his thesis \cite{cartmell1978} \cite{cartmell1986},
@@ -143,8 +144,7 @@ suffices to specify the types of the arguments and the type of the value of $f$.
 
 Finally, to present a theory we will give a set of symbols,
 each associated to its introductory rule, and a set of axioms.
-And, of course, everything must be well-formed, {\color{orange} something we 
-will address in the following section.}
+And, of course, everything must be well-formed, something we will address shortly.
 Now we give a formal presentation of category theory using GAT notation: 
 in Table \ref{table:categories-symbols} we state the symbols of the theory together with their introductory rules
 and in Table \ref{table:categories-axioms} we state the axioms of the theory as rules.
@@ -188,9 +188,8 @@ and in Table \ref{table:categories-axioms} we state the axioms of the theory as 
   \label{table:categories-axioms}
 \end{table}
 
-\section{Formal Definition}
 
-In this section we formally define all of the concepts 
+Now we formally define all of the concepts 
 we just introduced.
 To give a notion of well-formed introductory rule, we need the concept of derivability,
 which also depends on the introductory rules. 
@@ -333,8 +332,6 @@ for variables, i.e., that we can substitute a variable $x$ of type $A$ in an exp
 only by terms $t$ such that we can derive that $t \colon A$.
 We could add substitution as one of the derivation rules,
 but that would make applying induction very messy.
-
-\section{Contexts and Realizations} % --- Notation Changes ---
 
 To transition from syntax to geometry (which our Graph Neural Network will eventually navigate),
 we construct a category \cite{maclane1971} out of the theory syntax.
@@ -552,9 +549,7 @@ It follows that $C(U)$ is itself a contextual category.
 \end{definition}
 $\mathbf{Con}$ denotes the category of contextual categories and contextual functors.
 
-\section{Properties of Contextual Categories}
-
-In this section we state some properties about contextual categories that will be used later.
+Now, we will address some important properties of contextual categories we will be using later.
 
 % generalized projection morphism
 The first useful result is about projections; Although we defined projections on pairs $A \lhd B$, 
@@ -804,12 +799,14 @@ Hence, $(C(U), \mathcal{M})$ is an initial object of $\mathbf{Con}_U$.
 Soundness comes from the initiality of $C(U)$, as any model of $U$, i.e., any element of $\mathbf{Con}_U$, 
 is equivalent to the initial morphism $F$ we just defined.
 
-\section{Definition of the Problem}
+\section{Expansion Algorithm for GATs}
 
-In this section we introduce a formal definition of our 
+In this section, we give formal definition of our 
 problem, proposed at the beginning of the thesis,
-and reformulate it to an equivalent problem easier to solve
-with artificial intelligence.
+and reformulate it to an equivalent problem easier to solve.
+Then we propose an algorithm to solve such problem,
+that is designed to work together with artificial intelligence.
+Such optimization is discussed in Chapter 3.
 
 Our problem might be formalized in the following manner:
 Given a theory $U$ and a derived rule of $U$ of the form 
@@ -851,9 +848,7 @@ that we denote as $\mathcal{C}_\Gamma$.
 We denote a morphism $\langle x_1, \dots, x_n, t_{n+1}, \dots, t_{n+m} \rangle$  in $\mathcal{C}_\Gamma$,
 as $\langle t_{n+1}, \dots, t_{n+m} \rangle_\Gamma$.
 
-\section{Expansion Algorithm}
-
-In this section, we define the \textit{expansion algorithm}
+Now we define the \textit{expansion algorithm}
 that will be responsible of finding $\langle t \rangle_\Gamma$
 in $\mathcal{C}_\Gamma$.
 The complexity of this algorithm is really high, and it will serve

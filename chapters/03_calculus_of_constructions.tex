@@ -552,7 +552,7 @@ It can be also shown that $\mathcal{C}_I$ is the initial object of the category 
 structure preserving functors, named $\mathbf{DoC}$. Hence tha term model satisfies the properties of soundness, 
 completeness and initiality that we wanted.
 
-\section{Extending Calculus of Constructions and its \\Interpretation} \label{sect:extending-calculus-of-constructions-and-its-interpretation}
+\section[Extending CoC and its Interpretation]{Extending Calculus of Constructions and its \\Interpretation} \label{sect:extending-calculus-of-constructions-and-its-interpretation}
 
 In this section we show how to add symbols to Calculus of Constructions, the same thing that we could do in 
 GATs. We need to understand the current CoC as just as a minimal starting point, same as the empty theory for GATs. 
@@ -610,10 +610,10 @@ but with $\text{CoC}_\Sigma$ instead of $\text{CoC}_\emptyset$. Following a simi
 for $\mathcal{C}_I$ in \cite{streicher} we can prove the corresponding \textit{Completeness Theorems} and 
 that $\mathcal{C}_\Sigma$ is the initial object of $\mathbf{DoC}_\Sigma$. 
 
-\section{Redefinition of the Problem}
+\section{Expansion Algorithm for CoC}
 
-Now, we want to redefine our problem from the previous definition for GATs to our new syntax, then rephrase it to 
-similar categorical terms such that an extended version of the expansion algorithm works.
+First, we want to redefine our problem from the previous definition for GATs to our new syntax, and rephrase it to 
+similar categorical terms. Then we will propose an extended version of the Expansion Algorithm.
 
 The problem now can be formalized as follows:
 Given a valid signature of Calculus of Constructions $\Sigma$ and a derivable sequent $\Gamma \vdash A \type$ in 
@@ -744,8 +744,6 @@ by considering the category over a base object. To do it we need the following r
 With this result, and with the notation of $\Gamma$ subscript introduced in the second chapter, we reduce our problem to 
 finding a section of $[ \Gamma, x \colon A ]$ in $\mathcal{C}_{\Sigma, \Gamma}$, the relativization of $\mathcal{C}_\Sigma$
 to $\Gamma$.
-
-\section{Expansion Algorithm}
 
 % TODO: explain that projections are allways included.
 Now we extend the expansion algorithm from the previous chapter. We reintroduce the rules in order to match the syntax we are 

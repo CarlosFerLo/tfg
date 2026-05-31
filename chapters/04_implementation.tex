@@ -62,9 +62,10 @@ This allows us to build upon the construction of $C(U)$ we made for the general 
 to follow. Hence, we will look for simplification both of the category and the expansion rules.
 Consider $\Gamma$ a simple type expression of $\textbf{CL}_\to$, let $A_1, \dots, A_n$ be the type variables appearing on $\Gamma$,
 and let $\Delta$ be the context $A_1 \colon \Prop, \dots, A_n \colon \Prop$. We center our search on the relativization of $C(U)$ by $\Delta$,
-$\mathcal{C}_\Delta$. This is a contextual category, with all the tree structure, but this tree structure carries little-to-none meaning 
-as we are working with "non-dependent" types, so by just considering objects of the first level and the final object we have all the 
-possible types in $A_1, \dots, A_n$ and their relevant morphisms. Moreover, the object $[\Delta, x \colon \Prop]$ lies in the $\level$ $1$,
+$\mathcal{C}_\Delta$. Although the category $\mathcal{C}_\Delta$ carries a lot of information, i.e., its tree structure, dependent types and pullbacks,
+in this simple case it becomes somehow redundant. We then consider the full category composed by the first level of objects and the terminal object,
+this subcategory contains all possible types in $A_1, \dots, A_n$ and the relations between them.  
+Moreover, the object $[\Delta, x \colon \Prop]$ lies in the $\level$ $1$,
 but it carries no important information in our case, as its just used for object formation by the general expansion algorithm, but 
 that will be done differently in this special case, so we will remove it.
 So we can consider $\mathcal{C}$ to be the full subcategory of $C(U)$ containing $[\Delta]$ and $[\Delta, x \colon \Proof(p)]$ for each term $p$
@@ -117,7 +118,7 @@ First we initialize an \textsc{implica} graph and we add the proposition $A \to 
     )
 
     # Seed the graph with our target objective (A -> A)
-    graph.query().create(f"(:{query})").execute()
+    graph.query().create("(:A->A)").execute()
 \end{minted}
 
 Now, to perform one expansion iteration we execute the following code:
@@ -166,6 +167,7 @@ This explosive growth of the complexity of the algorithm is what we will try to 
 Let us walk through, iteration by iteration, on the generation of a term of type $A \to A$ by the expansion algorithm to get some intuition. 
 For simplicity, we have omitted the $1$ element on the graph displays, and also, as we just want witnesses of the existence of a term, we just have at most one
 morphism between two objects, and the sections (morphisms from $1$) will be displayed simply as red dots instead of blue.
+Appendix \ref{app:figures} contains images of the graphs we will be mentioning now.
 The starting point $G_0$ is rather uninteresting, as it just contains the object $A \to A$ with no section.
 In the Figure \ref{fig:g1-graph}, we can see that $G_1$ contains three unpopulated objects $A$, $A \to A$ and $(A \to A) \to A \to A$ from left to right.
 Then, by applying another expansion, we obtain $G_2$, Figure \ref{fig:g2-graph}, where we start to see some objects getting populated, 
@@ -202,13 +204,13 @@ from its immediate neighbors, enabling the model to learn both the local feature
 geometry of the network. Because of this unique architecture, GNNs are highly effective for node classification 
 (assigning specific labels to individual nodes), graph classification (categorizing the entire network structure as a 
 single entity), and graph embedding (translating complex graph structures into lower-dimensional vectors for easier 
-processing in downstream machine learning tasks).
+processing in downstream machine learning tasks). \cite{wu2021} \cite{zhou2020}
 
 The idea behind the expansion algorithm comes from trying to use GNNs to take advantage of the graph structures that 
 emerge from the categorical semantics we presented in the previous chapters. So we built it to work together with a 
 GNN performing node classification. 
 First consider the GNN as just a simple labeler, that given the finite subcategory $G_n$ produced by the previous 
-expansion, it labels each node in the following 3 categories: \textsc{Keep}, \textsc{Expand} and \textsc{Delete}.
+expansion step, the GNN labels each node in the following 3 categories: \textsc{Keep}, \textsc{Expand} and \textsc{Delete}.
 Then we define a partial expansion phase where we compute $G_{n+1}$ from $G_n$ without those nodes labeled as 
 \textsc{Delete}, and by only applying expansion on those nodes marked as \textsc{Expand}.
 This change will make us lose the exhaustivity of the process, but we will be gaining a lot of efficiency if the 
@@ -221,9 +223,9 @@ for building our labeling model.
 The first thing we must note is that using supervised learning techniques (that need to have input-output pairs)
 need for us to be able to generate a large quantity of training examples by the execution of the raw expansion algorithm,
 hence we have to discard this option as we would just be able to train our model on very simple examples, due to 
-the high complexity of the algorithm. 
+the high complexity of the algorithm. Similar constraints are stated in \cite{wang2020}.
 To solve this, we would need to train using unsupervised learning. The technique we are going to use is called 
-Teacher-Student or Conjecturer-Prover. It consists of having a two-headed model, i.e., a model with a GNN based body 
+Teacher-Student or Conjecturer-Prover \cite{matiisen2017} \cite{sukhbaatar2018} \cite{dong2025}. It consists of having a two-headed model, i.e., a model with a GNN based body 
 together with two different projection heads. The first head or conjecturer will propose a challenge, or in our case a type we need 
 to find a term of, and the second head or prover will act as the GNN we talked before and try to find the term with 
 the partial expansion algorithm. Then, if a solution is found, we compute the optimal labels at each step to compute
@@ -263,8 +265,10 @@ We study the components separately:
 
 \textbf{Prover:} this component is just a linear layer from the original embedding dimension to a 3-dimensional vector,
     same as the conjecturer, and then apply a soft-max. It classifies the nodes in 3 categories: \textsc{Keep}, \textsc{Expand} and \textsc{Delete}.
+    In the case when the objective isn't distinguished in an earlier phase, we could consider passing both the embeddings of the node together with the 
+    embedding of the objective node to this component.
 
-Now we have to consider training the model. The first problem is cold start. At the beginning we face an empty graph 
+Now we have to consider training the model. The main problem is cold start. At the beginning we face an empty graph 
 to feed to the conjecturer and a conjecturer yielding nonsense. This means that we have to somehow pre-train the conjecturer
 before stating the unsupervised training loop. 
 We will propose a way to go around this problem, but it must undergo testing before assuring it works. We start by feeding 
