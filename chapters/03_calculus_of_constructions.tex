@@ -33,7 +33,7 @@ making it much harder to follow.
 The latter just use $[x: A]B$ to present product types, functional abstraction and 
 universal quantification. Also, properties are presented as terms of type $\Prop$
 and as types themselves. To make our notation more readable, we will be using a type constructor
-$\Proof$ that, given a proposition $p : \Prop$, yields $\Proof(p)$ the type of 
+$\Proof$ that, given a proposition $p \colon \Prop$, yields $\Proof(p)$ the type of 
 proofs of proposition $p$.
 
 First, we define the class of \textit{pre-well-formed type expressions},
@@ -42,7 +42,7 @@ and the class of \textit{pre-well-formed object expressions},
 ranged over by lower case letters, by mutual recursion using Backus-Naur form \cite{aho2007}: 
 \[
 \begin{array}{lll}
-  E \Coloneqq & (\Pi x : E)\, E & \text{product of types} \\
+  E \Coloneqq & (\Pi x \colon E)\, E & \text{product of types} \\
         &  \mid\  \Prop & \text{type of propositions} \\
         &  \mid\  \Proof(t) & \text{type of proofs of proposition } t
 \end{array}
@@ -62,7 +62,7 @@ ranged over by lower case letters, by mutual recursion using Backus-Naur form \c
     This notation is discussed further in \cite{streicher}.  
 \end{observation}
 We say a \textit{pre-context} is a syntactical expression of the form 
-$x_1 : A_1, \dots, x_n : A_n$, where $x_1, \dots, x_n$ are pairwise 
+$x_1 \colon A_1, \dots, x_n \colon A_n$, where $x_1, \dots, x_n$ are pairwise 
 syntactically different variables. 
 Contexts are ranged over by capital greek letters.
 We define $\Var(\Gamma)$ as the set of variables declared in $\Gamma$.
@@ -76,8 +76,8 @@ We define a \textit{pre-judgment} to be a syntactic expression of one of the fol
 \begin{array}{ll}
     A \type & A \text{is a type} \\
     A = B & A \text{ and } B \text{ are equal types} \\
-    t : A & t \text{ is an object of type } A \\
-    t = s : A & t \text{ and } s \text{ are equal objects of type } $A$
+    t \colon A & t \text{ is an object of type } A \\
+    t = s \colon A & t \text{ and } s \text{ are equal objects of type } $A$
 \end{array}
 \]
 we will use the letter $\mathcal{J}$ to refer to pre-judgments.
@@ -172,7 +172,7 @@ they are needed to the definition of universal quantification.
                 as any section $t$ of $\Pi(B)$ gives a section $eval_B \circ p(A)^*t$ of $B$, hence we have a
                 canonical 1-1-correspondence of $\Sections(B)$ and $\Sections(\Pi(B))$. 
               \end{observation}
-        \item For any object $J$ and any morphism $f : J \to I$, the following conditions are satisfied:
+        \item For any object $J$ and any morphism $f \colon J \to I$, the following conditions are satisfied:
               \[
                 f^*(\Pi(B)) = \Pi(f^*B) 
                 \quad \text{and} \quad 
@@ -260,7 +260,7 @@ mapping such that:
           if $\mathcal{M}[\Gamma ; A]$ is defined then $\mathcal{M}[\Gamma ; A]$ is an object 
           of $\level$ $n + 1$ and $\mathcal{M}[\Gamma] \lhd \mathcal{M}[\Gamma; A]$; 
     \item for every pre-context $\Gamma$ of length $n$ and object expression $t$, 
-          if $\mathcal{M}[\Gamma; t]$ is defined then it is a morphism $s : \mathcal{M}[\Gamma] \to A$
+          if $\mathcal{M}[\Gamma; t]$ is defined then it is a morphism $s \colon \mathcal{M}[\Gamma] \to A$
           where $A$ is an object of $\level$ $n + 1$ such that \[
           \mathcal{M}[\Gamma] \lhd A \quad \text{and} \quad p(A) \circ s = \id_{\mathcal{M}[\Gamma]}.
           \]
@@ -278,7 +278,7 @@ We want to build this function by induction. We need an auxiliary definition:
     \[\depth[(\forall x \colon A) t] =  \depth[A] + \depth[t] + 1\]
     \[\depth[\App([x \colon A] B, t, s)] = \depth[A] + \depth[B] + \depth[t] + \depth[s] + 1\]
     \[
-        \text{For } \Gamma \equiv x_1 : A_1, \dots, x_n : A_n, 
+        \text{For } \Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n, 
         \quad
         \depth[\Gamma] = \sum_{i=1}^{n}\depth[A_i]
     \]
@@ -324,7 +324,7 @@ by the following clauses:
             \end{tikzcd}
         \]
         or, in other terms, $\mathcal{M}[\Gamma; x_i] = p(A_n, A_i)^*\Delta(A_i)$ where 
-        $\Delta(A_i)$ is the unique arrow $m: A_i \to p(A_i)^*A_i$ such that
+        $\Delta(A_i)$ is the unique arrow $m\colon A_i \to p(A_i)^*A_i$ such that
         \[
             p(p(A_i)^*A_i) \circ m = q(p(A_i), A_i) \circ m = id_{A_i};
         \]
@@ -451,21 +451,21 @@ If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta \equiv v_1 
 are admissible contexts, a morphism from $[\Gamma]$ to $[\Delta]$ is given by a $m$-tuple $\langle t_1, \dots, t_m \rangle$
 of terms such that for $i$, $1 \leq i \leq m$, 
 \[
-    \Gamma \vdash t_i : B_i[v_1  \leftarrow  t_1, \dots, v_{i-1}  \leftarrow  t_{i-1}]
+    \Gamma \vdash t_i \colon B_i[v_1  \leftarrow  t_1, \dots, v_{i-1}  \leftarrow  t_{i-1}]
 \] is derivable,
 if $\langle s_1, \dots, s_m \rangle$ is another $m$-tuple such that for  $i$, $1 \leq i \leq m$
 \[
-    \Gamma \vdash s_i : B_i[v_1  \leftarrow  s_1, \dots, v_{i-1}  \leftarrow  s_{i-1}]
+    \Gamma \vdash s_i \colon B_i[v_1  \leftarrow  s_1, \dots, v_{i-1}  \leftarrow  s_{i-1}]
 \] is derivable,
 then $\langle t_1, \dots, t_m \rangle$ and $\langle s_1, \dots, s_m \rangle$ are considered equal
 iff for $i$, $1 \leq i \leq m$
 \[
-    \Gamma \vdash t_i = s_i : B_i[v_1  \leftarrow  s_1, \dots, v_{i-1}  \leftarrow  s_{i-1}]
+    \Gamma \vdash t_i = s_i \colon B_i[v_1  \leftarrow  s_1, \dots, v_{i-1}  \leftarrow  s_{i-1}]
 \] is derivable,
 according to rules \ref{rule:crefl}1 and \ref{rule:crefl}2 the definition is independent from the choice of representatives.
-We write $[\langle t_1, \dots, t_m \rangle] : [\Gamma] \to [\Delta]$ for the class of $m$-tuples equatable to $\langle t_1, \dots, t_m \rangle$.
+We write $[\langle t_1, \dots, t_m \rangle] \colon [\Gamma] \to [\Delta]$ for the class of $m$-tuples equatable to $\langle t_1, \dots, t_m \rangle$.
 If we consider $\Theta \equiv v_1 \colon C_1, \dots, v_k \colon C_k$ is another admissible context and 
-$[\langle s_1, \dots, s_k\rangle]: [\Delta] \to [\Theta]$, then the composition of $[\langle t_1, \dots, t_m \rangle]$
+$[\langle s_1, \dots, s_k\rangle]\colon [\Delta] \to [\Theta]$, then the composition of $[\langle t_1, \dots, t_m \rangle]$
 with $[\langle s_1, \dots, s_k \rangle]$ is defined as
 \[
     [\langle s_1, \dots, s_k \rangle] 
@@ -542,7 +542,7 @@ that $C_I$ does not interpret or identify more objects or terms that those that 
               \begin{multline*}
                     v_1 \colon A_1 [x_1  \leftarrow  v_1, \dots, x_n  \leftarrow  v_n], \dots, v_n \colon A_n[x_1  \leftarrow  v_1, \dots, x_n  \leftarrow  v_n] \\
                 \vdash
-                    t[x_1  \leftarrow  v_1, \dots, x_n  \leftarrow  v_n] = s[y_1  \leftarrow  v_1, \dots, y_m  \leftarrow  v_m] : A
+                    t[x_1  \leftarrow  v_1, \dots, x_n  \leftarrow  v_n] = s[y_1  \leftarrow  v_1, \dots, y_m  \leftarrow  v_m] \colon A
               \end{multline*}
               is derivable.
     \end{enumerate}
@@ -805,7 +805,7 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
         If $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, 
         for every morphism \[
             [\langle t_1, \dots, t_{m-1} \rangle_\Gamma]
-            : [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w ]
+            \colon [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w ]
             \to [\Gamma y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1} ]
         \]
         we construct the corresponding pullback:
@@ -878,12 +878,13 @@ Also, we add the composition of morphisms to $G_{n+1}$ in order to complete it a
 
 Now we prove the exhaustivity theorem. In order to do it we will have to prove some previous lemmas:
 
+First, we introduce inversion (or generation) lemmas: given a derivable sequent, they characterize the syntactic form of its principal expression. The proof method is simultaneous structural induction on derivation height.
 \begin{lemma} \label{lemma:t-rule-cases}
     Given a derivable sequent of the form $\Gamma \vdash A \type$ there are 4 possible cases:
     \begin{enumerate}
         \item $A$ is equal to $\Prop$;
-        \item $A$ is equal to $\Proof(p)$ for some pre-object-expression $p$;
-        \item $A$ is equal to $(\Pi x \colon B) C$ for pre-type-expressions $B, C$ and a variable $x$;
+        \item $A$ is equal to $\Proof(p)$ for some pre-object-expression $p$ and $\Gamma \vdash p \colon \Prop$ is derivable;
+        \item $A$ is equal to $(\Pi x \colon B) C$ for pre-type-expressions $B, C$ and a variable $x$, such that $\Gamma, x \colon B \vdash C \type$ is a derivable sequent;
         \item There exists a sort symbol $S$ in $\Sigma$ with an introductory rule $y_1 \colon B_1, \dots, y_m \colon B_m \vdash S \type$ and sequents 
             \begin{align*}
                 \Gamma \vdash t_1 &\colon B_1 \\
@@ -895,7 +896,71 @@ Now we prove the exhaustivity theorem. In order to do it we will have to prove s
     \end{enumerate}
 \end{lemma}
 \begin{proof}
-    TODO
+    The four cases are mutually exclusive by the unique outermost constructor of pre-type-expressions (the BNF grammar for $E$ is unambiguous). We proceed by induction on $|\pi|$, with case analysis on the last rule applied.
+
+    \textbf{Group I: Direct Type Formation Rules} \\
+    These immediately yield the required form and witnesses.
+    \begin{itemize}
+        \item \ref{rule:prop}: $\dfrac{\Gamma \ok}{\Gamma \vdash \Prop \type}$ \\
+        $A \equiv \Prop$. This is Case 1.
+        
+        \item \ref{rule:prop-type}: $\dfrac{\Gamma \vdash p \colon \Prop}{\Gamma \vdash \Proof(p) \type}$ \\
+        $A \equiv \Proof(p)$. The premise $\Gamma \vdash p \colon \Prop$ is a strict sub-derivation. This is Case 2.
+        
+        \item \ref{rule:prod-form}: $\dfrac{\Gamma, x \colon B \vdash C \type}{\Gamma \vdash (\Pi x \colon B)C \type}$ \\
+        $A \equiv (\Pi x \colon B)C$. The premise $\Gamma, x \colon B \vdash C \type$ is a strict sub-derivation. This is Case 3.
+        
+        \item \textsc{Introductory Rule}: For a sort symbol $S \in \Sigma$ with rule $z_1\colon C_1,\ldots,z_w \colon C_w \vdash S \type$,
+        \[ \dfrac{\Gamma \vdash t_1 \colon C_1 \quad \cdots \quad \Gamma \vdash t_w \colon C_w[z_1{\leftarrow}t_1,\ldots,z_{w-1}{\leftarrow}t_{w-1}]}{\Gamma \vdash S[z_1{\leftarrow}t_1,\ldots,z_w{\leftarrow}t_w] \type} \]
+        $A \equiv S[z_1\leftarrow t_1,\ldots,z_w\leftarrow t_w]$ with all typing premises as strict sub-derivations. This is Case 4.
+    \end{itemize}
+
+    \textbf{Group II: Context-Structural Rules} \\
+    These change the context but not the outermost constructor of $A$; the case is transferred by applying the same rule to each sub-derivation.
+    \begin{itemize}
+        \item \ref{rule:equ}: $\dfrac{\Delta = \Gamma \quad \Delta \vdash A \type}{\Gamma \vdash A \type}$ \\
+        Apply the IH to $\Delta \vdash A \type$ (smaller $|\pi|$). One of the four cases holds in context $\Delta$. Transfer each to $\Gamma$:
+        \begin{itemize}
+            \item Case 1 ($A \equiv \Prop$): Trivially holds for $\Gamma$.
+            \item Case 2 ($\Delta \vdash p \colon \Prop$): Apply \ref{rule:equ} with $\Gamma = \Delta$ (from $\Delta = \Gamma$ by \ref{rule:csym}) to get $\Gamma \vdash p \colon \Prop$.
+            \item Case 3 ($\Delta, x \colon B \vdash C \type$): From $\Delta = \Gamma$ derive $\Delta, x \colon B = \Gamma, x \colon B$ by \ref{rule:cequ}. Apply \ref{rule:equ} to get $\Gamma, x \colon B \vdash C \type$.
+            \item Case 4 ($\Delta \vdash t_i \colon \ldots$ for each $i$): Apply \ref{rule:equ} to each typing.
+        \end{itemize}
+        
+        \item \ref{rule:thin}: $\dfrac{\Gamma,\Delta \vdash A \type \quad \Gamma \vdash B \type}{\Gamma, y \colon B, \Delta \vdash A \type}$ \\
+        Apply the IH to $\Gamma,\Delta \vdash A \type$. Transfer sub-derivations to $(\Gamma, y\colon B, \Delta)$ using \ref{rule:thin} (using \ref{rule:cont-thin} for the extended context in Case 3). All four cases transfer.
+        
+        \item \ref{rule:sub}: $\dfrac{\Gamma, y \colon B, \Delta \vdash A \type \quad \Gamma \vdash s \colon B}{\Gamma, \Delta[y{\leftarrow}s] \vdash A[y{\leftarrow}s] \type}$ \\
+        Apply the IH to $\Gamma, y \colon B, \Delta \vdash A \type$. Substitution preserves the outermost constructor.
+        \begin{itemize}
+            \item Case 1: $A[y \leftarrow s] \equiv \Prop$.
+            \item Case 2: $A[y\leftarrow s] \equiv \Proof(p[y\leftarrow s])$. Apply \ref{rule:sub} to $\Gamma,y \colon B,\Delta \vdash p\colon\Prop$ to obtain $\Gamma,\Delta[y\leftarrow s] \vdash p[y\leftarrow s] \colon \Prop$.
+            \item Case 3: $A[y\leftarrow s] \equiv (\Pi x \colon C[y\leftarrow s])D[y\leftarrow s]$. Apply \ref{rule:sub} to $\Gamma,y \colon B,\Delta,x \colon C \vdash D \type$ to obtain $\Gamma,\Delta[y\leftarrow s],x \colon C[y\leftarrow s] \vdash D[y\leftarrow s] \type$.
+            \item Case 4: $A[y\leftarrow s] \equiv S[z_i \leftarrow t_i[y\leftarrow s]]$. Apply \ref{rule:sub} to each typing derivation using $(C_i[z_1\leftarrow t_1,\ldots])[y\leftarrow s] \equiv C_i[z_1 \leftarrow t_1[y\leftarrow s],\ldots]$.
+        \end{itemize}
+    \end{itemize}
+
+    \textbf{Group III: The Reflection and Equality Rules}
+    \begin{itemize}
+        \item \ref{rule:reflection2}: $\dfrac{\Gamma \vdash t \colon A}{\Gamma \vdash A \type}$ \\
+        The sub-derivation $\pi' \colon \Gamma \vdash t \colon A$ satisfies $|\pi'| < |\pi|$. Apply Lemma \ref{lemma:in-rule-cases} (IH) to $\pi'$.
+        \begin{itemize}
+            \item Lemma \ref{lemma:in-rule-cases} Case 1 ($t \equiv x$, $x \colon A \in \Gamma$): Let $\Gamma \equiv \Gamma_0, x\colon A, \Gamma_1$. Context $\Gamma$ was formed by \ref{rule:cont-Intro} from $\Gamma_0 \vdash A \type$. By applying \ref{rule:thin}, $\Gamma \vdash A \type$ is derivable by a shorter derivation. Apply the IH.
+            \item Lemma \ref{lemma:in-rule-cases} Case 2 ($t \equiv (\lambda x\colon B)s$, $A \equiv (\Pi x\colon B)C$): From $\Gamma,x\colon B \vdash s\colon C$, apply \ref{rule:reflection2} (strictly smaller height) to get $\Gamma,x\colon B \vdash C \type$. This is Case 3.
+            \item Lemma \ref{lemma:in-rule-cases} Case 3 ($t \equiv \App([x\colon B]C, f, r)$, $A \equiv C[x\leftarrow r]$): From $\Gamma,x\colon B \vdash C \type$ and $\Gamma \vdash r\colon B$, apply \ref{rule:sub} to obtain $\Gamma \vdash C[x\leftarrow r] \type$ by a shorter derivation. Apply the IH.
+            \item Lemma \ref{lemma:in-rule-cases} Case 4 ($t \equiv (\forall x\colon B)p$, $A \equiv \Prop$): This is Case 1.
+            \item Lemma \ref{lemma:in-rule-cases} Case 5 ($t \equiv F[z_i\leftarrow t_i]$, $A \equiv D[z_i\leftarrow t_i]$): Apply \ref{rule:reflection2} to $\Gamma \vdash F[z_i\leftarrow t_i] \colon D[z_i\leftarrow t_i]$ (shorter) to get $\Gamma \vdash A \type$. Apply the IH.
+        \end{itemize}
+
+        \item \ref{rule:refl-typ}: $\dfrac{\Gamma \vdash A = A}{\Gamma \vdash A \type}$ \\
+        $A$ is syntactically of forms (1)-(4). We proceed by inner induction on the derivation of $\Gamma \vdash A = A$:
+        \begin{itemize}
+            \item If derived from $\Gamma \vdash A \type$, it is strictly shorter; apply the outer IH.
+            \item If via \ref{rule:prod-equ}: From $\Gamma,x\colon B \vdash C = C$, apply \ref{rule:refl-typ} (IH) to extract $\Gamma,x\colon B \vdash C \type$. This is Case 3.
+            \item If via \ref{rule:prop-equ}: From $\Gamma \vdash p = p \colon \Prop$, apply \ref{rule:refl-obj} to extract $\Gamma \vdash p \colon \Prop$. This is Case 2.
+            \item If via \ref{rule:forall-elim}: $\Gamma \vdash \Proof((\forall x\colon B)p) = (\Pi x\colon B)\Proof(p)$. If $A \equiv \Proof((\forall x\colon B)p)$, it is Case 2. If $A \equiv (\Pi x\colon B)\Proof(p)$, it is Case 3.
+        \end{itemize}
+    \end{itemize}
 \end{proof}
 
 \begin{lemma} \label{lemma:in-rule-cases}
@@ -905,7 +970,7 @@ Now we prove the exhaustivity theorem. In order to do it we will have to prove s
         \item $t$ is equal to $(\lambda x \colon B) s$ and $A$ is equal to $(\Pi x \colon B) C$ for some pre-type-expressions $B, C$, a pre-object-expression $s$ and variable $x$;
         \item $t$ is equal to $\App([x \colon B] C, s, r)$ and $A$ is equal to $C[x \leftarrow r]$ for some pre-type-expressions $B, C$, pre-object-expressions $s, r$ and variable $x$;
         \item $t$ is equal to $(\forall x \colon B) s$ and $A$ is equal to $\Prop$ for some pre-type-expression $B$, pre-object-expression $s$ and variable $x$;
-        \item there exist an operator symbol $F$ in $\Sigma$ with an introductory rule $y_1 \colon B_1, \dots, y_m \colon B_m \vdash F : B$ and sequents
+        \item there exist an operator symbol $F$ in $\Sigma$ with an introductory rule $y_1 \colon B_1, \dots, y_m \colon B_m \vdash F \colon B$ and sequents
              \begin{align*}
                 \Gamma \vdash t_1 &\colon B_1 \\
                 \Gamma \vdash t_2 &\colon B_2[y_1 \leftarrow t_1] \\
@@ -916,7 +981,47 @@ Now we prove the exhaustivity theorem. In order to do it we will have to prove s
     \end{enumerate}
 \end{lemma}
 \begin{proof}
-    TODO
+    By simultaneous induction on $|\pi|$ with Lemma \ref{lemma:t-rule-cases}.
+
+    \textbf{Group I: Direct Term Introduction Rules}
+    \begin{itemize}
+        \item \ref{rule:ass}: $\dfrac{\Gamma_0, x\colon A, \Delta \text{ ok}}{\Gamma_0, x\colon A, \Delta \vdash x \colon A}$ \\
+        $t \equiv x \in \Var(\Gamma)$. This is Case 1.
+        
+        \item \ref{rule:prod-intro}: $\dfrac{\Gamma, x \colon B \vdash s \colon C}{\Gamma \vdash (\lambda x \colon B)s \colon (\Pi x \colon B)C}$ \\
+        $t \equiv (\lambda x\colon B)s$ and $A \equiv (\Pi x\colon B)C$. The premise is a strict sub-derivation. This is Case 2.
+        
+        \item \ref{rule:prod-elim}: $\dfrac{\Gamma \vdash f \colon (\Pi x \colon B)C \quad \Gamma \vdash r \colon B \quad \Gamma, x\colon B \vdash C \type}{\Gamma \vdash \App([x\colon B]C, f, r) \colon C[x{\leftarrow}r]}$ \\
+        $t \equiv \App([x\colon B]C,f,r)$ and $A \equiv C[x\leftarrow r]$. Premises are strict sub-derivations. This is Case 3.
+        
+        \item \ref{rule:forall-intro}: $\dfrac{\Gamma, x \colon B \vdash p \colon \Prop}{\Gamma \vdash (\forall x \colon B)p \colon \Prop}$ \\
+        $t \equiv (\forall x\colon B)p$ and $A \equiv \Prop$. This is Case 4.
+        
+        \item \textsc{Introductory Rule}: For an operator $F \in \Sigma$, \\
+        $t \equiv F[z_i \leftarrow t_i]$ with all premises as strict sub-derivations. This is Case 5.
+    \end{itemize}
+
+    \textbf{Group II: Context-Structural Rules} \\
+    These preserve the syntactic form of $t$; only the context and type representative change.
+    \begin{itemize}
+        \item \ref{rule:equ}: $\dfrac{\Delta = \Gamma \quad \Delta \vdash t \colon A}{\Gamma \vdash t \colon A}$ \\
+        Apply the IH to $\Delta \vdash t \colon A$. Transfer each sub-derivation from context $\Delta$ to $\Gamma$ using \ref{rule:equ} (and \ref{rule:cequ} where necessary). All cases transfer safely.
+        
+        \item \ref{rule:thin}: $\dfrac{\Gamma,\Delta \vdash t\colon A \quad \Gamma \vdash B \type}{\Gamma, y\colon B, \Delta \vdash t\colon A}$ \\
+        Apply the IH to $\Gamma,\Delta \vdash t\colon A$. Transfer sub-derivations using \ref{rule:thin} (using \ref{rule:cont-thin} for extended contexts, valid by Prop. \ref{prop:cont-thin-elim}). All cases transfer.
+        
+        \item \ref{rule:sub}: $\dfrac{\Gamma, y\colon B, \Delta \vdash t\colon A \quad \Gamma \vdash s\colon B}{\Gamma, \Delta[y{\leftarrow}s] \vdash t[y{\leftarrow}s] \colon A[y{\leftarrow}s]}$ \\
+        Apply the IH to $\Gamma,y\colon B,\Delta \vdash t\colon A$. Substitution is transparent to the outermost constructor of $t$. If $t \equiv x \equiv y$, then $t[y\leftarrow s] \equiv s$. Extend $\Gamma \vdash s\colon B$ by \ref{rule:thin} and apply the IH to $\Gamma \vdash s\colon B$ (smaller height) to recursively determine the form of $s$.
+    \end{itemize}
+
+    \textbf{Group III: Type-Conversion and Equality Rules}
+    \begin{itemize}
+        \item \ref{rule:conv1}: $\dfrac{\Gamma \vdash A' = A \quad \Gamma \vdash t \colon A'}{\Gamma \vdash t \colon A}$ \\
+        Apply the IH to $\Gamma \vdash t \colon A'$ (smaller height). The syntactic form of $t$ is unchanged; we propagate the type claim from $A'$ to $A$ using provable equality $\Gamma \vdash A' = A$ and \ref{rule:trans-typ}. For example, in Case 2, $A'$ is provably equal to $(\Pi x\colon B)C$, and by transitivity, $A$ is provably equal to $(\Pi x\colon B)C$. 
+        
+        \item \ref{rule:refl-obj}: $\dfrac{\Gamma \vdash t = t \colon A}{\Gamma \vdash t \colon A}$ \\
+        By inner induction on the derivation of term equality. If derived from $\Gamma \vdash t\colon A$, it is shorter (apply outer IH). If derived by \ref{rule:trans-obj}, the companion term-equality lemma determines the form. If derived by \ref{rule:beta-rule} or \ref{rule:eta-rule}, $t$ maps directly to Case 3 or Case 2, respectively.
+    \end{itemize}
 \end{proof}
 
 Now we expand the concept of $\depth$ to this new syntax:
@@ -968,7 +1073,7 @@ We use it to prove the following lemma:
     As the sequent $\Delta \ok$ is derivable, by the rule \ref{rule:cont-intro}, we have that $\Delta' \vdash B_m \type$ is derivable, where $\Delta' = \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$. 
     By Lemma \ref{lemma:t-rule-cases}, we have to consider four cases:
     \begin{enumerate}
-        \item We have that $B_m = \Prop$. By induction hypothesis, $[\Delta']$ is constructible by expansion, also we have that $[\Gamma]$ and $[\Gamma, p: \Prop]$ are constructible by expansion.
+        \item We have that $B_m = \Prop$. By induction hypothesis, $[\Delta']$ is constructible by expansion, also we have that $[\Gamma]$ and $[\Gamma, p\colon \Prop]$ are constructible by expansion.
             Then by applying the rule \ref{rule:pullback-2} on the object $[\Gamma, p \colon \Prop]$ and the projection morphism of $[\Delta']$ on $[\Gamma]$, we have that the following pullback diagram is constructible by expansion: \[
                 \begin{tikzcd}
                     {[\Delta', x \colon \Prop]}
@@ -1025,7 +1130,7 @@ We use it to prove the following lemma:
             By induction hypothesis, we have that $[\Delta, x \colon A, y \colon B]$ and its section $[\langle y_1, \dots, y_m, x, s \rangle_\Gamma]$ are constructible by expansion.
             Then, by applying $\curry$ completion, we have that $[\langle y_1, \dots, y_m, (\lambda x \colon B) s \rangle_\Gamma] = [\langle y_1, \dots, y_m, t \rangle_\Gamma]$.
         \item We have that $t = \App([x \colon B] C, s, r)$ and $A = C[x \leftarrow r]$ for some pre-type-expressions $B, C$, pre-object-expressions $s, r$ and a variable $x$.
-            By induction hypothesis, we have that $[\langle y_1, \dots, y_m, s \rangle_\Gamma] : [\Delta] \to [\Delta, f \colon (\Pi x \colon B)C]$ and $[\langle y_1, \dots, y_m, r \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon B]$
+            By induction hypothesis, we have that $[\langle y_1, \dots, y_m, s \rangle_\Gamma] \colon [\Delta] \to [\Delta, f \colon (\Pi x \colon B)C]$ and $[\langle y_1, \dots, y_m, r \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon B]$
             are constructible by expansion. Then, by applying the expansion rule \ref{rule:application-2} we have that \[
                 [\langle y_1, \dots, y_m, t \rangle_\Gamma] = [\langle y_1, \dots, y_m, \App([x \colon B]C, s, r)\rangle_\Gamma] \colon [\Delta] \to [\Delta, y \colon B[x \leftarrow r]]
             \]
