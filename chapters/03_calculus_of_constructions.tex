@@ -105,35 +105,6 @@ We can distinguish different kinds of rules for different purposes:
     \item Rules for Propositions: finally, the machinery to work with the $\Prop$ universe, $\Proof$ and $\forall$.
 \end{enumerate}
 
-In some cases, we might want a smaller set of rules, specially when proving a result over structural induction on the set of sequents. 
-This is the case of the Lemma \ref{lemma:exhaustivity-for-docs}. 
-
-% TODO: probably rewrite this proposition.
-\begin{proposition} \label{prop:cont-thin-elim}
-    The derivation rule \ref{rule:cont-thin} is derivable from the other rules.
-\end{proposition}
-\begin{proof} 
-    Consider pre-contexts $\Gamma, \Delta$, a variable $x$ such that $x \notin \Var(\Gamma) \cup \Var(\Delta)$, a pre-type-expression $A$ and a pre-judgment $\mathcal{J}$. We can write $\Delta \equiv y_1 \colon B_1, \dots, y_m \colon B_m$.
-    We have to prove that if $\Gamma, \Delta \ok$ and $\Gamma \vdash A \type$ are derivable sequents, then $\Gamma, x \colon A, \Delta \ok$ is a derivable sequent;
-    We will prove this by mutual induction over $m$.
-
-    If $m = 0$, then 1 is equivalent to \ref{rule:cont-intro} and 2 is equivalent to \textsc{Thin'}.
-    We suppose it is true for $m \geq 0$, and we prove it for the case $m+1$.
-    We have that $\Gamma, y_1 \colon B_1, \dots, y_{m+1} \ok$ and $\Gamma \vdash A \type$ are derivable sequents. 
-    Then, by \ref{rule:cont-intro}, we have that $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m \vdash B_{m+1} \type$ is derivable, 
-    and by \ref{rule:reflection1} we have that $\Gamma, y_1 \colon B_1, \dots, y_m \ok$ is derivable. 
-    By induction hypothesis, we have that $\Gamma, x \colon A, y_1 \colon B_1, \dots, y_m \colon B_m \ok$ is derivable,
-    and, from \ref{rule:thin}, we have $\Gamma, x \colon A, y_1 \colon B_1, \dots, y_m \colon B_m \vdash B_{m+1} \type$  is also derivable.
-    Finally, by \ref{rule:cont-intro}, $\Gamma, x \colon A, \Delta$ is a derivable sequent. 
-\end{proof}
-
-\begin{proposition} \label{prop:cont-sub-elim}
-    The derivation rule \ref{rule:cont-sub} is derivable from the other rules.
-\end{proposition}
-\begin{proof}
-    This proof is analogous to the proof of Proposition \ref{prop:cont-thin-elim}, but using \ref{rule:sub} instead of \ref{rule:thin}.
-\end{proof}
-
 \section{Doctrines of Constructions}
 
 We leverage the concept of Context Categories introduced in the earlier chapter
@@ -745,7 +716,6 @@ With this result, and with the notation of $\Gamma$ subscript introduced in the 
 finding a section of $[ \Gamma, x \colon A ]$ in $\mathcal{C}_{\Sigma, \Gamma}$, the relativization of $\mathcal{C}_\Sigma$
 to $\Gamma$.
 
-% TODO: explain that projections are allways included.
 Now we extend the expansion algorithm from the previous chapter. We reintroduce the rules in order to match the syntax we are 
 using for Calculus of Constructions.
 First, consider $G$ to be a finite subcategory of $\mathcal{C}_{\Sigma, \Gamma}$ containing $[\Gamma]$,
@@ -877,7 +847,7 @@ As in the case of GATs, when adding a morphism we are implicitly adding its endp
 
 Now we prove the exhaustivity theorem. In order to do it we will have to prove some previous lemmas:
 
-First, we introduce inversion (or generation) lemmas: given a derivable sequent, they characterize the syntactic form of its principal expression. The proof method is simultaneous structural induction on derivation height.
+First, we introduce inversion (or generation) lemmas: given a derivable sequent, they characterize the syntactic form of its principal expression. The proof method is simultaneous structural induction on derivation height, and is detailed in Appendix \ref{app:inversion-lemmas}
 \begin{lemma} \label{lemma:t-rule-cases}
     Given a derivable sequent of the form $\Gamma \vdash A \type$ there are 4 possible cases:
     \begin{enumerate}
@@ -894,73 +864,6 @@ First, we introduce inversion (or generation) lemmas: given a derivable sequent,
             such that $A$ is equal to $S[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]$.
     \end{enumerate}
 \end{lemma}
-\begin{proof}
-    The four cases are mutually exclusive by the unique outermost constructor of pre-type-expressions (the BNF grammar for $E$ is unambiguous). We proceed by induction on $|\pi|$, with case analysis on the last rule applied.
-
-    \textbf{Group I: Direct Type Formation Rules} \\
-    These immediately yield the required form and witnesses.
-    \begin{itemize}
-        \item \ref{rule:prop}: $\dfrac{\Gamma \ok}{\Gamma \vdash \Prop \type}$ \\
-        $A \equiv \Prop$. This is Case 1.
-        
-        \item \ref{rule:prop-type}: $\dfrac{\Gamma \vdash p \colon \Prop}{\Gamma \vdash \Proof(p) \type}$ \\
-        $A \equiv \Proof(p)$. The premise $\Gamma \vdash p \colon \Prop$ is a strict sub-derivation. This is Case 2.
-        
-        \item \ref{rule:prod-form}: $\dfrac{\Gamma, x \colon B \vdash C \type}{\Gamma \vdash (\Pi x \colon B)C \type}$ \\
-        $A \equiv (\Pi x \colon B)C$. The premise $\Gamma, x \colon B \vdash C \type$ is a strict sub-derivation. This is Case 3.
-        
-        \item \textsc{Introductory Rule}: For a sort symbol $S \in \Sigma$ with rule $z_1\colon C_1,\ldots,z_w \colon C_w \vdash S \type$,
-        \[ \dfrac{\Gamma \vdash t_1 \colon C_1 \quad \cdots \quad \Gamma \vdash t_w \colon C_w[z_1{\leftarrow}t_1,\ldots,z_{w-1}{\leftarrow}t_{w-1}]}{\Gamma \vdash S[z_1{\leftarrow}t_1,\ldots,z_w{\leftarrow}t_w] \type} \]
-        $A \equiv S[z_1\leftarrow t_1,\ldots,z_w\leftarrow t_w]$ with all typing premises as strict sub-derivations. This is Case 4.
-    \end{itemize}
-
-    \textbf{Group II: Context-Structural Rules} \\
-    These change the context but not the outermost constructor of $A$; the case is transferred by applying the same rule to each sub-derivation.
-    \begin{itemize}
-        \item \ref{rule:equ}: $\dfrac{\Delta = \Gamma \quad \Delta \vdash A \type}{\Gamma \vdash A \type}$ \\
-        Apply the IH to $\Delta \vdash A \type$ (smaller $|\pi|$). One of the four cases holds in context $\Delta$. Transfer each to $\Gamma$:
-        \begin{itemize}
-            \item Case 1 ($A \equiv \Prop$): Trivially holds for $\Gamma$.
-            \item Case 2 ($\Delta \vdash p \colon \Prop$): Apply \ref{rule:equ} with $\Gamma = \Delta$ (from $\Delta = \Gamma$ by \ref{rule:csym}) to get $\Gamma \vdash p \colon \Prop$.
-            \item Case 3 ($\Delta, x \colon B \vdash C \type$): From $\Delta = \Gamma$ derive $\Delta, x \colon B = \Gamma, x \colon B$ by \ref{rule:cequ}. Apply \ref{rule:equ} to get $\Gamma, x \colon B \vdash C \type$.
-            \item Case 4 ($\Delta \vdash t_i \colon \ldots$ for each $i$): Apply \ref{rule:equ} to each typing.
-        \end{itemize}
-        
-        \item \ref{rule:thin}: $\dfrac{\Gamma,\Delta \vdash A \type \quad \Gamma \vdash B \type}{\Gamma, y \colon B, \Delta \vdash A \type}$ \\
-        Apply the IH to $\Gamma,\Delta \vdash A \type$. Transfer sub-derivations to $(\Gamma, y\colon B, \Delta)$ using \ref{rule:thin} (using \ref{rule:cont-thin} for the extended context in Case 3). All four cases transfer.
-        
-        \item \ref{rule:sub}: $\dfrac{\Gamma, y \colon B, \Delta \vdash A \type \quad \Gamma \vdash s \colon B}{\Gamma, \Delta[y{\leftarrow}s] \vdash A[y{\leftarrow}s] \type}$ \\
-        Apply the IH to $\Gamma, y \colon B, \Delta \vdash A \type$. Substitution preserves the outermost constructor.
-        \begin{itemize}
-            \item Case 1: $A[y \leftarrow s] \equiv \Prop$.
-            \item Case 2: $A[y\leftarrow s] \equiv \Proof(p[y\leftarrow s])$. Apply \ref{rule:sub} to $\Gamma,y \colon B,\Delta \vdash p\colon\Prop$ to obtain $\Gamma,\Delta[y\leftarrow s] \vdash p[y\leftarrow s] \colon \Prop$.
-            \item Case 3: $A[y\leftarrow s] \equiv (\Pi x \colon C[y\leftarrow s])D[y\leftarrow s]$. Apply \ref{rule:sub} to $\Gamma,y \colon B,\Delta,x \colon C \vdash D \type$ to obtain $\Gamma,\Delta[y\leftarrow s],x \colon C[y\leftarrow s] \vdash D[y\leftarrow s] \type$.
-            \item Case 4: $A[y\leftarrow s] \equiv S[z_i \leftarrow t_i[y\leftarrow s]]$. Apply \ref{rule:sub} to each typing derivation using $(C_i[z_1\leftarrow t_1,\ldots])[y\leftarrow s] \equiv C_i[z_1 \leftarrow t_1[y\leftarrow s],\ldots]$.
-        \end{itemize}
-    \end{itemize}
-
-    \textbf{Group III: The Reflection and Equality Rules}
-    \begin{itemize}
-        \item \ref{rule:reflection2}: $\dfrac{\Gamma \vdash t \colon A}{\Gamma \vdash A \type}$ \\
-        The sub-derivation $\pi' \colon \Gamma \vdash t \colon A$ satisfies $|\pi'| < |\pi|$. Apply Lemma \ref{lemma:in-rule-cases} (IH) to $\pi'$.
-        \begin{itemize}
-            \item Lemma \ref{lemma:in-rule-cases} Case 1 ($t \equiv x$, $x \colon A \in \Gamma$): Let $\Gamma \equiv \Gamma_0, x\colon A, \Gamma_1$. Context $\Gamma$ was formed by \ref{rule:cont-Intro} from $\Gamma_0 \vdash A \type$. By applying \ref{rule:thin}, $\Gamma \vdash A \type$ is derivable by a shorter derivation. Apply the IH.
-            \item Lemma \ref{lemma:in-rule-cases} Case 2 ($t \equiv (\lambda x\colon B)s$, $A \equiv (\Pi x\colon B)C$): From $\Gamma,x\colon B \vdash s\colon C$, apply \ref{rule:reflection2} (strictly smaller height) to get $\Gamma,x\colon B \vdash C \type$. This is Case 3.
-            \item Lemma \ref{lemma:in-rule-cases} Case 3 ($t \equiv \App([x\colon B]C, f, r)$, $A \equiv C[x\leftarrow r]$): From $\Gamma,x\colon B \vdash C \type$ and $\Gamma \vdash r\colon B$, apply \ref{rule:sub} to obtain $\Gamma \vdash C[x\leftarrow r] \type$ by a shorter derivation. Apply the IH.
-            \item Lemma \ref{lemma:in-rule-cases} Case 4 ($t \equiv (\forall x\colon B)p$, $A \equiv \Prop$): This is Case 1.
-            \item Lemma \ref{lemma:in-rule-cases} Case 5 ($t \equiv F[z_i\leftarrow t_i]$, $A \equiv D[z_i\leftarrow t_i]$): Apply \ref{rule:reflection2} to $\Gamma \vdash F[z_i\leftarrow t_i] \colon D[z_i\leftarrow t_i]$ (shorter) to get $\Gamma \vdash A \type$. Apply the IH.
-        \end{itemize}
-
-        \item \ref{rule:refl-typ}: $\dfrac{\Gamma \vdash A = A}{\Gamma \vdash A \type}$ \\
-        $A$ is syntactically of forms (1)-(4). We proceed by inner induction on the derivation of $\Gamma \vdash A = A$:
-        \begin{itemize}
-            \item If derived from $\Gamma \vdash A \type$, it is strictly shorter; apply the outer IH.
-            \item If via \ref{rule:prod-equ}: From $\Gamma,x\colon B \vdash C = C$, apply \ref{rule:refl-typ} (IH) to extract $\Gamma,x\colon B \vdash C \type$. This is Case 3.
-            \item If via \ref{rule:prop-equ}: From $\Gamma \vdash p = p \colon \Prop$, apply \ref{rule:refl-obj} to extract $\Gamma \vdash p \colon \Prop$. This is Case 2.
-            \item If via \ref{rule:forall-elim}: $\Gamma \vdash \Proof((\forall x\colon B)p) = (\Pi x\colon B)\Proof(p)$. If $A \equiv \Proof((\forall x\colon B)p)$, it is Case 2. If $A \equiv (\Pi x\colon B)\Proof(p)$, it is Case 3.
-        \end{itemize}
-    \end{itemize}
-\end{proof}
 
 \begin{lemma} \label{lemma:in-rule-cases}
     Given a derivable sequent of the form $\Gamma \vdash t \colon A$ there are 5 possible cases:
@@ -979,49 +882,6 @@ First, we introduce inversion (or generation) lemmas: given a derivable sequent,
             such that $t$ is equal to $F[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]$.
     \end{enumerate}
 \end{lemma}
-\begin{proof}
-    By simultaneous induction on $|\pi|$ with Lemma \ref{lemma:t-rule-cases}.
-
-    \textbf{Group I: Direct Term Introduction Rules}
-    \begin{itemize}
-        \item \ref{rule:ass}: $\dfrac{\Gamma_0, x\colon A, \Delta \text{ ok}}{\Gamma_0, x\colon A, \Delta \vdash x \colon A}$ \\
-        $t \equiv x \in \Var(\Gamma)$. This is Case 1.
-        
-        \item \ref{rule:prod-intro}: $\dfrac{\Gamma, x \colon B \vdash s \colon C}{\Gamma \vdash (\lambda x \colon B)s \colon (\Pi x \colon B)C}$ \\
-        $t \equiv (\lambda x\colon B)s$ and $A \equiv (\Pi x\colon B)C$. The premise is a strict sub-derivation. This is Case 2.
-        
-        \item \ref{rule:prod-elim}: $\dfrac{\Gamma \vdash f \colon (\Pi x \colon B)C \quad \Gamma \vdash r \colon B \quad \Gamma, x\colon B \vdash C \type}{\Gamma \vdash \App([x\colon B]C, f, r) \colon C[x{\leftarrow}r]}$ \\
-        $t \equiv \App([x\colon B]C,f,r)$ and $A \equiv C[x\leftarrow r]$. Premises are strict sub-derivations. This is Case 3.
-        
-        \item \ref{rule:forall-intro}: $\dfrac{\Gamma, x \colon B \vdash p \colon \Prop}{\Gamma \vdash (\forall x \colon B)p \colon \Prop}$ \\
-        $t \equiv (\forall x\colon B)p$ and $A \equiv \Prop$. This is Case 4.
-        
-        \item \textsc{Introductory Rule}: For an operator $F \in \Sigma$, \\
-        $t \equiv F[z_i \leftarrow t_i]$ with all premises as strict sub-derivations. This is Case 5.
-    \end{itemize}
-
-    \textbf{Group II: Context-Structural Rules} \\
-    These preserve the syntactic form of $t$; only the context and type representative change.
-    \begin{itemize}
-        \item \ref{rule:equ}: $\dfrac{\Delta = \Gamma \quad \Delta \vdash t \colon A}{\Gamma \vdash t \colon A}$ \\
-        Apply the IH to $\Delta \vdash t \colon A$. Transfer each sub-derivation from context $\Delta$ to $\Gamma$ using \ref{rule:equ} (and \ref{rule:cequ} where necessary). All cases transfer safely.
-        
-        \item \ref{rule:thin}: $\dfrac{\Gamma,\Delta \vdash t\colon A \quad \Gamma \vdash B \type}{\Gamma, y\colon B, \Delta \vdash t\colon A}$ \\
-        Apply the IH to $\Gamma,\Delta \vdash t\colon A$. Transfer sub-derivations using \ref{rule:thin} (using \ref{rule:cont-thin} for extended contexts, valid by Prop. \ref{prop:cont-thin-elim}). All cases transfer.
-        
-        \item \ref{rule:sub}: $\dfrac{\Gamma, y\colon B, \Delta \vdash t\colon A \quad \Gamma \vdash s\colon B}{\Gamma, \Delta[y{\leftarrow}s] \vdash t[y{\leftarrow}s] \colon A[y{\leftarrow}s]}$ \\
-        Apply the IH to $\Gamma,y\colon B,\Delta \vdash t\colon A$. Substitution is transparent to the outermost constructor of $t$. If $t \equiv x \equiv y$, then $t[y\leftarrow s] \equiv s$. Extend $\Gamma \vdash s\colon B$ by \ref{rule:thin} and apply the IH to $\Gamma \vdash s\colon B$ (smaller height) to recursively determine the form of $s$.
-    \end{itemize}
-
-    \textbf{Group III: Type-Conversion and Equality Rules}
-    \begin{itemize}
-        \item \ref{rule:conv1}: $\dfrac{\Gamma \vdash A' = A \quad \Gamma \vdash t \colon A'}{\Gamma \vdash t \colon A}$ \\
-        Apply the IH to $\Gamma \vdash t \colon A'$ (smaller height). The syntactic form of $t$ is unchanged; we propagate the type claim from $A'$ to $A$ using provable equality $\Gamma \vdash A' = A$ and \ref{rule:trans-typ}. For example, in Case 2, $A'$ is provably equal to $(\Pi x\colon B)C$, and by transitivity, $A$ is provably equal to $(\Pi x\colon B)C$. 
-        
-        \item \ref{rule:refl-obj}: $\dfrac{\Gamma \vdash t = t \colon A}{\Gamma \vdash t \colon A}$ \\
-        By inner induction on the derivation of term equality. If derived from $\Gamma \vdash t\colon A$, it is shorter (apply outer IH). If derived by \ref{rule:trans-obj}, the companion term-equality lemma determines the form. If derived by \ref{rule:beta-rule} or \ref{rule:eta-rule}, $t$ maps directly to Case 3 or Case 2, respectively.
-    \end{itemize}
-\end{proof}
 
 Now we expand the concept of $\depth$ to this new syntax:
 
@@ -1164,5 +1024,5 @@ We use it to prove the following lemma:
     Every object and every morphism of $\mathcal{C}_{\Sigma, \Gamma}$ are constructible by expansion.
 \end{theorem}
 \begin{proof} 
-    Follows directly from \ref{lemma:exhaustivity-for-docs} and the proof of \ref{thm:exhaustivity-for-gats}.
+    Follows directly from Lemma \ref{lemma:exhaustivity-for-docs} and the proof of Theorem \ref{thm:exhaustivity-for-gats}.
 \end{proof}
