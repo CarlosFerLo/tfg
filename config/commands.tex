@@ -170,6 +170,14 @@
 }
 \makeatother
 
+\makeatletter
+\newcommand{\RuleLabel}[2]{%
+  \def\@currentlabel{\textsc{#1}}% Tells \ref{} to output the label name
+  \label{rule:#2}% Creates the actual reference hook
+  \textsc{#1}% Prints the visual text next to the line
+}
+\makeatother
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % TODO: operatorname

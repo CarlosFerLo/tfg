@@ -54,28 +54,28 @@ about terms and types. This notation will be formally defined
 in a later section. Given a set of variables $V$,
 we associate types to variables as required.
 When asserting that a term $t$ is of type $A$, we will write
-$t \colon A$, but if $t$ has variables $x_1, \dots, x_n$ occurring in it, this assertion
+$t \colon A$. But if $t$ has variables $x_1, \dots, x_n$ occurring in it, this assertion
 does not make sense unless we assign some types to $x_1, \dots, x_m$.
 To do this we write $x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A$ or
-\begin{equation*}
-    \dfrac{
+\begin{mathpar}
+    \inferrule{
         x_1 \colon A_1, \dots, x_n\colon A_n
     }{
         t \colon A
     }
-\end{equation*}
+\end{mathpar}
 that reads as follows: if $x_1$ is a variable of type $A_1$, \dots and if $x_n$ is a variable of type $A_n$,
 then $t$ is a term of type $A$. 
 Similarly, if we want to assert that if $x_1$ is a variable of type $A_1$,
 \dots and if $x_n$ is a variable of type $A_n$,
 then $A$ is a type, we can write: $x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type$ or
-\begin{equation*}
-    \dfrac{
+\begin{mathpar}
+    \inferrule{
         x_1 \colon A_1, \dots, x_n \colon A_n 
     }{
         A \type
     }
-\end{equation*}
+\end{mathpar}
 Such assertions are called rules or sequents. 
 Instead of considering expressions or judgments as basic units, we will use rules, 
 as both expressions and judgments make sense only within a context.
@@ -83,26 +83,19 @@ as both expressions and judgments make sense only within a context.
 Axioms are also written as rules. The conclusion of those rules
 are equalities between types or between terms of the same type.
 We write those rules as follows:
-
-\begin{minipage}{0.5\textwidth}
-  \begin{equation*}
-    \dfrac{
+\begin{mathpar}
+    \inferrule{
         x_1 \colon A_1, \dots, x_n \colon A_n
     }{
         A = A'
     }
-  \end{equation*}
-\end{minipage}%
-\begin{minipage}{0.5\textwidth}
-  \begin{equation*}
-    \dfrac{
+    \and
+    \inferrule{
         x_1 \colon A_1, \dots, x_n \colon A_n
     }{
         t = t' \colon A
     }
-  \end{equation*}
-\end{minipage}
-
+\end{mathpar}
 and read as: if $x_1$ is a variable of type $A_1$, \dots and $x_n$ is a variable of type $A_n$,
 then $A = A'$, or $t = t'$ as terms of type $A$, respectively.
 We will be using both shorthand and fraction notation as needed.
@@ -124,22 +117,22 @@ we must present each symbol with a rule specifying the role
 of this symbol, either as a sort symbol or as specifically typed operator symbol. 
 These rules are called \textit{introductory rules}.
 In the case of a sort symbol $A$, the rule should be like 
-\begin{equation*}
-    \dfrac{
+\begin{mathpar}
+    \inferrule{
         x_1 \colon A_1, \dots, x_n \colon A_n
     }{
         A(x_1, \dots, x_n) \type
     }
-\end{equation*}
+\end{mathpar}
 clearly specifying the types $A$ is dependent on.
 In the case of an operator symbol, a rule of the form
-\begin{equation*}
-    \dfrac{
+\begin{mathpar}
+    \inferrule{
         x_1 \colon A_1, \dots, x_n \colon A_n
     }{
         f(x_1, \dots, x_n) \colon A
     }
-\end{equation*}
+\end{mathpar}
 suffices to specify the types of the arguments and the type of the value of $f$.
 
 Finally, to present a theory we will give a set of symbols,
@@ -250,24 +243,24 @@ Now we can define a \textit{pre-theory} and later a \textit{theory}.
         \item a set of operator symbols $\mathcal{Z}$;
         \item for each sort symbol $A \in \mathcal{S}$, an associated rule 
               of the alphabet $\mathcal{S} \cup \mathcal{Z}$:
-              \begin{equation*}
-                \dfrac{
+              \begin{mathpar}
+                \inferrule{
                     x_1 \colon A_1, \dots, x_n \colon A_n
                 }{
                     A(x_1, \dots, x_n) \type
                 }
-              \end{equation*}
+              \end{mathpar}
               for some $n \geq 0$. It is called the \textit{introductory
               rule} of $A$;
         \item for each operator symbol $F \in \mathcal{Z}$, an associated rule
               of the alphabet $\mathcal{S} \cup \mathcal{Z}$:
-              \begin{equation*}
-                \dfrac{
+              \begin{mathpar}
+                \inferrule{
                     x_1 \colon A_1, \dots, x_n \colon A_n
                 }{
                     F(x_1, \dots, x_n) \colon A
                 }
-              \end{equation*}
+              \end{mathpar}
               for some $n \geq 0$. It is called the \textit{introductory
               rule} of $F$;
         \item a set of axioms. Where each axiom is either a $T=$rule or
@@ -289,13 +282,13 @@ Now we tackle the problem of well-formedness of rules.
     \begin{enumerate}
         \item a \textit{context} is a premise $x_1 \colon A_1, \dots, x_n \colon A_n$
             such that the rule
-            \begin{equation*}
-                \dfrac{
+            \begin{mathpar}
+                \inferrule{
                     x_1 \colon A_1, \dots, x_{n-1}\colon A_{n-1}
                 }{
                     A_n \type
                 }
-            \end{equation*}
+            \end{mathpar}
             is a derived rule such that $x_n$ is distinct from all of $x_1, \dots, x_n$.
         \item \begin{enumerate}
             \item the rule $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{\Delta \text{ is a type}}$
@@ -660,43 +653,37 @@ direct from the definition of $C(U)$:
 \begin{theorem}[Completeness Theorem] \label{thm:completeness-context-category}
     Let $\mathcal{M}$ be the canonical interpretation of a theory $U$ in $C(U)$.
     \begin{enumerate}
-        \item The $T$-rule \[
+        \item The $T$-rule \(
                 \dfrac{
                     x_1 \colon A_1, \dots, x_n \colon A_n
                 }{
                     A \type
                 }
-            \] is derivable if and only if
+            \) is derivable if and only if
             $x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A$
             is a context, i.e., if $[x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A]$
             in $C(U)$.
-        \item The $\in$-rule \[
+        \item The $\in$-rule \(
                 \dfrac{
                     x_1 \colon A_1, \dots, x_n \colon A_n
                 }{
                     t \colon A
                 }
-            \]  is derivable if and only if
+            \)  is derivable if and only if
             $\langle x_1, \dots, x_n, t \rangle$ is a section of 
             $[x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A]$
             in $C(U)$.
-        \item If the following $T$-rules are derivable: \[
-                \Gamma \vdash A_1 \type 
-                    \quad \text{ and } \quad
-                \Gamma \vdash A_2 \type,
-            \] then the rule \(
+        \item If the $T$-rules $\Gamma \vdash A_1 \type$ and $\Gamma \vdash A_2 \type$ are derivable, 
+            then the rule \(
                 \Gamma \vdash A_1 = A_2
-            \) is derivable if and only if \[
+            \) is derivable if and only if \(
                 [\Gamma, x \colon A_1]
                 = 
                 [\Gamma, x \colon A_2],
-            \]
+            \)
             where $x$ is a variable that does not appear in $\Gamma$.
-        \item If the following $\in$-rules are derivable: \[
-                \Gamma \vdash t \colon A 
-                    \quad \text{ and } \quad
-                \Gamma \vdash s \colon A,
-            \] then the rule $\Gamma \vdash t = s \colon A$ is derivable
+        \item If the $\in$-rules $\Gamma \vdash t \colon A$ and $\Gamma \vdash s \colon A$ are derivable, 
+            then the rule $\Gamma \vdash t = s \colon A$ is derivable
             if, and only if, $\langle x_1, \dots, x_n, t \rangle$ and 
             $\langle x_1, \dots, x_n, s \rangle$
             are equal sections of $[\Gamma, x\colon A]$ in $C(U)$,
@@ -726,9 +713,9 @@ is a mapping $\mathcal{M}$ from the $T$- and $\in$-rules of $U$ to the $\mathcal
                 A_i \text{ is a type}   
             }
         \) for $1 \leq i \leq n$, then $\mathcal{M}[R_1], \dots, \mathcal{M}[R_n], \mathcal{M}[R]$ are
-        objects of $\mathcal{C}$ such that \[
+        objects of $\mathcal{C}$ such that \(
             1 \lhd \mathcal{M}[R_1] \lhd \dots \lhd \mathcal{M}[R_n] \lhd \mathcal{M}[R]
-        \]
+        \)
         in $\mathcal{C}$.
 
     \item if $R_t$ is a derived $\in$-rule \(
@@ -739,16 +726,16 @@ is a mapping $\mathcal{M}$ from the $T$- and $\in$-rules of $U$ to the $\mathcal
             }
         \) then $\mathcal{M}[R_t]$ is section of $\mathcal{M}[R]$.
 
-    \item if $\Gamma \vdash A = A'$ is a derived $T=$rule, then if \[
-            R \equiv \Gamma \vdash A \type
-            \quad \text{ and } \quad
-            R' \equiv \Gamma \vdash A' \type,
-        \] then $\mathcal{M}[R] = \mathcal{M}[R']$.
-    \item if $\Gamma \vdash t = t' \colon A$ is a derived $\in=$rule, then if \[
-            R_t \equiv \Gamma \vdash t \colon A, \quad
-            R_{t'} \equiv \Gamma \vdash t' \colon A, \quad
-            R \equiv \Gamma \vdash A \type,
-        \] then both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$.
+    \item if $\Gamma \vdash A = A'$ is a derived $T=$rule, then if we name 
+            $R \equiv \Gamma \vdash A \type$
+            and
+            $R' \equiv \Gamma \vdash A' \type$,
+         then $\mathcal{M}[R] = \mathcal{M}[R']$.
+    \item if $\Gamma \vdash t = t' \colon A$ is a derived $\in=$rule, then if we name
+            $R_t \equiv \Gamma \vdash t \colon A$,
+            $R_{t'} \equiv \Gamma \vdash t' \colon A$ and
+            $R \equiv \Gamma \vdash A \type$,
+        then both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$.
         and $\mathcal{M}[R_t] = \mathcal{M}[R_{t'}]$
 \end{enumerate}
 
@@ -810,21 +797,21 @@ Such optimization is discussed in Chapter 3.
 
 Our problem might be formalized in the following manner:
 Given a theory $U$ and a derived rule of $U$ of the form 
-\begin{equation*}
-    \dfrac{
+\begin{mathpar}
+    \inferrule{
         x_1 \colon A_1, \dots, x_n \colon A_n
     }{
         A \type
     }
-\end{equation*}
+\end{mathpar}
 we want to find an expression $t$ of $U$ such that the rule 
-\begin{equation*}
-    \dfrac{
+\begin{mathpar}
+    \inferrule{
         x_1 \colon A_1, \dots, x_n \colon A_n
     }{
         t \colon A 
     }
-\end{equation*}
+\end{mathpar}
 is a derived rule of $U$.
 
 This problem is undecidable, in general, as it follows from the undecidability
@@ -871,13 +858,15 @@ $\Gamma y_1 \colon B_1, \dots, y_m \colon B_m$
 of $G_n$:
 \begin{itemize}
     \ruleitem{E1}{sort-symbol-intro} For each sort symbol $S$ with a well-formed
-        introductory rule \[
-            \dfrac{
+        introductory rule 
+        \begin{mathpar}
+            \inferrule{
                 z_1 \colon C_1, \dots, z_n \colon C_w
             }{
                 A(z_1, \dots, z_w) \type
-            }
-        \] such that $G_n$ contains sections
+            }    
+        \end{mathpar}
+        such that $G_n$ contains sections
         \begin{align*} % TODO: fix alignment
             \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
             &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}
@@ -905,13 +894,15 @@ of $G_n$:
         
         and their corresponding projections for each $1 \leq i \leq n$ and each $1 \leq j \leq m$.
     \ruleitem{E3}{operator-symbol-intro} For every operator symbol $F$ with a well-formed
-        introductory rule \[
-            \dfrac{
+        introductory rule 
+        \begin{mathpar}
+            \inferrule{
                 z_1 \colon C_1, \dots, z_w \colon C_w
             }{
                 F(z_1, \dots, z_w) \colon C
             }
-        \] if the following sections exist in $G_n$
+        \end{mathpar}
+        if the following sections exist in $G_n$
         \begin{align*} % TODO: fix alignment
             \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
             &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}

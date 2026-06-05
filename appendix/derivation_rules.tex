@@ -1,90 +1,120 @@
 % !TEX root = ../main.tex
 \chapter{Derivation Rules}
 
-We denote "from $S_1, \dots, S_n$ derive $S$", where $S_1, \dots, S_n, S$ are rules or sequents, as follows: \[
-    \dfrac{
+We denote "from $S_1, \dots, S_n$ derive $S$", where $S_1, \dots, S_n, S$ are rules or sequents, as follows: 
+\begin{mathpar}
+    \inferrule{
         S_1 \quad \dots \quad S_n
     }{
         S
     }
-\] 
+\end{mathpar}
 Also, we write 
-\[
-    \ddoublefrac{S_1}{S_2} \text{ abbreviates } \dfrac{S_1}{S_2} \text{ and } \dfrac{S_2}{S_1}
-\]
+\begin{mathpar}
+    \vcenter{\hbox{$ 
+        \infer={S_1}{S_2} 
+    $}}
+    \quad \text{abbreviates} \quad
+    \inferrule{S_1}{S_2}
+    \text{ and }
+    \inferrule{S_2}{S_1}
+\end{mathpar}
 
 \section{Derivation Rules of Generalized Algebraic Theories} \label{app:derivation-rules-gat}
 
 In this section we present the derivation rules of Generalized Algebraic Theories as presented in \cite{cartmell1986},
 but with a more compact notation.
 
+\begin{mathpar}
+    \inferrule*[Left=\RuleLabel{LI1}{li1}]
+        {\Gamma \vdash A \type}
+        {\Gamma \vdash A = A}
+
+    \and
+
+    \inferrule*[Left=\RuleLabel{LI2}{li2}]
+        {\Gamma \vdash t \colon A}
+        {\Gamma \vdash t = t \colon A}
+
+    \and
+
+    \inferrule*[Left=\RuleLabel{LI3}{li3}]
+        {\Gamma \vdash A_1 = A_2}
+        {\Gamma \vdash A_2 = A_1}
+
+    \and
+
+    \inferrule*[Left=\RuleLabel{LI4}{li4}]
+        {\Gamma \vdash t_1 = t_2 \colon A}
+        {\Gamma \vdash t_2 = t_1 \colon A}
+
+    \and
+
+    \inferrule*[Left=\RuleLabel{LI5}{li5}]
+        {\Gamma \vdash A_1 = A_2 \\ \Gamma \vdash A_2 = A_3}
+        {A_1 = A_3}
+
+    \and
+
+    \inferrule*[Left=\RuleLabel{LI6}{li6}]
+        {\Gamma \vdash t_1 = t_2 \colon A \\ \Gamma \vdash t_2 = t_3 \colon A}
+        {\Gamma \vdash t_1 = t_3 \colon A}
+
+    \and 
+
+    \inferrule*[Left=\RuleLabel{LI7}{li7}]
+        {\Gamma \vdash t_1 = t_2 \colon A_1 \\ \Gamma \vdash A_1 = A_2}
+        {t_1 = t_2 \colon A_2}
+
+    \and 
+
+    \inferrule*[Left=\RuleLabel{T1}{t1}]
+        {\Gamma \vdash A_1 = A_2 \quad \Gamma \vdash t \colon A_1}
+        {\Gamma \vdash t \colon A_2}
+\end{mathpar}
 \begin{enumerate}
-    \ruleitem{LI1}{li1} \(\dfrac{\Gamma \vdash A \type}{\Gamma \vdash A = A} \)
-    \ruleitem{LI2}{li2} \(\dfrac{\Gamma \vdash t \colon A}{\Gamma \vdash t = t \colon A} \)
-    \ruleitem{LI3}{li3} \(\dfrac{\Gamma \vdash A_1 = A_2}{\Gamma \vdash A_2 = A_1} \)
-    \ruleitem{LI4}{li4} \(\dfrac{\Gamma \vdash t_1 = t_2 \colon A}{\Gamma \vdash t_2 = t_1 \colon A}\)
-    \ruleitem{LI5}{li5} \(\dfrac{
-            \Gamma \vdash A_1 = A_2 \quad \Gamma \vdash A_2 = A_3
-        }{
-            A_1 = A_3
-        }  \)
-    \ruleitem{LI6}{li6} \(\dfrac{
-            \Gamma \vdash t_1 = t_2 \colon A \quad \Gamma \vdash t_2 = t_3 \colon A
-        }{
-            \Gamma \vdash t_1 = t_3 \colon A
-        }\)
-    \ruleitem{LI7}{li7} \(\dfrac{
-            \Gamma \vdash t_1 = t_2 \colon A_1 \quad \Gamma \vdash A_1 = A_2
-        }{
-            t_1 = t_2 \colon A_2
-        }\)
-    \ruleitem{T1}{t1} \(\dfrac{
-            \Gamma \vdash A_1 = A_2 \quad \Gamma \vdash t \colon A_1
-        }{
-            \Gamma \vdash t \colon A_2
-        }\)
-    \ruleitem{CF1}{cf1} For $n \geq 0, 1 \leq i \leq n+1$: \[
-            \dfrac{
+    \ruleitem{CF1}{cf1} For $n \geq 0, 1 \leq i \leq n+1$: \begin{mathpar}
+            \inferrule{
                 x_1 \colon A_1, \dots, x_n \colon A_n \vdash A_{n+1} \type
             }{
                 x_1 \colon A_1, \dots, x_{n+1} \colon A_{n+1} \vdash x_i \colon A_i   
             }
-        \]
+        \end{mathpar}
         providing that $x_{n+1}$ is a variable distinct from all $x_1, \dots, x_n$.
     \ruleitem{CF2(a)}{cf2a} For every sort symbol $S$ with well-formed introductory rule \[
             x_1 \colon A_1, \dots, x_n \colon A_n 
             \vdash
             S(x_1, \dots, x_n) \type,
-        \] for every context $\Gamma$, \[
-            \dfrac{
-                \Gamma \vdash t_1 \colon A_1 \quad
-                \Gamma \vdash t_2 \colon A_2[x_1  \leftarrow  t_1] 
-                \dots
+        \] for every context $\Gamma$, \begin{mathpar}
+            \inferrule{
+                \Gamma \vdash t_1 \colon A_1 \\
+                \Gamma \vdash t_2 \colon A_2[x_1  \leftarrow  t_1] \\
+                \dots \\
                 \Gamma \vdash t_n \colon A_n[x_1  \leftarrow  t_1, \dots, x_{n-1}  \leftarrow  t_{n-1}]
             }{
                 \Gamma \vdash S(t_1, \dots, t_n) \type
             }
-        \]
+        \end{mathpar}
     \ruleitem{CF2(b)}{cf2b} For every operator symbol $F$ with well-formed introductory rule \[
             x_1 \colon A_1, \dots, x_n \colon A_n 
             \vdash
             F(x_1, \dots, x_n) \colon A,
-        \] for every context $P$, \[
-            \dfrac{
-                \Gamma \vdash t_1 \colon A_1 \quad 
-                \Gamma \vdash t_2 \colon A_2[x_1  \leftarrow  t_1] 
-                \dots
+        \] for every context $P$, \begin{mathpar}
+            \inferrule{
+                \Gamma \vdash t_1 \colon A_1 \\
+                \Gamma \vdash t_2 \colon A_2[x_1  \leftarrow  t_1] \\
+                \dots \\
                 \Gamma \vdash t_n \colon A_n[x_1  \leftarrow  t_1, \dots, x_{n-1}  \leftarrow  t_{n-1}]
             }{
                 \Gamma \vdash F(t_1, \dots, t_n) \colon A[x_1  \leftarrow  t_1, \dots, x_n  \leftarrow  t_n]
             }
-        \]
-    \ruleitem{SI1}{si1} If $\Gamma$ is a context, then \[
-            \dfrac{
-                x_1 \colon A_1, \dots x_n \colon A_n \vdash A = A' \quad
-                \Gamma \vdash s_1 = s'_1 \colon A_1 \quad
-                \Gamma \vdash s_2 = s'_2 \colon A_2[x_1  \leftarrow  s_1] 
-                \dots
+        \end{mathpar}
+    \ruleitem{SI1}{si1} If $\Gamma$ is a context, then \begin{mathpar}
+            \inferrule{
+                x_1 \colon A_1, \dots x_n \colon A_n \vdash A = A' \\
+                \Gamma \vdash s_1 = s'_1 \colon A_1 \\
+                \Gamma \vdash s_2 = s'_2 \colon A_2[x_1  \leftarrow  s_1] \\
+                \dots \\
                 \Gamma \vdash s_m = s'_m \colon A_n[x_1  \leftarrow  s_1, \dots, x_{n-1}  \leftarrow  s_{n-1}]
             }{
                 \Gamma 
@@ -93,38 +123,36 @@ but with a more compact notation.
                 =
                 A'[x_1  \leftarrow  s'_1, \dots, x_n  \leftarrow  s'_n]
             }
-        \]
-    \ruleitem{SI2}{si2} If $\Gamma$ is a context, then \[
-            \dfrac{
-                x_1 \colon A_1, \dots, x_n \colon A_n \vdash s = s' \colon A \quad
-                \Gamma \vdash s_1 = s'_1 \colon A_1 \quad
-                \Gamma \vdash s_2 = s'_2 \colon A_2 [x_1  \leftarrow  s_1] 
-                \dots
+        \end{mathpar}
+    \ruleitem{SI2}{si2} If $\Gamma$ is a context, then \begin{mathpar}
+            \inferrule{
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash s = s' \colon A \\
+                \Gamma \vdash s_1 = s'_1 \colon A_1 \\
+                \Gamma \vdash s_2 = s'_2 \colon A_2 [x_1  \leftarrow  s_1] \\
+                \dots \\
                 \Gamma \vdash s_n = s'_n \colon A_n[x_1  \leftarrow  s_1, \dots, x_{n-1}  \leftarrow  s_{n-1}]
             }{
                 s[x_1  \leftarrow  s_1, \dots, x_n  \leftarrow  s_n]
                 = 
                 s'[x_1  \leftarrow  s'_1, \dots, x_n  \leftarrow  s'_n]
             }
-        \]
-    \ruleitem{A1}{a1} If $x_1 \colon A_1, \dots, x_n \colon A_n \vdash A = A'$ is an axiom, then \[
-            \dfrac{
-                x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type
-                \quad
+        \end{mathpar}
+    \ruleitem{A1}{a1} If $x_1 \colon A_1, \dots, x_n \colon A_n \vdash A = A'$ is an axiom, then \begin{mathpar}
+            \inferrule{
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type \\
                 x_1 \colon A_1, \dots, x_n \colon A_n \vdash A' \type   
             }{
                 x_1 \colon A_1, \dots, x_n \colon A_n \vdash A = A'
             }
-        \]
-    \ruleitem{A2}{a2} If $x_1 \colon A_1, \dots, x_n \colon A_n \vdash t = t' \colon A$ is an axiom, then from \[
-            \dfrac{
-                x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A 
-                \quad
+        \end{mathpar}
+    \ruleitem{A2}{a2} If $x_1 \colon A_1, \dots, x_n \colon A_n \vdash t = t' \colon A$ is an axiom, then from \begin{mathpar}
+            \inferrule{
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A  \\
                 x_1 \colon A_1, \dots, x_n \colon A_n \vdash t' \colon A
             }{
                 x_1 \colon A_1, \dots, x_n \colon A_n \vdash t = t' \colon A
             }
-        \]
+        \end{mathpar}
 \end{enumerate}
 
 \section{Derivation Rules of Calculus of Constructions} \label{app:derivation-rules-coc}
@@ -132,153 +160,183 @@ but with a more compact notation.
 In this section we present all the derivation rules for CoC as presented in \cite{streicher}.
 
 Context Formation Rules:
-\begin{enumerate} % TODO: reformat this
-    \ruleitem{Empty}{empty} $\dfrac{}{\quad \ok}$
-    \ruleitem{Cont-Intro}{cont-intro} $\ddoublefrac{\Gamma \vdash A \type}{\Gamma, x \colon A \ok}$, if $x \notin \Var(\Gamma)$
-    \ruleitem{Cont-Thin}{cont-thin} $\dfrac{
-            \Gamma, \Delta \ok \quad \Gamma \vdash A \type
-        }{
-            \Gamma, x \colon A, \Delta \ok
-        }$, if $x \notin \Var(\Gamma) \cup \Var(\Delta)$
-    \ruleitem{Cont-Sub}{cont-sub} $\dfrac{
-        \Gamma, x \colon A, \Delta \ok \quad \Gamma \vdash t \colon A
-    }{
-        \Gamma, \Delta[x  \leftarrow  t] \ok
-    }$
-\end{enumerate}
+\begin{mathpar}
+    \RuleLabel{Empty}{empty} \quad
+    \inferrule
+        { }
+        {\quad \ok}
 
-Context Equality Rules
-\begin{enumerate}
-    \ruleitem{Crefl}{crefl} $\ddoublefrac{
-        \Gamma = \Gamma
-    }{
-        \Gamma \ok
-    }$
-    \ruleitem{Csym}{csym} $\dfrac{
-        \Gamma = \Delta
-    }{
-        \Delta = \Gamma
-    }$
-    \ruleitem{Ctrans}{ctrans} $\dfrac{
-        \Gamma = \Delta \quad \Delta = \Theta
-    }{
-        \Gamma = \Theta
-    }$
-    \ruleitem{Cequ}{cequ} $\dfrac{
-        \Gamma, x \colon A, \Delta \ok 
-        \quad 
-        \Gamma \vdash A = B
-    }{
-        \Gamma, x \colon A, \Delta
-        =
-        \Gamma, x : B, \Delta
-    }$
-    \ruleitem{Creflect1}{creflect1} $\dfrac{
-        \Gamma, x \colon A 
-        = 
-        \Delta, x \colon B
-    }{
-        \Gamma = \Delta
-    }$
-    \ruleitem{Creflect2}{creflect2} $\dfrac{
-        \Gamma, x \colon A 
-        = \Delta, x \colon B
-    }{
-        \Gamma \vdash A = B
-    }$
-\end{enumerate}
+    \and
+
+    
+    \RuleLabel{Cont-Intro}{cont-intro} \quad
+    \vcenter{\hbox{$
+        \infer=
+        {\Gamma \vdash A \type}
+        {\Gamma, x \colon A \ok} 
+    $}}
+    \text{, if} x \notin \Var(\Gamma)
+
+    \and
+    
+    \RuleLabel{Cont-Thin}{cont-thin} \quad
+    \inferrule
+        {\Gamma, \Delta \ok \\ \Gamma \vdash A \type}
+        {\Gamma, x \colon A, \Delta \ok}
+    \text{, if} x \notin \Var(\Gamma) \cup \Var(\Delta)
+    
+    \and
+
+    \inferrule*[Left=\RuleLabel{Cont-Sub}{cont-sub}]
+        {\Gamma, x \colon A, \Delta \ok \\ \Gamma \vdash t \colon A}
+        {\Gamma, \Delta[x  \leftarrow  t] \ok}
+\end{mathpar}
+
+Context Equality Rules:
+\begin{mathpar}
+    \RuleLabel{Crefl}{crefl} \quad
+    \vcenter{\hbox{$
+        \infer=
+            {\Gamma \ok}
+            {\Gamma = \Gamma}
+    $}}
+
+    \and
+
+    \RuleLabel{Csym}{csym} \quad 
+        \inferrule
+            {\Gamma = \Delta}
+            {\Delta = \Gamma}
+
+    \and
+
+    \RuleLabel{Ctrans}{ctrans} \quad
+        \inferrule
+            {\Gamma = \Delta \\ \Delta = \Theta}
+            {\Gamma = \Theta}
+
+    \and
+
+    \RuleLabel{Cequ}{cequ} \quad
+        \inferrule
+            {\Gamma, x \colon A, \Delta \ok \\ \Gamma \vdash A = B}
+            {\Gamma, x \colon A, \Delta = \Gamma, x \colon B, \Delta}
+    
+    \and
+
+    \RuleLabel{Creflect1}{creflect1} \quad
+        \inferrule
+            {\Gamma, x \colon A = \Delta, x \colon B}
+            {\Gamma = \Delta}
+
+    \and
+
+    \RuleLabel{Creflect2}{creflect2} \quad
+        \inferrule
+            {\Gamma, x \colon A = \Delta, x \colon B}
+            {\Gamma \vdash A = B}
+
+\end{mathpar}
 
 Structural Rules for Judgement Formation
-\begin{enumerate}
-    \ruleitem{Ass}{ass} $\dfrac{
-        \Gamma, x \colon A, \Delta \ok
-    }{
-        \Gamma, x \colon A, \Delta 
-        \vdash 
-        x \colon A
-    }$ 
-    \ruleitem{Reflection1}{reflection1} $\dfrac{
-        \Gamma \vdash \mathcal{J}
-    }{
-        \Gamma \ok
-    }$
-    \ruleitem{Reflection2}{reflection2} $\dfrac{
-        \Gamma \vdash t : A
-    }{
-        \Gamma \vdash A \type
-    }$
-    \ruleitem{Thin}{thin} $\dfrac{
-        \Gamma, \Delta \vdash \mathcal{J}
-        \quad
-        \Gamma \vdash A \type   
-    }{
-        \Gamma, x \colon A, \Delta 
-        \vdash 
-        \mathcal{J}
-    }$, if $x \notin \Var(\Gamma) \cup \Var(\Delta)$
-    \ruleitem{Sub}{sub} $\dfrac{
-        \Gamma, x \colon A, \Delta \vdash \mathcal{J}
-        \quad
-        \Gamma \vdash t : A  
-    }{
-        \Gamma, \Delta[x  \leftarrow  t] 
-        \vdash
-        \mathcal{J}[x  \leftarrow  t]
-    }$
-\end{enumerate}
+\begin{mathpar}
+    \RuleLabel{Ass}{ass} \quad
+        \inferrule
+            {\Gamma, x \colon A, \Delta \ok}
+            {\Gamma, x \colon A, \Delta \vdash x \colon A}
+    
+    \and
+
+    \RuleLabel{Reflection1}{reflection1} \quad
+        \inferrule
+            {\Gamma \vdash \mathcal{J}}
+            {\Gamma \ok}
+
+    \and
+
+    \RuleLabel{Reflection2}{reflection2} \quad
+        \inferrule
+            {\Gamma \vdash t : A}
+            {\Gamma \vdash A \type}
+
+    \and
+
+    \RuleLabel{Thin}{thin} \quad
+        \inferrule
+            {\Gamma, \Delta \vdash \mathcal{J} \\ \Gamma \vdash A \type}
+            {\Gamma, x \colon A, \Delta \vdash \mathcal{J}}
+        \text{, if } x \notin \Var(\Gamma) \cup \Var(\Delta)
+
+    \and
+
+    \RuleLabel{Sub}{sub} \quad
+        \inferrule
+            {\Gamma, x \colon A, \Delta \vdash \mathcal{J} \\ \Gamma \vdash t : A}
+            {\Gamma, \Delta[x  \leftarrow  t] \vdash \mathcal{J}[x  \leftarrow  t]}
+\end{mathpar}
 
 Equality Rules:
+\begin{mathpar}
+    \RuleLabel{Equ}{equ} \quad
+        \inferrule 
+            {\Gamma = \Delta \\ \Gamma \vdash \mathcal{J}}
+            {\Delta \vdash \mathcal{J}}
+
+    \and
+
+    \RuleLabel{Refl-Typ}{refl-typ} \quad
+        \vcenter{\hbox{$
+            \infer=
+                {\Gamma \vdash A = A}
+                {\Gamma \vdash A \type}
+        $}}
+
+    \and
+
+    \RuleLabel{Refl-Obj}{refl-obj} \quad 
+        \vcenter{\hbox{$
+            \infer=
+                {\Gamma \vdash t = t : A}
+                {\Gamma \vdash t : A}
+        $}}
+
+    \and
+
+    \RuleLabel{Symm-Typ}{symm-typ} \quad
+        \inferrule 
+            {\Gamma \vdash A = B}
+            {\Gamma \vdash B = A}
+
+    \and
+
+    \RuleLabel{Symm-Obj}{symm-obj} \quad
+        \inferrule
+            {\Gamma \vdash t = s \colon A}
+            {\Gamma \vdash s = t \colon A}
+
+    \and
+
+    \RuleLabel{Trans-Typ}{trans-typ} \quad
+        \inferrule
+            {\Gamma \vdash A = B \\ \Gamma \vdash B = C}
+            {\Gamma \vdash A = C}
+
+    \and
+
+    \RuleLabel{Trans-Obj}{trans-obj} \quad
+        \inferrule 
+            {\Gamma \vdash t_1 = t_2 \colon A \\ \Gamma \vdash t_2 = t_3 \colon A}
+            {\Gamma \vdash t_1 = t_3 \colon A} 
+
+    \and
+
+    \RuleLabel{Repl1}{repl1} 
+        \inferrule
+            {\Gamma \vdash t = s \colon A \\ \Gamma, x \colon A, \Delta \ok}
+            {\Gamma, \Delta[x  \leftarrow  t] = \Gamma, \Delta[x  \leftarrow  t]}
+\end{mathpar}
+
 \begin{enumerate}
-    \ruleitem{Equ}{equ} $\dfrac{
-        \Gamma = \Delta
-        \quad
-        \Gamma \vdash \mathcal{J}
-    }{
-        \Delta \vdash \mathcal{J}
-    }$ 
-    \ruleitem{Refl-Typ}{refl-typ} $\ddoublefrac{
-        \Gamma \vdash A = A
-    }{
-        \Gamma \vdash A \type
-    }$
-    \ruleitem{Refl-Obj}{refl-obj} $\ddoublefrac{
-        \Gamma \vdash t = t : A
-    }{
-        \Gamma \vdash t : A
-    }$
-    \ruleitem{Symm-Typ}{symm-typ} $\dfrac{
-        \Gamma \vdash A = B
-    }{
-        \Gamma \vdash B = A
-    }$
-    \ruleitem{Symm-Obj}{symm-obj} $\dfrac{
-        \Gamma \vdash t = s : A
-    }{
-        \Gamma \vdash s = t : A
-    }$
-    \ruleitem{Trans-Typ}{trans-typ} $\dfrac{
-        \Gamma \vdash A = B 
-        \quad
-        \Gamma \vdash B = C
-    }{
-        \Gamma \vdash A = C
-    }$
-    \ruleitem{Trans-Obj}{trans-obj} $\dfrac{
-        \Gamma \vdash t_1 = t_2 : A 
-        \quad
-        \Gamma \vdash t_2 = t_3 : A
-    }{
-        \Gamma \vdash t_1 = t_3 : A
-    }$
-    \ruleitem{Repl1}{repl1} $\dfrac{
-        \Gamma \vdash t = s : A
-        \quad
-        \Gamma, x \colon A, \Delta \ok
-    }{
-        \Gamma, \Delta[x  \leftarrow  t] 
-        =
-        \Gamma, \Delta[x  \leftarrow  t]
-    }$
     \ruleitem{Repl2}{repl2} $\dfrac{
         \Gamma \vdash t = s : A
         \quad

@@ -15,11 +15,11 @@ reduced to the problem of finding a well-typed term in a formal type theory.
 
 Modern proof assistants, such as Rocq (formerly Coq) \cite{coquand1988} and Lean \cite{demoura2015}
 leverage this correspondence using rich type theories like the 
-Calculus of Inductive Constructions \cite{paulin-mohring1993}. While these environments
+Calculus of Inductive Constructions \cite{coquand1990} \cite{paulin-mohring1993}. While these environments
 enabled the formalization of highly complex mathematics, fully autonomous theorem
 proving with such rich frameworks remains an incredibly
 difficult challenge. The primary obstacle is undecidability of 
-type inhabitation in dependent type theories, and even for inhabited types, attempting
+type inhabitation in dependent type theories \cite{dowek1993}, and even for inhabited types, attempting
 to exhaustively construct a term of a given type results in a 
 combinatorial explosion of the search space.
 
@@ -32,7 +32,7 @@ have been observed by the Logical Intelligence team in \cite{logicalintelligence
 
 This work grew out of an attempt to understand the framework
 proposed by Laurent Lafforgue, which connects Topos Theory 
-\cite{lawvere1971} with artificial intelligence. 
+\cite{lawvere1971} with artificial intelligence \cite{lafforgue2022} \cite{lafforgue2024}. 
 While studying this connection, we found that Toposes, 
 despite offering a strong theoretical foundation, 
 were too abstract to serve directly as a practical 
@@ -41,9 +41,9 @@ semantics as a more tractable alternative.
 Our central idea is to leverage the categorical semantics 
 of type theories to reframe autonomous theorem proving as a 
 structural graph exploration problem. By translating the 
-syntax of Generalized Algebraic Theories (GATs) and the 
-Calculus of Constructions (CoC) into categorical structures 
----namely Contextual Categories and Doctrines of Constructions--- 
+syntax of Generalized Algebraic Theories (GATs) \cite{cartmell1978} \cite{cartmell1986} and the 
+Calculus of Constructions (CoC) \cite{coquand1988} into categorical structures 
+---namely Contextual Categories and Doctrines of Constructions \cite{streicher}--- 
 we obtain term models that carry a rich geometric graph structure. 
 The soundness of this translation is guaranteed by the term 
 model being the initial object of the category of models of 
