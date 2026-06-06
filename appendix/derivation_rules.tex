@@ -166,8 +166,6 @@ Context Formation Rules:
         { }
         {\quad \ok}
 
-    \and
-
     
     \RuleLabel{Cont-Intro}{cont-intro} \quad
     \vcenter{\hbox{$
@@ -176,18 +174,15 @@ Context Formation Rules:
         {\Gamma, x \colon A \ok} 
     $}}
     \text{, if} x \notin \Var(\Gamma)
-
-    \and
     
     \RuleLabel{Cont-Thin}{cont-thin} \quad
     \inferrule
         {\Gamma, \Delta \ok \\ \Gamma \vdash A \type}
         {\Gamma, x \colon A, \Delta \ok}
     \text{, if} x \notin \Var(\Gamma) \cup \Var(\Delta)
-    
-    \and
 
-    \inferrule*[Left=\RuleLabel{Cont-Sub}{cont-sub}]
+    \RuleLabel{Cont-Sub}{cont-sub} \quad
+    \inferrule
         {\Gamma, x \colon A, \Delta \ok \\ \Gamma \vdash t \colon A}
         {\Gamma, \Delta[x  \leftarrow  t] \ok}
 \end{mathpar}
@@ -200,36 +195,31 @@ Context Equality Rules:
             {\Gamma \ok}
             {\Gamma = \Gamma}
     $}}
-
-    \and
+    
 
     \RuleLabel{Csym}{csym} \quad 
         \inferrule
             {\Gamma = \Delta}
             {\Delta = \Gamma}
-
-    \and
+    
 
     \RuleLabel{Ctrans}{ctrans} \quad
         \inferrule
             {\Gamma = \Delta \\ \Delta = \Theta}
             {\Gamma = \Theta}
-
-    \and
+    
 
     \RuleLabel{Cequ}{cequ} \quad
         \inferrule
             {\Gamma, x \colon A, \Delta \ok \\ \Gamma \vdash A = B}
             {\Gamma, x \colon A, \Delta = \Gamma, x \colon B, \Delta}
     
-    \and
 
     \RuleLabel{Creflect1}{creflect1} \quad
         \inferrule
             {\Gamma, x \colon A = \Delta, x \colon B}
             {\Gamma = \Delta}
-
-    \and
+    
 
     \RuleLabel{Creflect2}{creflect2} \quad
         \inferrule
@@ -245,29 +235,25 @@ Structural Rules for Judgement Formation
             {\Gamma, x \colon A, \Delta \ok}
             {\Gamma, x \colon A, \Delta \vdash x \colon A}
     
-    \and
 
     \RuleLabel{Reflection1}{reflection1} \quad
         \inferrule
             {\Gamma \vdash \mathcal{J}}
             {\Gamma \ok}
-
-    \and
+    
 
     \RuleLabel{Reflection2}{reflection2} \quad
         \inferrule
             {\Gamma \vdash t : A}
             {\Gamma \vdash A \type}
-
-    \and
+    
 
     \RuleLabel{Thin}{thin} \quad
         \inferrule
             {\Gamma, \Delta \vdash \mathcal{J} \\ \Gamma \vdash A \type}
             {\Gamma, x \colon A, \Delta \vdash \mathcal{J}}
         \text{, if } x \notin \Var(\Gamma) \cup \Var(\Delta)
-
-    \and
+    
 
     \RuleLabel{Sub}{sub} \quad
         \inferrule
@@ -281,8 +267,7 @@ Equality Rules:
         \inferrule 
             {\Gamma = \Delta \\ \Gamma \vdash \mathcal{J}}
             {\Delta \vdash \mathcal{J}}
-
-    \and
+    
 
     \RuleLabel{Refl-Typ}{refl-typ} \quad
         \vcenter{\hbox{$
@@ -290,8 +275,7 @@ Equality Rules:
                 {\Gamma \vdash A = A}
                 {\Gamma \vdash A \type}
         $}}
-
-    \and
+    
 
     \RuleLabel{Refl-Obj}{refl-obj} \quad 
         \vcenter{\hbox{$
@@ -299,229 +283,147 @@ Equality Rules:
                 {\Gamma \vdash t = t : A}
                 {\Gamma \vdash t : A}
         $}}
-
-    \and
+    
 
     \RuleLabel{Symm-Typ}{symm-typ} \quad
         \inferrule 
             {\Gamma \vdash A = B}
             {\Gamma \vdash B = A}
-
-    \and
+    
 
     \RuleLabel{Symm-Obj}{symm-obj} \quad
         \inferrule
             {\Gamma \vdash t = s \colon A}
             {\Gamma \vdash s = t \colon A}
-
-    \and
+    
 
     \RuleLabel{Trans-Typ}{trans-typ} \quad
         \inferrule
             {\Gamma \vdash A = B \\ \Gamma \vdash B = C}
             {\Gamma \vdash A = C}
-
-    \and
+    
 
     \RuleLabel{Trans-Obj}{trans-obj} \quad
         \inferrule 
             {\Gamma \vdash t_1 = t_2 \colon A \\ \Gamma \vdash t_2 = t_3 \colon A}
             {\Gamma \vdash t_1 = t_3 \colon A} 
+    
 
-    \and
-
-    \RuleLabel{Repl1}{repl1} 
+    \RuleLabel{Repl1}{repl1} \quad
         \inferrule
             {\Gamma \vdash t = s \colon A \\ \Gamma, x \colon A, \Delta \ok}
             {\Gamma, \Delta[x  \leftarrow  t] = \Gamma, \Delta[x  \leftarrow  t]}
+    
+
+    \RuleLabel{Repl2}{repl2} \quad
+        \inferrule
+            {\Gamma \vdash t = s : A \\ \Gamma, x \colon A, \Delta \vdash B \type}
+            {\Gamma, \Delta[x  \leftarrow  t] \vdash B[x  \leftarrow  t] = B[x  \leftarrow  s]}
+    
+
+    \RuleLabel{Repl3}{repl3} \quad
+        \inferrule
+            {\Gamma \vdash t_1 = t_2 : A \\ \Gamma, x \colon A, \Delta \vdash s : B}
+            {\Gamma, \Delta[ x  \leftarrow  t_1] \vdash s[x  \leftarrow  t_1] = s[x  \leftarrow  t_2] : B[x  \leftarrow  t_1]}
+    
+
+    \RuleLabel{Conv1}{conv1} \quad
+        \inferrule
+            {\Gamma \vdash A = B \\ \Gamma \vdash t : A}
+            { \Gamma \vdash t : B}
+    
+
+    \RuleLabel{Conv2}{conv2} \quad
+        \inferrule
+            {\Gamma \vdash A = B \\ \Gamma \vdash t = s : A}
+            {\Gamma \vdash t = s : B}
+
 \end{mathpar}
 
-\begin{enumerate}
-    \ruleitem{Repl2}{repl2} $\dfrac{
-        \Gamma \vdash t = s : A
-        \quad
-        \Gamma, x \colon A, \Delta \vdash B \type
-    }{
-        \Gamma, \Delta[x  \leftarrow  t]
-        \vdash
-        B[x  \leftarrow  t] = B[x  \leftarrow  s]
-    }$
-    \ruleitem{Repl3}{repl3} $\dfrac{
-        \Gamma \vdash t_1 = t_2 : A
-        \quad
-        \Gamma, x \colon A, \Delta \vdash s : B
-    }{
-        \Gamma, \Delta[ x  \leftarrow  t_1]
-        \vdash
-        s[x  \leftarrow  t_1] = s[x  \leftarrow  t_2] : B[x  \leftarrow  t_1]
-    }$
-    \ruleitem{Conv1}{conv1} $\dfrac{
-        \Gamma \vdash A = B
-        \quad
-        \Gamma \vdash t : A
-    }{
-        \Gamma \vdash t : B
-    }$
-    \ruleitem{Conv2}{conv2} $\dfrac{
-        \Gamma \vdash A = B
-        \quad
-        \Gamma \vdash t = s : A
-    }{
-        \Gamma \vdash t = s : B
-    }$
-\end{enumerate}
+Rules for products of types:
 
-Rules for Products of types
+\begin{mathpar}
+    \RuleLabel{$\Pi$-Form}{prod-form} \quad
+        \inferrule
+            {\Gamma, x \colon A \vdash B \type}
+            {\Gamma \vdash (\Pi x \colon A) B \type}
+    
 
-\begin{enumerate}
-    \ruleitem{$\Pi$-Form}{prod-form} $\dfrac{
-        \Gamma, x \colon A \vdash B \type
-    }{
-        \Gamma 
-        \vdash 
-        (\Pi x \colon A) B \type
-    }$
-    \ruleitem{$\Pi$-Equ}{prod-equ} $\dfrac{
-        \Gamma \vdash A_1 = A_2
-        \quad
-        \Gamma, x \colon A_1 \vdash B_1 = B_2
-    }{
-        \Gamma
-        \vdash
-        (\Pi x \colon A_1) B_1
-        =
-        (\Pi x \colon A_2) B_2
-    }$
-    \ruleitem{$\Pi$-Intro}{prod-intro} $\dfrac{
-        \Gamma, x \colon A \vdash t : B
-    }{
-        \Gamma
-        \vdash
-        (\lambda x \colon A) t
-        :
-        (\Pi x \colon A) B
-    }$
-    \ruleitem{$\xi$-Rule}{xi-rule} $\dfrac{
-        \Gamma, x \colon A_1 \vdash t_1 = t_2 : B
-        \quad
-        \Gamma \vdash A_1 = A_2
-    }{
-        \Gamma
-        \vdash
-        (\lambda x \colon A_1) t_1
-        =
-        (\lambda x \colon A_2) t_2
-        \colon
-        (\Pi x \colon A_1) B
-    }$
-    \ruleitem{$\Pi$-Elim}{prod-elim} $\dfrac{
-        \Gamma \vdash t \colon (\Pi x \colon A) B
-        \quad
-        \Gamma \vdash s \colon A
-        \quad
-        \Gamma, x \colon A \vdash B \type
-    }{
-        \Gamma
-        \vdash
-        \App([x \colon A] B, t, s) 
-        \colon 
-        B[x  \leftarrow  s]
-    }$
-    \ruleitem{$\Pi$-Elim-Equ}{prod-elim-equ} $\dfrac{
-        \Gamma \vdash A_1 = A_2
-        \quad
-        \Gamma \vdash t_1 = t_2 \colon (\Pi x \colon A_1) B_1
-        \quad
-        \Gamma, x \colon A_1 \vdash B_1 = B_2
-        \quad
-        \Gamma \vdash s_1 = s_2 \colon A_1
-    }{
-        \Gamma
-        \vdash
-        \App([x \colon A_1] B_1, t_1, s_1)
-        = 
-        \App([x \colon A_2] B_2, t_2, s_2)
-        \colon
-        B_1[x  \leftarrow  s_1]
-    }$
-    \ruleitem{$\beta$-Rule}{beta-rule} $\dfrac{
-        \Gamma, x \colon A \vdash B \type
-        \quad
-        \Gamma, x \colon A \vdash t \colon B
-        \quad
-        \Gamma \vdash s \colon A
-    }{
-        \Gamma 
-        \vdash
-        \App([x \colon A] B, (\lambda x : A) t, s)
-        = 
-        t[x  \leftarrow  s] 
-        \colon
-        B[x  \leftarrow  s]
-    }$
-    \ruleitem{$\eta$-rule}{eta-rule} $\dfrac{
-        \Gamma, x \colon A \vdash B \type
-        \quad
-        \Gamma \vdash t \colon (\Pi x \colon A) B
-    }{
-        \Gamma 
-        \vdash
-        (\lambda x \colon A) \App([x \colon A] B, t, x) 
-        = 
-        t
-        \colon
-        (\Pi x \colon A) B
-    }$
-\end{enumerate}
+    \RuleLabel{$\Pi$-Equ}{prod-equ} \quad
+        \inferrule
+            {\Gamma \vdash A_1 = A_2 \\ \Gamma, x \colon A_1 \vdash B_1 = B_2}
+            {\Gamma \vdash (\Pi x \colon A_1) B_1 = (\Pi x \colon A_2) B_2}
+    
+
+    \RuleLabel{$\Pi$-Intro}{prod-intro} \quad
+        \inferrule
+            {\Gamma, x \colon A \vdash t \colon B}
+            {\Gamma \vdash (\lambda x \colon A) t \colon (\Pi x \colon A) B}
+
+    \RuleLabel{$\xi$-Rule}{xi-rule} \quad
+        \inferrule
+            {\Gamma, x \colon A_1 \vdash t_1 = t_2  \colon B \\ \Gamma \vdash A_1 = A_2}
+            {\Gamma \vdash (\lambda x \colon A_1) t_1 = (\lambda x \colon A_2) t_2 \colon (\Pi x \colon A_1) B}
+
+\end{mathpar} % --- Page Break ---
+\begin{mathpar}
+
+    \RuleLabel{$\Pi$-Elim}{prod-elim} \quad
+        \inferrule
+            {\Gamma \vdash t \colon (\Pi x \colon A) B \\ \Gamma \vdash s \colon A \\ \Gamma, x \colon A \vdash B \type}
+            {\Gamma \vdash \App([x \colon A] B, t, s) \colon B[x  \leftarrow  s]}   
+
+    \RuleLabel{$\Pi$-Elim-Equ}{prod-elim-equ} \quad
+        \inferrule
+            {\Gamma \vdash A_1 = A_2 \\ \Gamma \vdash t_1 = t_2 \colon (\Pi x \colon A_1) B_1 \\ \Gamma, x \colon A_1 \vdash B_1 = B_2 \\ \Gamma \vdash s_1 = s_2 \colon A_1}
+            {\Gamma \vdash \App([x \colon A_1] B_1, t_1, s_1) =  \App([x \colon A_2] B_2, t_2, s_2) \colon B_1[x  \leftarrow  s_1]}
+
+    \RuleLabel{$\beta$-Rule}{beta-rule} \quad
+        \inferrule
+            {\Gamma, x \colon A \vdash B \type \\ \Gamma, x \colon A \vdash t \colon B \\ \Gamma \vdash s \colon A}
+            {\Gamma \vdash \App([x \colon A] B, (\lambda x : A) t, s) = t[x  \leftarrow  s] \colon B[x  \leftarrow  s]}
+
+    \RuleLabel{$\eta$-rule}{eta-rule} \quad
+        \inferrule 
+            {\Gamma, x \colon A \vdash B \type \\ \Gamma \vdash t \colon (\Pi x \colon A) B}
+            {\Gamma \vdash (\lambda x \colon A) \App([x \colon A] B, t, x) = t \colon (\Pi x \colon A) B}
+
+\end{mathpar}
 
 Rules for Propositions
 
-\begin{enumerate}
-    \ruleitem{Prop}{prop} $\dfrac{
-        \Gamma \ok
-    }{
-        \Gamma \vdash \Prop \type
-    }$ 
-    \ruleitem{Prop-Type}{prop-type} $\ddoublefrac{
-        \Gamma \vdash p \colon \Prop
-    }{
-        \Gamma \vdash \Proof(p) \type
-    }$
-    \ruleitem{Prop-Equ}{prop-equ} $\ddoublefrac{
-        \Gamma \vdash p_1 = p_2 \colon \Prop
-    }{
-        \Gamma \vdash \Proof(p_1) = \Proof(p_2)
-    }$
-    \ruleitem{$\forall$-Intro}{forall-intro} $\dfrac{
-        \Gamma, x \colon A 
-        \vdash
-        p \colon \Prop
-    }{
-        \Gamma
-        \vdash
-        (\forall x \colon A) p 
-        \colon \Prop
-    }$
-    \ruleitem{$\forall$-Equ}{forall-equ} $\dfrac{
-        \Gamma, x \colon A_1 \vdash p_1 = p_2 \colon \Prop
-        \quad
-        \Gamma \vdash A_1 = A_2
-    }{
-        \Gamma
-        \vdash
-        (\forall x \colon A_1) p_1
-        =
-        (\forall x \colon A_2) p_2 
-        \colon
-        \Prop
-    }$
-    \ruleitem{$\forall$-Elim}{forall-elim} $\dfrac{
-        \Gamma, x \colon A \vdash p \in \Prop
-    }{
-        \Gamma 
-        \vdash
-        \Proof((\forall x \colon A) p)
-        = 
-        (\Pi x \colon A) \Proof(p)
-    }$
-\end{enumerate}
+\begin{mathpar}
+    \RuleLabel{Prop}{prop} \quad
+        \inferrule
+            {\Gamma \ok}
+            {\Gamma \vdash \Prop \type}
+
+    \RuleLabel{Prop-Type}{prop-type} \quad
+        \vcenter{\hbox{$ 
+            \infer=
+                {\Gamma \vdash p \colon \Prop}
+                {\Gamma \vdash \Proof(p) \type}
+        $}}
+
+    \RuleLabel{Prop-Equ}{prop-equ} \quad
+        \vcenter{\hbox{$ 
+            \infer=
+                {\Gamma \vdash p_1 = p_2 \colon \Prop}
+                {\Gamma \vdash \Proof(p_1) = \Proof(p_2)}
+        $}}
+    
+    \RuleLabel{$\forall$-Intro}{forall-intro} \quad
+        \inferrule
+            {\Gamma, x \colon A \vdash p \colon \Prop}
+            {\Gamma \vdash (\forall x \colon A) p \colon \Prop}
+    
+    \RuleLabel{$\forall$-Equ}{forall-equ} \quad
+        \inferrule
+            {\Gamma, x \colon A_1 \vdash p_1 = p_2 \colon \Prop \\ \Gamma \vdash A_1 = A_2}
+            {\Gamma \vdash (\forall x \colon A_1) p_1 = (\forall x \colon A_2) p_2  \colon \Prop}
+
+    \RuleLabel{$\forall$-Elim}{forall-elim} \quad
+        \inferrule
+            {\Gamma, x \colon A \vdash p \in \Prop}
+            {\Gamma \vdash \Proof((\forall x \colon A) p) = (\Pi x \colon A) \Proof(p)}        
+\end{mathpar}
