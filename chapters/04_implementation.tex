@@ -212,7 +212,7 @@ processing in downstream machine learning tasks). \cite{wu2021} \cite{zhou2020}
 
 The core of our expansion algorithm leverages these GNN capabilities to process the graph structures that emerge from 
 the categorical semantics presented in previous chapters. The system operates alongside a GNN trained for node classification. 
-{\color{red}Initially}, we treat the GNN as a simple labeler. Given a finite subcategory $G_n$ produced by the previous expansion step, 
+We treat the GNN as a labeler. Given a finite subcategory $G_n$ produced by the previous expansion step, 
 the GNN classifies each node into one of three categories: \textsc{Keep}, \textsc{Expand}, or \textsc{Delete}.
 
 Next, we execute a partial expansion phase to compute $G_{n+1}$ from $G_n$. We remove any nodes labeled as \textsc{Delete} and 
