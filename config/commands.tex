@@ -271,3 +271,19 @@
 \newcommand{\ddoublefrac}[2]{{\displaystyle\doublefrac{#1}{#2}}}
 \newcommand{\tdoublefrac}[2]{{\textstyle\doublefrac{#1}{#2}}}
 \makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%% Equation Spacing %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\tightdisplayskips}{%
+  \setlength{\abovedisplayskip}{6pt}%
+  \setlength{\belowdisplayskip}{6pt}%
+  \setlength{\abovedisplayshortskip}{3pt}%
+  \setlength{\belowdisplayshortskip}{3pt}%
+}
+
+\appto{\normalsize}{\tightdisplayskips}
+\appto{\small}{\tightdisplayskips}
+\appto{\footnotesize}{\tightdisplayskips}

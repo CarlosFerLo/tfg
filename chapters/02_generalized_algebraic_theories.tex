@@ -56,47 +56,29 @@ we associate types to variables as required.
 When asserting that a term $t$ is of type $A$, we will write
 $t \colon A$. But if $t$ has variables $x_1, \dots, x_n$ occurring in it, this assertion
 does not make sense unless we assign some types to $x_1, \dots, x_m$.
-To do this we write $x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A$ or
-\begin{mathpar}
-    \inferrule{
-        x_1 \colon A_1, \dots, x_n\colon A_n
-    }{
-        t \colon A
-    }
-\end{mathpar}
+To do this we write 
+\begin{equation*}
+    x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A
+\end{equation*}
 that reads as follows: if $x_1$ is a variable of type $A_1$, \dots and if $x_n$ is a variable of type $A_n$,
 then $t$ is a term of type $A$. 
 Similarly, if we want to assert that if $x_1$ is a variable of type $A_1$,
 \dots and if $x_n$ is a variable of type $A_n$,
-then $A$ is a type, we can write: $x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type$ or
-\begin{mathpar}
-    \inferrule{
-        x_1 \colon A_1, \dots, x_n \colon A_n 
-    }{
-        A \type
-    }
-\end{mathpar}
+then $A$ is a type, we can write: $$x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type$$
+
 Such assertions are called rules or sequents. 
 Instead of considering expressions or judgments as basic units, we will use rules, 
 as both expressions and judgments make sense only within a context.
 
 Axioms are also written as rules. The conclusion of those rules
 are equalities between types or between terms of the same type.
-We write those rules as follows:
-\begin{mathpar}
-    \inferrule{
-        x_1 \colon A_1, \dots, x_n \colon A_n
-    }{
-        A = A'
-    }
-    \and
-    \inferrule{
-        x_1 \colon A_1, \dots, x_n \colon A_n
-    }{
-        t = t' \colon A
-    }
-\end{mathpar}
-and read as: if $x_1$ is a variable of type $A_1$, \dots and $x_n$ is a variable of type $A_n$,
+We write those rules as 
+\begin{equation*}
+     x_1 \colon A_1, \dots, x_n \colon A_n \vdash A = A'
+     \quad \text{and} \quad
+     x_1 \colon A_1, \dots, x_n \colon A_n \vdash t = t' \colon A
+\end{equation*}
+that read as: if $x_1$ is a variable of type $A_1$, \dots and $x_n$ is a variable of type $A_n$,
 then $A = A'$, or $t = t'$ as terms of type $A$, respectively.
 We will be using both shorthand and fraction notation as needed.
 
@@ -117,23 +99,15 @@ we must present each symbol with a rule specifying the role
 of this symbol, either as a sort symbol or as specifically typed operator symbol. 
 These rules are called \textit{introductory rules}.
 In the case of a sort symbol $A$, the rule should be like 
-\begin{mathpar}
-    \inferrule{
-        x_1 \colon A_1, \dots, x_n \colon A_n
-    }{
-        A(x_1, \dots, x_n) \type
-    }
-\end{mathpar}
+\begin{equation*}
+    x_1 \colon A_1, \dots, x_n \colon A_n \vdash A(x_1, \dots, x_n) \type
+\end{equation*}
 clearly specifying the types $A$ is dependent on.
 In the case of an operator symbol, a rule of the form
-\begin{mathpar}
-    \inferrule{
-        x_1 \colon A_1, \dots, x_n \colon A_n
-    }{
-        f(x_1, \dots, x_n) \colon A
-    }
-\end{mathpar}
-suffices to specify the types of the arguments and the type of the value of $f$.
+\begin{equation*}
+    x_1 \colon A_1, \dots, x_n \colon A_n \vdash F(x_1, \dots, x_n) \colon A
+\end{equation*}
+suffices to specify the types of the arguments and the type of the value of $F$.
 
 Finally, to present a theory we will give a set of symbols,
 each associated to its introductory rule, and a set of axioms.
@@ -150,9 +124,12 @@ and in Table \ref{table:categories-axioms} we state the axioms of the theory as 
     \toprule
     \textit{Symbol} & \textit{Introductory Rule} \\
     \midrule
-    $\Ob$   & $\vdash \Ob  \type$ \\
+    $\Ob$   & $\vdash \Ob \type$ \\
     $\Hom$  & $x, y \colon \mathrm{Ob} \vdash \Hom(x, y) \type$ \\
-    $\circ$         & $x, y, z \colon \Ob, f \colon \Hom(x,y), g \colon \Hom(y,z) \vdash \circ(f,g) \colon \Hom(x,z)$ \\
+    $\circ$ & $\begin{aligned}[t]
+                x, y, z \colon \Ob, f \colon \Hom(x,y), g \colon \Hom(y,z) \\
+                \vdash \circ(f,g) \colon \Hom(x,z)
+              \end{aligned}$ \\
     $\mathrm{id}$   & $x \in \Ob \vdash \id(x) \colon \Hom(x,x)$ \\
     \bottomrule
   \end{tabular}
@@ -164,17 +141,14 @@ and in Table \ref{table:categories-axioms} we state the axioms of the theory as 
 \begin{table}[htbp]
   \centering
   \renewcommand{\arraystretch}{1.6}
-  \begin{tabular}{@{} p{6.5cm} p{8cm} @{}}
+  \begin{tabular}{@{} l @{}}
     \toprule
-    \multicolumn{2}{@{}l}{\textit{Axioms}} \\
+    \textit{Axioms} \\
     \midrule
-    $\circ(\id(x), f) = f$
-      & whenever $x, y \colon \Ob$ and $f \colon \Hom(x, y)$ \\
-    $\circ(f, \id(y)) = f$
-      & whenever $x, y \colon \Ob$ and $f \colon \Hom(x, y)$ \\
-    $\circ(\circ(f,g),\,h) = \circ(f,\circ(g,h))$
-      & whenever $w, x, y, z \colon \Ob$, $f \colon \Hom(w,x)$,
-        $g \colon \Hom(x,y)$ and $h \colon \Hom(y,z)$ \\
+    $x, y \colon \Ob, f \colon \Hom(x, y) \vdash \circ(\id(x), f) = f$ \\
+    $x, y \colon \Ob, f \colon \Hom(x, y) \vdash \circ(f, \id(y)) = f$ \\
+    $w, x, y, z \colon \Ob, f \colon \Hom(w, x), g \colon \Hom(x, y), h \colon \Hom(y, z)$ \\
+    $\quad \vdash \circ(\circ(f, g), h) = \circ(f, \circ(g, h))$ \\
     \bottomrule
   \end{tabular}
   \caption{Axioms (left unit, right unit, associativity).}
@@ -213,8 +187,8 @@ Now we can define the building blocks of a rule:
 \begin{definition}
     A \textit{premise} is defined to be a sequence of elements of $V \times \mathcal{E}$.
     The empty sequence is allowed and we call it an empty premise.
-    If $((x_1, A_1), \dots, (x_n, A_n))$ is a premise,
-    we write it as $x_1 \colon A_1, \dots, x_n \colon A_n$.
+    We denote the premise $((x_1, A_1), \dots, (x_n, A_n))$  
+    as $x_1 \colon A_1, \dots, x_n \colon A_n$.
 \end{definition}
 \begin{definition}
     We call a \textit{conclusion} to one of the following:
@@ -229,7 +203,7 @@ Now we can define the building blocks of a rule:
               and written as '$t_1 = t_2 \colon A$'
     \end{enumerate}
     Finally a \textit{rule} is determined by a premise $P$ and a
-    conclusion $C$, and is written as $\dfrac{P}{C}$ or as $P \vdash C$.
+    conclusion $C$, and is written as $P \vdash C$.
     We name the rule as $T$-rule, $\in$-rule, $T=$rule or $\in=$rule
     according to the form of the conclusion.
 \end{definition}
@@ -243,24 +217,16 @@ Now we can define a \textit{pre-theory} and later a \textit{theory}.
         \item a set of operator symbols $\mathcal{Z}$;
         \item for each sort symbol $A \in \mathcal{S}$, an associated rule 
               of the alphabet $\mathcal{S} \cup \mathcal{Z}$:
-              \begin{mathpar}
-                \inferrule{
-                    x_1 \colon A_1, \dots, x_n \colon A_n
-                }{
-                    A(x_1, \dots, x_n) \type
-                }
-              \end{mathpar}
+              \begin{equation*}
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash A(x_1, \dots, x_n) \type
+              \end{equation*}
               for some $n \geq 0$. It is called the \textit{introductory
               rule} of $A$;
         \item for each operator symbol $F \in \mathcal{Z}$, an associated rule
               of the alphabet $\mathcal{S} \cup \mathcal{Z}$:
-              \begin{mathpar}
-                \inferrule{
-                    x_1 \colon A_1, \dots, x_n \colon A_n
-                }{
-                    F(x_1, \dots, x_n) \colon A
-                }
-              \end{mathpar}
+              \begin{equation*}
+                x_1 \colon A_1, \dots, x_n \colon A_n \vdash F(x_1, \dots, x_n) \colon A
+              \end{equation*}
               for some $n \geq 0$. It is called the \textit{introductory
               rule} of $F$;
         \item a set of axioms. Where each axiom is either a $T=$rule or
@@ -282,27 +248,23 @@ Now we tackle the problem of well-formedness of rules.
     \begin{enumerate}
         \item a \textit{context} is a premise $x_1 \colon A_1, \dots, x_n \colon A_n$
             such that the rule
-            \begin{mathpar}
-                \inferrule{
-                    x_1 \colon A_1, \dots, x_{n-1}\colon A_{n-1}
-                }{
-                    A_n \type
-                }
-            \end{mathpar}
+            \begin{equation*}
+                x_1 \colon A_1, \dots, x_{n-1}\colon A_{n-1} \vdash A_n \type
+            \end{equation*}
             is a derived rule such that $x_n$ is distinct from all of $x_1, \dots, x_n$.
         \item \begin{enumerate}
-            \item the rule $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{\Delta \text{ is a type}}$
-                  is \textit{well-formed} if the premise $x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n$ is a context.
-            \item the rule $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{t \colon \Delta}$
-                  is \textit{well-formed} if $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{\Delta \text{ is a type}}$
+            \item the rule $\Gamma \vdash A \type$
+                  is \textit{well-formed} if the premise $\Gamma$ is a context.
+            \item the rule $\Gamma \vdash t \colon A$
+                  is \textit{well-formed} if $\Gamma \vdash A \type$
                   is a derived rule of $U$.
-            \item the rule $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{\Delta = \Delta'}$
-                  is \textit{well-formed} if $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{\Delta \text{ is a type}}$
-                  and \\ $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{\Delta' \text{ is a type}}$
+            \item the rule $\Gamma \vdash A = A'$
+                  is \textit{well-formed} if $\Gamma \vdash A \type$
+                  and $\Gamma \vdash A' \type$
                   are derived rules of $U$.
-            \item the rule $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{t = t' \colon \Delta}$
-                  is \textit{well-formed} if $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{t \colon \Delta}$
-                  and \\ $\dfrac{x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n}{t' \colon \Delta}$
+            \item the rule $\Gamma \vdash t = t' \colon A$
+                  is \textit{well-formed} if $\Gamma \vdash t \colon A$
+                  and $\Gamma \vdash t' \colon A$
                   are derived rules of $U$.
         \end{enumerate}
     \end{enumerate}
@@ -341,16 +303,16 @@ we construct a category \cite{maclane1971} out of the theory syntax.
         \Gamma \vdash t_j \colon B_j[y_1  \leftarrow  t_1, \dots, y_{j-1}  \leftarrow  t_{j-1}] 
     \]
     is derivable.
-    The identity of an object $x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n$ is the realization 
+    We define the identity of an object $x_1 \colon \Delta_1, \dots, x_n \colon \Delta_n$ is the realization 
     $\langle x_1, \dots, x_n \rangle$, and composition is defined as 
-    \begin{multline*}
-        \langle t_1, \dots, t_m \rangle \circ \langle s_1, \dots, s_w \rangle = \\
-        \langle s_1[y_1  \leftarrow  t_1, \dots, y_m  \leftarrow  t_m], \dots, s_w[y_1  \leftarrow  t_1, \dots, y_m  \leftarrow  t_m] \rangle
-    \end{multline*}
-    whenever $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$ and $\Delta = y_1 \colon B_1, \dots, y_m \colon B_m$
-    and $\Omega = z_1 \colon C_1, \dots,  z_w \colon C_w$ are contexts, and 
+    \begin{align*}
+        \langle t_1, \dots, t_m \rangle \circ \langle s_1, \dots, s_w \rangle &= \\
+        &\quad \langle s_1[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m], \dots, s_w[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m] \rangle
+    \end{align*}
+    for $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, $\Delta = y_1 \colon B_1, \dots, y_m \colon B_m$
+    and $\Omega = z_1 \colon C_1, \dots,  z_w \colon C_w$ contexts, and 
     $\langle t_1, \dots, t_m \rangle \colon \Gamma \to \Delta$ and $\langle s_1, \dots, s_w \rangle \colon \Delta \to \Omega$
-    are realizations.
+    realizations.
 \end{definition}
 
 Now we study some properties of this category.
@@ -389,9 +351,9 @@ as $p(\langle x_1 \colon A_1, \dots, x_{n+m} \colon A_{n+m} \rangle, \langle x_1
 Hence, if we consider $\Gamma, \Delta \in \Ob R(U)$ such that $\Gamma \leq \Delta$, then $p(\Delta, \Gamma)$ is defined and 
 $p(\Delta, \Gamma) \colon \Delta \to \Gamma$ in $R(U)$.
 
-If $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, $\Gamma' = y_1 \colon B_1, \dots, y_m \colon B_m$
-and $\Delta = y_1 \colon B_1, \dots, y_{m+w} \colon B_{m+w}$ are contexts, and if 
-$f = \langle t_1, \dots, t_m \rangle \colon \Gamma \to \Gamma'$ in $R(U)$, then
+Additionally, for contexts $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, $\Gamma' = y_1 \colon B_1, \dots, y_m \colon B_m$
+and $\Delta = y_1 \colon B_1, \dots, y_{m+w} \colon B_{m+w}$, and morphism
+$f = \langle t_1, \dots, t_m \rangle \colon \Gamma \to \Gamma'$ in $R(U)$, 
 \[
 \begin{tikzcd}
     f^*\Delta \arrow[r, "{q(f, \Delta)}"] \arrow[d, "{p(f^*\Delta, \Gamma)}"'] & \Delta \arrow[d, "{p(\Delta, \Gamma')}"] \\
@@ -399,14 +361,10 @@ $f = \langle t_1, \dots, t_m \rangle \colon \Gamma \to \Gamma'$ in $R(U)$, then
 \end{tikzcd}
 \]
 is a pullback diagram \cite{maclane1971} in $R(U)$, where % TODO: fix alignment
-\begin{multline*}
-    f^*\Delta 
-    = 
-        x_1 \colon A_1, \dots, x_n \colon A_n, \\
-        y_{m+1} \colon B[y_1  \leftarrow  t_1, \dots, y_m  \leftarrow  t_m], 
-        \dots,
-        y_{m+w} \colon B[y_1  \leftarrow  t_1, \dots, y_m  \leftarrow  t_m] 
-\end{multline*}
+\begin{align*}
+    f^*\Delta &= x_1 \colon A_1, \dots, x_n \colon A_n, \\
+    &\quad y_{m+1} \colon B[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m], \dots, y_{m+w} \colon B[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]
+\end{align*}
 \[
     q(f, \Delta) = \langle t_1, \dots, t_m, y_{m+1}, \dots, y_{m+w} \rangle.
 \]
@@ -653,25 +611,14 @@ direct from the definition of $C(U)$:
 \begin{theorem}[Completeness Theorem] \label{thm:completeness-context-category}
     Let $\mathcal{M}$ be the canonical interpretation of a theory $U$ in $C(U)$.
     \begin{enumerate}
-        \item The $T$-rule \(
-                \dfrac{
-                    x_1 \colon A_1, \dots, x_n \colon A_n
-                }{
-                    A \type
-                }
-            \) is derivable if and only if
-            $x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A$
-            is a context, i.e., if $[x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A]$
-            in $C(U)$.
-        \item The $\in$-rule \(
-                \dfrac{
-                    x_1 \colon A_1, \dots, x_n \colon A_n
-                }{
-                    t \colon A
-                }
-            \)  is derivable if and only if
-            $\langle x_1, \dots, x_n, t \rangle$ is a section of 
-            $[x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A]$
+        \item The $T$-rule $\Gamma \vdash A \type$
+            is derivable if and only if
+            $\Gamma, x \colon A$
+            is a context, i.e., if $[\Gamma, x \colon A]$
+            is an object of $C(U)$.
+        \item The $\in$-rule $\Gamma \vdash t \colon A$, for $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, is derivable if and only if
+            $[\langle x_1, \dots, x_n, t \rangle]$ is a section of 
+            $[\Gamma, x \colon A]$
             in $C(U)$.
         \item If the $T$-rules $\Gamma \vdash A_1 \type$ and $\Gamma \vdash A_2 \type$ are derivable, 
             then the rule \(
@@ -682,7 +629,7 @@ direct from the definition of $C(U)$:
                 [\Gamma, x \colon A_2],
             \)
             where $x$ is a variable that does not appear in $\Gamma$.
-        \item If the $\in$-rules $\Gamma \vdash t \colon A$ and $\Gamma \vdash s \colon A$ are derivable, 
+        \item If the $\in$-rules $\Gamma \vdash t \colon A$ and $\Gamma \vdash s \colon A$, for $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, are derivable, 
             then the rule $\Gamma \vdash t = s \colon A$ is derivable
             if, and only if, $\langle x_1, \dots, x_n, t \rangle$ and 
             $\langle x_1, \dots, x_n, s \rangle$
@@ -700,41 +647,35 @@ Given a contextual category $\mathcal{C}$ and a theory $U$, an \textit{interpret
 is a mapping $\mathcal{M}$ from the $T$- and $\in$-rules of $U$ to the $\mathcal{C}$ such that
 \begin{enumerate}
     \item if $R$ is a derived $T$-rule \(
-            \dfrac{
-                x_1 \colon A_1, \dots, x_n \colon A_n
-            }{
-                A \text{ is a type}   
-            }
-        \) and we define rules \\ 
+            x_1 \colon A_1, \dots, x_n \colon A_n
+            \vdash
+            A \type    
+        \) and we name the rules 
         \(
-            R_i \equiv \dfrac{
-                x_1 \colon A_1, \dots, x_{i-1} \colon A_{i-1}
-            }{
-                A_i \text{ is a type}   
-            }
-        \) for $1 \leq i \leq n$, then $\mathcal{M}[R_1], \dots, \mathcal{M}[R_n], \mathcal{M}[R]$ are
+            x_1 \colon A_1, \dots, x_{i-1} \colon A_{i-1}
+            \vdash 
+            A_i \type
+        \) as $R_i$ for $1 \leq i \leq n$, then $\mathcal{M}[R_1], \dots, \mathcal{M}[R_n], \\ \mathcal{M}[R]$ are
         objects of $\mathcal{C}$ such that \(
             1 \lhd \mathcal{M}[R_1] \lhd \dots \lhd \mathcal{M}[R_n] \lhd \mathcal{M}[R]
         \)
         in $\mathcal{C}$.
 
     \item if $R_t$ is a derived $\in$-rule \(
-            \dfrac{
-                x_1 \colon A_1, \dots, x_n \colon A_n   
-            }{
-                t \colon A
-            }
+            x_1 \colon A_1, \dots, x_n \colon A_n   
+            \vdash
+            t \colon A
         \) then $\mathcal{M}[R_t]$ is section of $\mathcal{M}[R]$.
 
     \item if $\Gamma \vdash A = A'$ is a derived $T=$rule, then if we name 
-            $R \equiv \Gamma \vdash A \type$
+            $\Gamma \vdash A \type$ as $R$
             and
-            $R' \equiv \Gamma \vdash A' \type$,
+            $\Gamma \vdash A' \type$ as $R'$,
          then $\mathcal{M}[R] = \mathcal{M}[R']$.
     \item if $\Gamma \vdash t = t' \colon A$ is a derived $\in=$rule, then if we name
-            $R_t \equiv \Gamma \vdash t \colon A$,
-            $R_{t'} \equiv \Gamma \vdash t' \colon A$ and
-            $R \equiv \Gamma \vdash A \type$,
+            $\Gamma \vdash t \colon A$ as $R_t$,
+            $\Gamma \vdash t' \colon A$ as $R_{t'}$ and
+            $\Gamma \vdash A \type$ as $R$,
         then both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$.
         and $\mathcal{M}[R_t] = \mathcal{M}[R_{t'}]$
 \end{enumerate}
@@ -825,12 +766,11 @@ output.
 We can consider this problem from the point of view of the 
 context category $C(U)$, where by the Completeness Theorem \ref{thm:completeness-context-category}
 it is rephrased as follows:
-Given a context $\langle x_1 \colon A_1, \dots, x_n \colon A_n \rangle$
-in $C(U)$, we want to find a section of $\langle x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A \rangle$
+Given a context $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$
+in $C(U)$, we want to find a section of $\Gamma, x \colon A$
 in $C(U)$.
 
-By naming $\Gamma \equiv \langle x_1 \colon A_1, \dots, x_n \colon A_n \rangle$,
-we can restrict our search to the \textit{relativization} of $C(U)$ to $[\Gamma]$,
+We can restrict our search to the \textit{relativization} of $C(U)$ to $[\Gamma]$,
 that we denote as $\mathcal{C}_\Gamma$.
 We denote a morphism $\langle x_1, \dots, x_n, t_{n+1}, \dots, t_{n+m} \rangle$  in $\mathcal{C}_\Gamma$,
 as $\langle t_{n+1}, \dots, t_{n+m} \rangle_\Gamma$.
@@ -854,92 +794,66 @@ if there exists an $n \geq 0$ such that the given object or morphism
 is contained in $G_n$. 
 The process of constructing $G_{n+1}$ from $G_n$ consists of applying
 the following rules to each context 
-$\Gamma y_1 \colon B_1, \dots, y_m \colon B_m$
+$\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$
 of $G_n$:
 \begin{itemize}
     \ruleitem{E1}{sort-symbol-intro} For each sort symbol $S$ with a well-formed
-        introductory rule 
-        \begin{mathpar}
-            \inferrule{
-                z_1 \colon C_1, \dots, z_n \colon C_w
-            }{
-                A(z_1, \dots, z_w) \type
-            }    
-        \end{mathpar}
+        introductory rule \[
+            z_1 \colon C_1, \dots, z_n \colon C_m \vdash A(z_1, \dots, z_w) \type
+        \]
         such that $G_n$ contains sections
-        \begin{align*} % TODO: fix alignment
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
-            &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1 \\
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
-            &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma}
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_2 \colon C_2[z_1  \leftarrow  t_1] \\
-            \vdots \\
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
-            &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_\Gamma}
-            \Gamma y_1 \colon B_1, \dots, y_m \colon B_m, z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}] \\
+        \begin{align*}
+            [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_1 \colon C_1] \\
+            [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_2[z_1 \leftarrow t_1]] \\
+            &\vdots \\
+            [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]]
         \end{align*}
         then we add the context
-        $\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, y \colon A(t_1, \dots, t_w)$ 
+        $[\Delta, y \colon A(t_1, \dots, t_w)]$ 
         and its projection to $G_{n+1}$.
-    \ruleitem{E2}{variable-duplication} Add the morphisms \[
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
-            \xrightarrow{\langle y_1, \dots, y_m, x_i\rangle_\Gamma}
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, x \colon A_i 
+    \ruleitem{E2}{variable-duplication} Add the morphisms 
+        \[
+            [\langle y_1, \dots, y_m, x_i \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A_i]
         \] \[
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
-            \xrightarrow{\langle y_1, \dots, y_m, y_j \rangle_\Gamma}
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, y \colon B_j
+            [\langle y_1, \dots, y_m, y_j \rangle_\Gamma] \colon [\Delta] \to [\Delta, y \colon B_j]
         \]
-        
         and their corresponding projections for each $1 \leq i \leq n$ and each $1 \leq j \leq m$.
     \ruleitem{E3}{operator-symbol-intro} For every operator symbol $F$ with a well-formed
-        introductory rule 
-        \begin{mathpar}
-            \inferrule{
-                z_1 \colon C_1, \dots, z_w \colon C_w
-            }{
-                F(z_1, \dots, z_w) \colon C
-            }
-        \end{mathpar}
-        if the following sections exist in $G_n$
-        \begin{align*} % TODO: fix alignment
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
-            &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1  \\
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
-            &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma}
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_2 \colon C_2[z_1  \leftarrow  t_1]  \\
-            \vdots \\
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
-            &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_\Gamma}
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}] \\
+        introductory rule \[
+            z_1 \colon C_1, \dots, z_w \colon C_w \vdash F(z_1, \dots, z_w) \colon C
+        \]
+        if the following sections exist in $G_n$:
+        \begin{align*}
+            [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_1 \colon C_1] \\
+            [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_2 \colon C_2[z_1 \leftarrow t_1]] \\
+            &\vdots \\
+            [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_w \colon C_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]]
         \end{align*}
         then we add the section
-        \[ % TODO: fix alignment
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
-            \xrightarrow{\langle y_1, \dots, y_m, F(t_1, \dots, t_w) \rangle_\Gamma}
-            \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z \colon C[z_1  \leftarrow  t_1, \dots, z_w  \leftarrow  t_w]
+        \[
+            [\langle y_1, \dots, y_m, F(t_1, \dots, t_w) \rangle_\Gamma] \colon [\Delta] \to [\Delta, z \colon C[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]]
         \]
     \ruleitem{E4}{pullback} For every morphism
         \[
-            \langle t_1, \dots, t_{m-1} \rangle_\Gamma
-            \colon \Gamma, z_1 \colon C_1, \dots, z_w \colon C_w 
-            \to \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}
+            [\langle t_1, \dots, t_{m-1} \rangle_\Gamma]
+            \colon [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]
+            \to [\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}]
         \]
-        we construct the corresponding pullback % TODO: fix alignment
+        we construct the corresponding pullback in $G_{n+1}$:% TODO: properly align this
         \[
-            \begin{tikzcd}
-                \Gamma, z_1\colon C_1, \dots, z_w \colon C_w, y_m \colon B_m[t_1  \leftarrow  y_1, \dots, t_{m-1}  \leftarrow  y_{m-1}]
-                \arrow[r, "\langle t_1{,} \dots{,} t_{m-1}{,} y_m \rangle_\Gamma"] \arrow[d, open] 
-                & \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
+            \begin{tikzcd}[column sep=large]
+                {\begin{array}{c}
+                [\Gamma, z_1: C_1, \dots, z_w: C_w, \\
+                y_m: B_m[t_1 \leftarrow y_1, \dots, t_{m-1} \leftarrow y_{m-1}]]
+                \end{array}}
+                \arrow[r, "{[\langle t_1, \dots, t_{m-1}, y_m \rangle_\Gamma]}"] \arrow[d, open] 
+                & {[\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m]}
                 \arrow[d, open] \\
-                \Gamma, z_1 \colon C_1, \dots, z_w \colon C_w
-                \arrow[r, "\langle t_1 {,} \dots {,} t_{m-1} \rangle_\Gamma"]
-                & \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}
+                {[\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]}
+                \arrow[r, "{[\langle t_1 {,} \dots {,} t_{m-1} \rangle_\Gamma]}"]
+                & {[\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}]}
             \end{tikzcd}
         \]
-        in $G_{n+1}$.
 \end{itemize} 
 Finally, we complete $G_{n+1}$ by adding the compositions of all of its morphisms.
 When we say we add a morphism, it is implied that we also add both endpoints, and when adding an object,
@@ -967,7 +881,7 @@ prove a the result by induction. This definition is inspired to the one in the n
     \end{enumerate}
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{lemma:exhaustivity-for-gats}
     Every object and every section of $\mathcal{C}_\Gamma$ are constructible by expansion.
 \end{lemma}
 \begin{proof}
@@ -976,17 +890,17 @@ prove a the result by induction. This definition is inspired to the one in the n
         \item if $\Delta$ is a context over $\Gamma$, then \[
             \degree[\Delta] = \depth[\Delta] - \depth[\Gamma];
         \]
-        \item if $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$ is a context and 
+        \item if $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$ is a context and 
             $[\langle y_1, \dots, y_m, t \rangle_\Gamma]$ is a section of $[\Delta, x \colon A]$, then \[
                 \degree[\langle y_1, \dots, y_m, t \rangle_\Gamma] = \degree[\Delta] + \depth[t].
             \]
     \end{enumerate}
     Together with a secondary induction on derivation length.
 
-    Consider then a context $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. We want to see that $[\Delta]$ is constructible by expansion.
-    As $\Delta$ is a context, if we denote $\Delta' \equiv \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$, we have that \[
+    Consider then a context $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. We want to see that $[\Delta]$ is constructible by expansion.
+    As $\Delta$ is a context, we have that \[
         \Delta' \vdash B_m \type
-    \] is a derived rule of $U$. This implies that $\Delta'$ is itself a context, and by induction hypothesis, as \[
+    \] is a derived rule of $U$, where we denote $\Delta' = \Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}$. This implies that $\Delta'$ is itself a context, and by induction hypothesis, as \[
         \degree[\Delta] = \degree[\Delta'] + \depth[B_m] \geq \degree[\Delta'] + 1 > \degree[\Delta'],
     \] we have that $[\Delta']$ is constructible by expansion.
     Moreover, as the rule $\Delta' \vdash B_m \type$ can only be derived by \ref{rule:cf2a}, there exists a sort symbol $S$
@@ -1007,14 +921,14 @@ prove a the result by induction. This definition is inspired to the one in the n
         &\vdots \\
         [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]] 
     \end{align*}
-    And clearly, as \begin{multline*}
-        \degree[\Delta] = \degree[\Delta'] + \depth[A(t_1, \dots, t_m)] > \\ 
-        > \degree[\Delta'] + \depth[t_j] = \degree[\langle y_1, \dots, y_m \rangle_\Gamma]
-    \end{multline*}
+    And clearly, as \begin{align*}
+        \degree[\Delta] &= \degree[\Delta'] + \depth[A(t_1, \dots, t_m)] > \\ 
+        &> \degree[\Delta'] + \depth[t_j] = \degree[\langle y_1, \dots, y_m \rangle_\Gamma]
+    \end{align*}
     for every $j$, with $1 \leq j \leq w$, they are all constructible by expansion by induction hypothesis.
     Finally, by applying the expansion rule \ref{rule:sort-symbol-intro}, we have that $[\Delta]$ is constructible by expansion.
     
-    Now, consider a section $[\langle y_1, \dots, y_m, t \rangle_\Gamma]$ of $[\Delta, x \colon A]$, hence the rule 
+    Now, consider a section $[\langle y_1, \dots, y_m, t \rangle_\Gamma]$ of $[\Delta, x \colon A]$. By definition, the rule 
     \begin{equation}
         \Delta \vdash t \colon A \label{eq:underlying-rule-operator}
     \end{equation} 
@@ -1050,14 +964,14 @@ prove a the result by induction. This definition is inspired to the one in the n
             \end{multline*}
             for all $j$, with $1 \leq j \leq w$, by the induction hypothesis, the following sections are constructible by expansion: 
             \begin{align*}
-                [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_1 \colon C_1] \\
-                [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_2 \colon C_2[z_1  \leftarrow  t_1]] \\
+                [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_1 \colon C_1] \\
+                [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_2 \colon C_2[z_1  \leftarrow  t_1]] \\
                 &\vdots \\
-                [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]] 
+                [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]] 
             \end{align*}
             Then by applying the expansion rule \ref{rule:operator-symbol-intro}, we get that the section \[
                 [\langle y_1, \dots, y_m, t \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A]
-            \] is constructible by expansion.
+            \] is constructible by expansion. \qedhere
     \end{enumerate}
 \end{proof}
 
@@ -1086,83 +1000,68 @@ prove a the result by induction. This definition is inspired to the one in the n
 
     Now we show that the morphism 
     \[
-        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m \rangle
-        \xrightarrow{\langle y_1, \dots, y_m, t_1, \dots, t_w \rangle_\Gamma}
-        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_w \colon C_w
+        [\langle y_1, \dots, y_m, t_1, \dots, y_w \rangle_\Gamma] \colon [\Delta] \to [\Delta, z_1 \colon C_1, \dots, z_w \colon C_w]
     \]
     is constructible by expansion. To do this, we  prove that, given $j$ with $2 < j \leq n$, if
     \[
-        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m 
-        \xrightarrow{\langle y_1, \dots, y_m, \dots, t_{j-1} \rangle_\Gamma}
-        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_{j-1} \colon C_{j-1}
+        [\langle y_1, \dots, y_m, t_1, \dots t_{j-1} \rangle_\Gamma] \colon [\Delta] \to [\Delta, z_1 \colon C_1, \dots, z_{j-1} \colon C_{j-1}]
     \]
     \[
-        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
-        \xrightarrow{\langle y_1, \dots, y_m, t_j \rangle_\Gamma}
-        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_j \colon C_j[z_1  \leftarrow  \dots z_{j-1}  \leftarrow  t_{j-1}]
+        [\langle y_1, \dots, y_m, t_j \rangle_\Gamma] \colon [\Delta] \to [\Delta, z_j \colon C_j[z_1 \leftarrow t_1, \dots, z_{j-1} \leftarrow t_{j-1}]]
     \]
-    are constructible by expansion so is
+    are constructible by expansion, then so is
     \[
-        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m
-        \xrightarrow{\langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma}
-        \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m, z_1 \colon C_1, \dots, z_j \colon C_j 
+        [\langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma] \colon [\Delta] \to [\Delta, z_1 \colon C_1, \dots, z_j \colon C_j]
     \]
     By the previous lemma, the object $[\Delta, z_1 \colon C_1, \dots, z_j \colon C_j]$ is constructible by expansion,
     and by applying the expansion rule \ref{rule:pullback} on it, the following diagram is constructible by expansion:
     \[
-    \begin{tikzcd} % TODO: fix overflow
-        \Delta, z_j \colon C_j[t_1  \leftarrow  z_1, \dots, t_j  \leftarrow  z_j]
-            \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots {,} t_{j-1} {,} z_j \rangle_\Gamma"]
+    \begin{tikzcd}[column sep=large]
+        {[\Delta, z_j \colon C_j[t_1  \leftarrow  z_1, \dots, t_j  \leftarrow  z_j]]}
+            \arrow[r, "{\langle t_1, \dots, t_{j-1}, z_j \rangle_\Delta}"]
             \arrow[d, open] 
-        & \Delta, z_1 \colon C_1, \dots, z_j \colon C_j 
+        & {[\Delta, z_1 \colon C_1, \dots, z_j \colon C_j ]}
             \arrow[d, open] 
         \\
         \Delta
-            \arrow[r, "\langle y_1{,} \dots{,} y_m{,} t_1{,} \dots{,} t_{j-1} \rangle_\Gamma"] &
+            \arrow[r, "{\langle t_1, \dots, t_{j-1} \rangle_\Delta}"] &
         \Delta, z_1 \colon C_1, \dots, z_{j-1} \colon C_{j-1}
     \end{tikzcd}
     \]
     and by composition we get that 
     \[
-        \langle y_1, \dots, y_m, t_1, \dots, t_{j-1}, z_j \rangle_\Gamma
+        [\langle y_1, \dots, y_m, t_1, \dots, t_{j-1}, z_j \rangle_\Gamma]
         \circ
-        \langle y_1, \dots, y_m, t_j \rangle_\Gamma
+        [\langle y_1, \dots, y_m, t_j \rangle_\Gamma]
         = 
-        \langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma
+        [\langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma]
     \]
     is constructible by expansion.
     It remains to see that the morphism
     \[
-        \Gamma,
-            y_1 \colon B_1, \dots, y_m \colon B_m,
-            z_1 \colon C_1, \dots, z_w \colon C_w
-        \xrightarrow{\langle z_1, \dots, z_w \rangle_\Gamma}
-        \Gamma,
-            z_1 \colon C_1, \dots, z_w \colon C_w
+        [\langle z_1, \dots, z_w \rangle_\Gamma] \colon [\Delta, z_1 \colon C_1, \dots, z_w \colon C_w] \to [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]
     \]
-    is constructible by expansion. That comes directly from the 
-    fact that $[\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]$
-    is constructible by expansion, and repeated application of the rule \ref{rule:pullback}
+    is constructible by expansion.
+    As $\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w$ is a context, by Lemma \ref{lemma:exhaustivity-for-gats}, $[\Delta, z_1 \colon C_1, \dots, z_j \colon C_j]$ is constructible by expansion.
+    And by repeated application of the rule \ref{rule:pullback}
     gives us the following diagram: 
     \[
-    \begin{tikzcd}
-        \Gamma, 
-        y_1 \colon B_1, \dots, y_m \colon B_m
-        z_1 \colon C_1, \dots, z_w \colon C_w
+    \begin{tikzcd}[column sep=large]
+        {[\Delta, 
+        z_1 \colon C_1, \dots, z_w \colon C_w]}
             \arrow[r, "\langle z_1{,} \dots{,} z_w \rangle_\Gamma"]
             \arrow[d, open] 
-        & \Gamma,
-        z_1 \colon C_1, \dots, z_w \colon C_w
+        & {[\Gamma,
+        z_1 \colon C_1, \dots, z_w \colon C_w]}
             \arrow[d, open] 
         \\
-        \Gamma,
-        y_1 \colon B_1, \dots, y_m \colon B_m
-        z_1 \colon C_1, \dots, z_{w-1} \colon C_{w-1}
+        {[\Delta,
+        z_1 \colon C_1, \dots, z_{w-1} \colon C_{w-1}]}
             \arrow[r, "\langle z_1{,} \dots{,} z_{w-1} \rangle_\Gamma"]
             \arrow[d, open] 
         &
-        \Gamma,
-        z_1 \colon C_1, \dots, z_{w-1} \colon C_{w-1}
+        {[\Gamma,
+        z_1 \colon C_1, \dots, z_{w-1} \colon C_{w-1}]}
             \arrow[d, open] 
         \\
         \vdots 
@@ -1170,16 +1069,14 @@ prove a the result by induction. This definition is inspired to the one in the n
         & \vdots 
             \arrow[d, open]
         \\
-        \Gamma, 
-        y_1 \colon B_1, \dots, y_m \colon B_m,
-        z_1 \colon C_1
+        {[\Delta,
+        z_1 \colon C_1]}
             \arrow[r, "\langle z_1 \rangle_\Gamma"]
             \arrow[d, open] 
         & \Gamma, z_1 \colon C_1
             \arrow[d, open] 
         \\
-        \Gamma,
-        y_1 \colon B_1, \dots, y_m \colon B_m
+        {[\Delta]}
             \arrow[r, "\langle \rangle_\Gamma"] 
         & \Gamma
     \end{tikzcd}
