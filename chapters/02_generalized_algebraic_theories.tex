@@ -289,7 +289,7 @@ We could add substitution as one of the derivation rules,
 but that would make applying induction very messy.
 
 To transition from syntax to geometry (which our Graph Neural Network will eventually navigate),
-we construct a category \cite{maclane1971} out of the theory syntax.
+we construct a category out of the theory syntax.
 
 \begin{definition}
     For a theory $U$, we define the \textit{category of contexts and realizations},
@@ -355,12 +355,12 @@ Additionally, for contexts $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, $\G
 and $\Delta = y_1 \colon B_1, \dots, y_{m+w} \colon B_{m+w}$, and morphism
 $f = \langle t_1, \dots, t_m \rangle \colon \Gamma \to \Gamma'$ in $R(U)$, 
 \[
-\begin{tikzcd}
+\begin{tikzcd}[column sep=large]
     f^*\Delta \arrow[r, "{q(f, \Delta)}"] \arrow[d, "{p(f^*\Delta, \Gamma)}"'] & \Delta \arrow[d, "{p(\Delta, \Gamma')}"] \\
     \Gamma \arrow[r, "f"] & \Gamma'
 \end{tikzcd}
 \]
-is a pullback diagram \cite{maclane1971} in $R(U)$, where % TODO: fix alignment
+is a pullback diagram in $R(U)$, where % TODO: revise if should substitute x_1, \dots, x_n by \Gamma
 \begin{align*}
     f^*\Delta &= x_1 \colon A_1, \dots, x_n \colon A_n, \\
     &\quad y_{m+1} \colon B[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m], \dots, y_{m+w} \colon B[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]
@@ -379,7 +379,7 @@ This motivates the following definition:
         \item a category $\mathcal{C}$ with a terminal object $1$;
         \item a function $\parent \colon \Ob \mathcal{C} \to \Ob \mathcal{C}$ 
               such that $(\Ob \mathcal{C}, \parent)$ is a tree, and $1$ is the root of the tree, 
-              i.e., $\parent 1 = 1$;
+              i.e., $\parent (1) = 1$;
         \item for each object $A$ of $\mathcal{C}$ different from $1$, a morphism $p(A) \colon A \to \parent A$,
               called \textit{canonical projection of $A$}, which we write as $A \openrightarrow \parent(A)$;
         \item for all objects $A, B$ in $\mathcal{C}$ with $A \lhd B$ and all morphisms $f \colon C \to A$, 
@@ -486,7 +486,7 @@ It follows that $C(U)$ is itself a contextual category.
 
 \begin{definition}
     If $\mathcal{C}$ and $\mathcal{C}'$ are contextual categories, then a \textbf{contextual functor}
-    is a functor \cite{maclane1971} $F \colon \mathcal{C} \to \mathcal{C}'$ such that:
+    is a functor $F \colon \mathcal{C} \to \mathcal{C}'$ such that:
     \begin{enumerate}
         \item $F(1) = 1$ and if $A \lhd B$ in $\mathcal{C}$, then $F(A) \lhd F(B)$ in $\mathcal{C}'$;
         \item for every object $A$ of $\mathcal{C}$, $F(p(A)) = p(F(A))$;
@@ -514,20 +514,23 @@ Notation: $B \openrightarrow A$. % TODO: fix notation?
 In type theory, proving a theorem often requires working under a set of assumptions (a context).
 In categorical semantics, "assuming a context $A$" corresponds to taking the relativization of $\mathcal{C}$
 to $A$, noted as $\mathcal{C}_A$.
-More formally, let $\mathcal{C}$ be a contextual category and $A$ an arbitrary object of $\mathcal{C}$. Then we define 
-the \textit{relativization} of $\mathcal{C}$ to $A$ as the contextual category
-where:
-\begin{enumerate}
-    \item The objects of $\mathcal{C}_A$ are the objects $B$ of $\mathcal{C}$ such that $A \leq B$.
-    \item For objects $B, C$ in $\mathcal{C}_A$, a morphism from $B$ to $C$ in $\mathcal{C}_A$, also referenced as a morphism from $B$ to $C$ over $A$,
-          is a morphism $f \colon B \to C$ in $\mathcal{C}$ such that $p(C, A) \circ f = p(B, A)$. Composition of morphisms is inherited from $\mathcal{C}$.
-    \item $\parent_A(B) = \parent(B)$ if $A < B$, and $\parent_A(A) = A$.
-    \item For objects $B > A$, $p_A(B) = p(B) \colon B \to \parent(B)$.
-    \item For $B, C, D$ objects of $\mathcal{C}_A$ with $\parent_A(D) = C$ and morphisms $f \colon B \to C$, we write
-          \[
-                f^{*_A}D = f^*D \quad \text{ and } \quad q_A(f, D) = q(f, D).
-          \]
-\end{enumerate}
+More formally:
+\begin{definition}
+    let $\mathcal{C}$ be a contextual category and $A$ an arbitrary object of $\mathcal{C}$. Then we define 
+    the \textit{relativization} of $\mathcal{C}$ to $A$ as the contextual category
+    where:
+    \begin{enumerate}
+        \item The objects of $\mathcal{C}_A$ are the objects $B$ of $\mathcal{C}$ such that $A \leq B$.
+        \item For objects $B, C$ in $\mathcal{C}_A$, a morphism from $B$ to $C$ in $\mathcal{C}_A$, also referenced as a morphism from $B$ to $C$ over $A$,
+                is a morphism $f \colon B \to C$ in $\mathcal{C}$ such that $p(C, A) \circ f = p(B, A)$. Composition of morphisms is inherited from $\mathcal{C}$.
+        \item $\parent_A(B) = \parent(B)$ if $A < B$, and $\parent_A(A) = A$.
+        \item For objects $B > A$, $p_A(B) = p(B) \colon B \to \parent(B)$.
+        \item For $B, C, D$ objects of $\mathcal{C}_A$ with $\parent_A(D) = C$ and morphisms $f \colon B \to C$, we write
+                \[
+                    f^{*_A}D = f^*D \quad \text{ and } \quad q_A(f, D) = q(f, D).
+                \]
+    \end{enumerate}
+\end{definition}
 
 Now we see that any morphism $f \colon B \to A$ in $\mathcal{C}$ induces a pullback functor 
 $f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which is a contextual functor. The proof of the following 
@@ -592,11 +595,11 @@ the categorical equivalent of a term of type $B$ under context $\langle x_1 \col
 
 \section{Relevance of the Context Category} \label{sect:relevance-of-the-context-category}
 
-The context category is the first example of what it is called a \textbf{term model}.
+The context category is the first example of what it is called a \textit{term model}.
 This means that it is a category built directly from the syntax of a theory 
 without picking any particular mathematical interpretation. 
-This gives us the \textit{most generic} model of that theory.
-The three main properties of this models are the following:
+This gives us the "most generic" model of that theory.
+The three main properties of these models are the following:
 \begin{enumerate}
     \item \textbf{Soundness}: Any model of such theory corresponds to a structure preserving 
           functor out of the term model.
@@ -639,48 +642,50 @@ direct from the definition of $C(U)$:
 \end{theorem}
 
 Now we prove the initiality of $C(U)$, a special case of Voevodsky's initiality conjecture \cite{voevodsky2017}. 
-Hence, we need to define interpretation of a theory $U$
-in a contextual category, and see that the interpretation into $C(U)$ is the 
+In order to do it, we need to define interpretation of a theory $U$
+in a contextual category, and see that the canonical interpretation into $C(U)$ is the 
 initial object of the category of interpretations of $U$.
 
-Given a contextual category $\mathcal{C}$ and a theory $U$, an \textit{interpretation} of $U$ in $\mathcal{C}$
-is a mapping $\mathcal{M}$ from the $T$- and $\in$-rules of $U$ to the $\mathcal{C}$ such that
-\begin{enumerate}
-    \item if $R$ is a derived $T$-rule \(
-            x_1 \colon A_1, \dots, x_n \colon A_n
-            \vdash
-            A \type    
-        \) and we name the rules 
-        \(
-            x_1 \colon A_1, \dots, x_{i-1} \colon A_{i-1}
-            \vdash 
-            A_i \type
-        \) as $R_i$ for $1 \leq i \leq n$, then $\mathcal{M}[R_1], \dots, \mathcal{M}[R_n], \\ \mathcal{M}[R]$ are
-        objects of $\mathcal{C}$ such that \(
-            1 \lhd \mathcal{M}[R_1] \lhd \dots \lhd \mathcal{M}[R_n] \lhd \mathcal{M}[R]
-        \)
-        in $\mathcal{C}$.
+\begin{definition}
+    Given a contextual category $\mathcal{C}$ and a theory $U$, an \textit{interpretation} of $U$ in $\mathcal{C}$
+    is a mapping $\mathcal{M}$ from the $T$- and $\in$-rules of $U$ to the $\mathcal{C}$ such that
+    \begin{enumerate}
+        \item if $R$ is a derived $T$-rule \(
+                x_1 \colon A_1, \dots, x_n \colon A_n
+                \vdash
+                A \type    
+            \) and we name the rules 
+            \(
+                x_1 \colon A_1, \dots, x_{i-1} \colon A_{i-1}
+                \vdash 
+                A_i \type
+            \) as $R_i$ for $1 \leq i \leq n$, then $\mathcal{M}[R_1], \dots, \mathcal{M}[R_n], \\ \mathcal{M}[R]$ are
+            objects of $\mathcal{C}$ such that \(
+                1 \lhd \mathcal{M}[R_1] \lhd \dots \lhd \mathcal{M}[R_n] \lhd \mathcal{M}[R]
+            \)
+            in $\mathcal{C}$.
 
-    \item if $R_t$ is a derived $\in$-rule \(
-            x_1 \colon A_1, \dots, x_n \colon A_n   
-            \vdash
-            t \colon A
-        \) then $\mathcal{M}[R_t]$ is section of $\mathcal{M}[R]$.
+        \item if $R_t$ is a derived $\in$-rule \(
+                x_1 \colon A_1, \dots, x_n \colon A_n   
+                \vdash
+                t \colon A
+            \) then $\mathcal{M}[R_t]$ is section of $\mathcal{M}[R]$.
 
-    \item if $\Gamma \vdash A = A'$ is a derived $T=$rule, then if we name 
-            $\Gamma \vdash A \type$ as $R$
-            and
-            $\Gamma \vdash A' \type$ as $R'$,
-         then $\mathcal{M}[R] = \mathcal{M}[R']$.
-    \item if $\Gamma \vdash t = t' \colon A$ is a derived $\in=$rule, then if we name
-            $\Gamma \vdash t \colon A$ as $R_t$,
-            $\Gamma \vdash t' \colon A$ as $R_{t'}$ and
-            $\Gamma \vdash A \type$ as $R$,
-        then both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$.
-        and $\mathcal{M}[R_t] = \mathcal{M}[R_{t'}]$
-\end{enumerate}
+        \item if $\Gamma \vdash A = A'$ is a derived $T=$rule, then if we name 
+                $\Gamma \vdash A \type$ as $R$
+                and
+                $\Gamma \vdash A' \type$ as $R'$,
+            then $\mathcal{M}[R] = \mathcal{M}[R']$.
+        \item if $\Gamma \vdash t = t' \colon A$ is a derived $\in=$rule, then if we name
+                $\Gamma \vdash t \colon A$ as $R_t$,
+                $\Gamma \vdash t' \colon A$ as $R_{t'}$ and
+                $\Gamma \vdash A \type$ as $R$,
+            then both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$.
+            and $\mathcal{M}[R_t] = \mathcal{M}[R_{t'}]$
+    \end{enumerate}
+\end{definition}
 
-There is a canonical interpretation $\mathcal{M}$ of $U$ in $\mathcal{C}(U)$, defined as follows:
+There is a \textit{canonical interpretation} $\mathcal{M}$ of $U$ in $\mathcal{C}(U)$, defined as follows:
 \begin{enumerate}
     \item if $R \equiv x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type$ is a derived $T$-judgement, 
             then we define \[
@@ -694,30 +699,31 @@ There is a canonical interpretation $\mathcal{M}$ of $U$ in $\mathcal{C}(U)$, de
 The Completeness Theorem \ref{thm:completeness-context-category} guarantees that $\mathcal{M}$ is well defined.
 
 Now we shall define the concept of homomorphism between interpretations of a theory $U$.
-Let $\mathcal{C}$, $\mathcal{C}'$ be two contextual categories, and let $\mathcal{M_C}$ and $\mathcal{M_{C'}}$
-be two $U$-interpretations in $\mathcal{C}$ and $\mathcal{C}'$ respectively. Then, an interpretation 
-homomorphism is a contextual functor $F \colon \mathcal{C} \to \mathcal{C}'$ such that:
-\begin{enumerate}
-    \item if $R$ is a $T$-rule, then $F \mathcal{M_C}[R] = \mathcal{M_{C'}}[R]$;
-    \item if $R_t$ is a $\in$-rule, then $F \mathcal{M_C}[R_t] = \mathcal{M_{C'}}[R_t]$.
-\end{enumerate}
-
+\begin{definition}
+    Let $\mathcal{C}$, $\mathcal{C}'$ be two contextual categories, and let $\mathcal{M_C}$ and $\mathcal{M_{C'}}$
+    be two $U$-interpretations in $\mathcal{C}$ and $\mathcal{C}'$ respectively. Then, an \textit{interpretation 
+    homomorphism} is a contextual functor $F \colon \mathcal{C} \to \mathcal{C}'$ such that:
+    \begin{enumerate}
+        \item if $R$ is a $T$-rule, then $F \mathcal{M_C}[R] = \mathcal{M_{C'}}[R]$;
+        \item if $R_t$ is a $\in$-rule, then $F \mathcal{M_C}[R_t] = \mathcal{M_{C'}}[R_t]$.
+    \end{enumerate}
+\end{definition}
 So we can define the category $\mathbf{Con}_U$ as the category with pairs of contextual categories and $U$-interpretations
 and their homomorphisms. We can easily see that $(C(U), \mathcal{M})$ is an
 initial object of $\mathbf{Con}_U$. Consider an object $(\mathcal{C}, \mathcal{N})$ of
 $\mathbf{Con}_U$. Let construct a morphism $F \colon ((C(U), \mathcal{M})) \to (\mathcal{C}, \mathcal{N})$, i.e., we have to construct
-a contextual functor $F \colon C(U) \to \mathcal{C}$ that \textit{commutes} with the interpretation functions.
+a contextual functor $F \colon C(U) \to \mathcal{C}$ that commutes with the interpretation functions.
 If $[\Gamma]$ an object of $C(U)$, then there is a $T$-rule $R^\Gamma$ such that $\mathcal{M}[R^\Gamma] = \Gamma$. We define 
 $F \Gamma = \mathcal{N}[R^\Gamma]$. 
 In order to define $F$ on the morphisms of $C(U)$, it suffices to define it for the sections of $C(U)$, as any morphism 
 \[
-    \langle t_1, \dots, t_m \rangle \colon
-    \langle x_1 \colon A_1, \dots, x_n \colon A_n \rangle \to
-    \langle y_1 \colon B_1, \dots, y_m \colon B_m \rangle
+    [\langle t_1, \dots, t_m \rangle] \colon
+    [x_1 \colon A_1, \dots, x_n \colon A_n]  \to
+    [y_1 \colon B_1, \dots, y_m \colon B_m]
 \]
 can be built by composition and pullback functors of sections and projections, and the latter is uniquely determined by the condition that $F$
 is a contextual functor.
-Hence, given a section $s = \langle x_1, \dots, x_n, t \rangle$ of $R \equiv x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A$,
+Hence, given a section $s = [\langle x_1, \dots, x_n, t \rangle]$ of $[x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A]$,
 by definition there exists a derived $\in$-rule $R_t$ such that $\mathcal{M}[R_t] = s$, so we can define
 $F s = \mathcal{N}[R_t]$.
 The uniqueness of $F$ is rather simple to see, as we cannot assign any other values to any object or morphism of $C(P)$ without 
@@ -738,37 +744,28 @@ Such optimization is discussed in Chapter 3.
 
 Our problem might be formalized in the following manner:
 Given a theory $U$ and a derived rule of $U$ of the form 
-\begin{mathpar}
-    \inferrule{
-        x_1 \colon A_1, \dots, x_n \colon A_n
-    }{
-        A \type
-    }
-\end{mathpar}
+\[
+    x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type
+\]
 we want to find an expression $t$ of $U$ such that the rule 
-\begin{mathpar}
-    \inferrule{
-        x_1 \colon A_1, \dots, x_n \colon A_n
-    }{
-        t \colon A 
-    }
-\end{mathpar}
+\[
+    x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A
+\]
 is a derived rule of $U$.
 
 This problem is undecidable, in general, as it follows from the undecidability
-of the inhabitation in a $GAT$. This is why we will not try to find
+of the inhabitation in a GAT, or of dependent type theories \cite{dowek1993}. This is why we will not try to find
 an algorithm that either finds a term or says that the type is empty.
 We aim to find an algorithm that, in case that the type is 
 inhabited, it finds a term in a finite number of steps.
-In case that the type is empty, it does not have to give an
-output.
+In case that the type is empty, it does not have to terminate.
 
 We can consider this problem from the point of view of the 
 context category $C(U)$, where by the Completeness Theorem \ref{thm:completeness-context-category}
 it is rephrased as follows:
-Given a context $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$
-in $C(U)$, we want to find a section of $\Gamma, x \colon A$
-in $C(U)$.
+Given a context $x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A$
+in in $U$, we want to find a section of $[\Gamma, x \colon A]$
+in $C(U)$, for $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$.
 
 We can restrict our search to the \textit{relativization} of $C(U)$ to $[\Gamma]$,
 that we denote as $\mathcal{C}_\Gamma$.
@@ -777,14 +774,12 @@ as $\langle t_{n+1}, \dots, t_{n+m} \rangle_\Gamma$.
 
 Now we define the \textit{expansion algorithm}
 that will be responsible of finding $\langle t \rangle_\Gamma$
-in $\mathcal{C}_\Gamma$.
-The complexity of this algorithm is really high, and it will serve
-as a baseline to be optimized by a graph neural network. We will
-explain this in the last chapter.
+in $\mathcal{C}_\Gamma$:
 
-First, consider a finite subcategory $G$ of $\mathcal{C}_A$ which 
-contains $\Gamma$, $\Gamma, x \colon A$ and
-its projection.
+First, consider a finite subcategory $G$ of $\mathcal{C}_\Gamma$ which 
+contains \[
+    [\Gamma, x \colon A] \openrightarrow [\Gamma].
+\]
 The process consists of the construction of a sequence $\{ G_i\}_i$
 of finite subcategories of $\mathcal{C}_\Gamma$ such that $G_0 = G$,
 and that $G_{n+1}$ is computed by the process described below
@@ -809,15 +804,14 @@ of $G_n$:
             [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]]
         \end{align*}
         then we add the context
-        $[\Delta, y \colon A(t_1, \dots, t_w)]$ 
-        and its projection to $G_{n+1}$.
+        $[\Delta, y \colon A(t_1, \dots, t_w)]$ to $G_{n+1}$.
     \ruleitem{E2}{variable-duplication} Add the morphisms 
         \[
             [\langle y_1, \dots, y_m, x_i \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A_i]
         \] \[
             [\langle y_1, \dots, y_m, y_j \rangle_\Gamma] \colon [\Delta] \to [\Delta, y \colon B_j]
         \]
-        and their corresponding projections for each $1 \leq i \leq n$ and each $1 \leq j \leq m$.
+        for each $1 \leq i \leq n$ and each $1 \leq j \leq m$.
     \ruleitem{E3}{operator-symbol-intro} For every operator symbol $F$ with a well-formed
         introductory rule \[
             z_1 \colon C_1, \dots, z_w \colon C_w \vdash F(z_1, \dots, z_w) \colon C

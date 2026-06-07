@@ -50,7 +50,7 @@ model being the initial object of the category of models of
 the underlying type theory, a result known as the initiality
 conjecture, due to Voevodsky \cite{voevodsky2017}. 
 It was first proved by Streicher \cite{streicher} for CoC, and later for
-full Martin-Löf type theory by Brunerie and Lumsdaine \cite{bruneire2020}.
+full Martin-L\"of type theory by Brunerie and Lumsdaine \cite{bruneire2020}.
 
 Within this categorical framework, the problem of finding a proof
 translates to finding a specific section ---a specific morphism--- 
@@ -85,6 +85,15 @@ Then we implement the expansion algorithm for simply typed combinatory logic, as
 about how the expansion process works. 
 Finally we give a proposal of a GNN-based model thought to optimize term generation.
 
+\section*{Prerequisites}
+
+This thesis bridges type theory, categorical semantics, and machine learning. 
+While specialized categorical structures ---such as Contextual Categories and Doctrines of Constructions--- are introduced and defined within the text, 
+a basic familiarity with the fundamental concepts of category theory (e.g., categories, functors, and pullbacks) is assumed. 
+For readers seeking an introduction or a refresher on this foundational material, Awodey's \textit{Category Theory} \cite{awodey2010} is an excellent and highly recommended reference, 
+particularly for its focus on logic and computer science. 
+As a more classical reference there is Mac Lane's \textit{Categories for the Working Mathematician} \cite{maclane1992}.
+
 \section*{Thesis Outline}
 This thesis is structured to guide the reader from the abstract categorical foundations
 to the practical implementation of AI-guided theorem proving:
@@ -108,3 +117,4 @@ to the practical implementation of AI-guided theorem proving:
         Finally, we outline the architecture for integrating Graph Neural Networks
         using a novel unsupervised "Conjecturer-Prover" training paradigm to optimize the expansion process.
 \end{itemize}
+
