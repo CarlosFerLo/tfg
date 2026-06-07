@@ -7,8 +7,8 @@ as the geometric problem of finding a section in a graph.
 
 In this chapter, we scale up the complexity to the Calculus of Constructions (CoC).
 Introduced by Coquand and Huet \cite{coquand1988}, CoC is a powerful higher-order typed lambda calculus.
-It serves as the foundation for the Calculus of Inductive Constructions, the type 
-theory powering modern proof assistants like Rocq (formerly Coq) \cite{coquand1988}.
+It serves as the foundation for the Calculus of Inductive Constructions \cite{coquand1990} \cite{paulin-mohring1993}, the type 
+theory powering modern proof assistants like Rocq (formerly Coq) \cite{huet2000}.
 
 The primary additions in CoC, compared to Generalized Algebraic Theories (GATs), are: 
 \begin{enumerate}
@@ -22,7 +22,6 @@ The primary additions in CoC, compared to Generalized Algebraic Theories (GATs),
 We define syntax of CoC, map it to a richer categorical structure called
 Doctrine of Constructions, and extend our Expansion Algorithm to navigate this new, 
 highly complex search space.
-
 
 \section{Syntactic Formulation}
 
@@ -63,7 +62,7 @@ ranged over by lower case letters, by mutual recursion using Backus-Naur form \c
 \end{observation}
 We say a \textit{pre-context} is a syntactical expression of the form 
 $x_1 \colon A_1, \dots, x_n \colon A_n$, where $x_1, \dots, x_n$ are pairwise 
-syntactically different variables. 
+syntactically different variables and $A_1, \dots, A_n$ are pre-type-expressions.
 Contexts are ranged over by capital greek letters.
 We define $\Var(\Gamma)$ as the set of variables declared in $\Gamma$.
 We will not distinguish expressions which are equivalent up to renaming of variables
@@ -86,7 +85,7 @@ We define a \textit{pre-sequent} as a syntactic expression of the following form
 \begin{array}{ll}
     \Gamma \ok & \Gamma \text{ is a context} \\
     \Gamma = \Delta & \Gamma \text{ and } \Delta \text{ are equal contexts} \\
-    \Gamma \vdash \mathcal{J} & \text{the judgement } \mathcal{J} \text{ holds w.r.t. } \Gamma
+    \Gamma \vdash \mathcal{J} & \text{the judgement } \mathcal{J} \text{ holds with respect to } \Gamma
 \end{array}
 \]
 
@@ -109,7 +108,7 @@ We can distinguish different kinds of rules for different purposes:
 
 We leverage the concept of Context Categories introduced in the earlier chapter
 to serve as a basic structure for handling dependent types, and add more conditions
-so that it can handle products of families of types, universal quantification and the type of properties, in
+so that it can handle products of families of types, universal quantification and properties universe, in
 order to develop a categorical structure that captures the interpretation of the
 Calculus of Constructions.
 
@@ -140,7 +139,7 @@ they are needed to the definition of universal quantification.
                 \end{tikzcd}
               \]
               \begin{observation}
-                as any section $t$ of $\Pi(B)$ gives a section $eval_B \circ p(A)^*t$ of $B$, hence we have a
+                as any section $t$ of $\Pi(B)$ gives a section $eval_B \circ p(A)^*t$ of $B$, there is a
                 canonical 1-1-correspondence of $\Sections(B)$ and $\Sections(\Pi(B))$. 
               \end{observation}
         \item For any object $J$ and any morphism $f \colon J \to I$, the following conditions are satisfied:
@@ -197,7 +196,7 @@ And finally, by wrapping everything up and adding universal quantification we ha
 \begin{definition}
     A \textit{doctrine of constructions} is a contextual category with products of families of types
     together with a collection of types $T$ such that for all $A, B \in \Ob \mathcal{C}$ with 
-    $A \lhd B$ and $f \colon B \to \Prop$, where $\Prop = \parent T$, 
+    $A \lhd B$ and $f \colon B \to \Prop$, where $\Prop = \parent (T)$, 
     there exists a necessarily unique morphism $g \colon A \to \Prop$ also denoted by $\forall(f)$
     such that
     \[
@@ -222,7 +221,7 @@ Now we see that doctrines of constructions correspond to models of Calculus of C
 In this section we define the interpretation of Calculus of Constructions in arbitrary
 doctrines of constructions. 
 
-To do this, fixed one doctrine of constructions, an \textbf{interpretation function} $\mathcal{M}$ should be a
+To do this, fixed one doctrine of constructions, an \textit{interpretation function} $\mathcal{M}$ should be a
 mapping such that:
 \begin{enumerate}
     \item for every pre-context $\Gamma$ of length $n$, if $\mathcal{M}[\Gamma]$ is defined, then 
@@ -239,7 +238,7 @@ mapping such that:
 
 We want to build this function by induction. We need an auxiliary definition:
 \begin{definition}
-    By structural induction of expressions we define a function \textbf{$\depth$} mapping
+    By structural induction of expressions we define a function $\depth$ mapping
     pre-well-formed expressions and pre-contexts to $\omega$:
     \[\depth[x] = 1\]
     \[\depth[\Prop] = 1\]
@@ -267,18 +266,7 @@ by the following clauses:
     \item $\mathcal{M}[\Gamma, \Prop] = p(\mathcal{M}, 1)^*\Prop$
           if $\mathcal{M}[\Gamma]$ is defined;
     \item $\mathcal{M}[\Gamma; \Proof(p)] = \mathcal{M}[\Gamma; p]^*p(\mathcal{M}[\Gamma], 1)^* T$
-          if $\mathcal{M}[\Gamma; p]$ is defined and a section of $p(\mathcal{M}[\Gamma], 1)^*\Prop$
-          \[
-            \begin{tikzcd}[column sep=3cm]
-                \mathcal{M}[\Gamma] 
-                    \arrow[dr, "\mathcal{M}{[}\Gamma{;} p{]}"] 
-                    \arrow[drr, "q(p(\mathcal{M}{[}\Gamma{]}{,} 1){,} \Prop) \circ \mathcal{M}{[}\Gamma{;} p{]}", bend left=10]
-                    \arrow[ddr, "\id_{\mathcal{M}[\Gamma]}", bend right=10]
-                    & & \\
-                & p(\mathcal{M}[\Gamma], 1)^*\Prop \arrow[r, "q(p(\mathcal{M}{[}\Gamma{]}{,} 1){,}\Prop)"] \arrow[d, open]^*\Prop & \Prop \arrow[d, open]\\
-                & \mathcal{M}[\Gamma] \arrow[r, "p(\mathcal{M}{[}\Gamma{]}{,} 1)"] & 1
-            \end{tikzcd}
-        \]
+          if $\mathcal{M}[\Gamma; p]$ is defined and a section of $p(\mathcal{M}[\Gamma], 1)^*\Prop$;
     \item $\mathcal{M}[\Gamma, x] = s$ 
           provided that $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$ and $x_i \equiv x$ 
           and $\mathcal{M}[\Gamma]$ is defined and $\mathcal{M}[\Gamma] = A_n \rhd \dots \rhd A_1 \rhd A_0 \rhd 1$
@@ -319,29 +307,8 @@ by the following clauses:
           provided that $\mathcal{M}[\Gamma ; t]$, $\mathcal{M}[\Gamma; s]$, $\mathcal{M}[\Gamma, x \colon A; B]$
           are defined, and $\mathcal{M}[\Gamma; s]$ is a section of $\mathcal{M}[\Gamma; A]$
           and $\mathcal{M}[\Gamma; t]$ is a section of $\Pi(\mathcal{M}[\Gamma, x \colon A; B])$
-          \[
-          \begin{tikzcd}[column sep=3cm]
-            \mathcal{M}[\Gamma] 
-                \arrow[r, "{\mathcal{M}[\Gamma; s]}"] 
-                \arrow[d, "\substack{
-                    \mathcal{M}[\Gamma;s]^*(\eval_{\mathcal{M}[\Gamma, x \colon A; B]} \circ \\
-                    p(\mathcal{M}[\Gamma; A])^*\mathcal{M}[\Gamma; t])}"']
-            & \mathcal{M}[\Gamma; A] 
-                \arrow[d, "{\eval_{\mathcal{M}[\Gamma, x \colon A; B]} \circ p(\mathcal{M}[\Gamma; A])^*\mathcal{M}[\Gamma; t]}"]
-            \\
-            \mathcal{M}[\Gamma; s]^*\mathcal{M}[\Gamma, x \colon A; B] 
-                \arrow[r, "{q(\mathcal{M}[\Gamma; s], \mathcal{M}[\Gamma, x \colon A; B])}"]
-                \arrow[d, open]
-            & \mathcal{M}[\Gamma, x \colon A ; B] 
-                \arrow[d, open]
-            \\
-            \mathcal{M}[\Gamma]
-                \arrow[r, "{\mathcal{M}[\Gamma; s]}"]
-            & \mathcal{M}[\Gamma; A]
-          \end{tikzcd}
-          \]
     \item $\mathcal{M}[\Gamma; (\forall x \colon A) p] = s$
-          provided $\mathcal{M}[\Gamma, x \colon A ; p]$ is a section of $p(\mathcal{M}[\Gamma; A], 1)^*\Prop$
+          if $\mathcal{M}[\Gamma, x \colon A ; p]$ is a section of $p(\mathcal{M}[\Gamma; A], 1)^*\Prop$
           and $s$ is the unique section of $p(\mathcal{M}[\Gamma], 1)$ such that 
           \begin{multline*}
             \forall(q(p(\mathcal{M}[\Gamma; A], 1), \Prop) \circ \mathcal{M}[\Gamma, x \colon A; p])
@@ -401,6 +368,7 @@ must be fulfilled:
           then $\Gamma = \Delta$, $\Gamma \vdash A = B$ and $\Gamma \vdash t = s \colon A$ are derivable.
 \end{enumerate}
 
+% TODO : we should get rid of this.
 In order to be able to identify contexts up to $\alpha$-conversion, we consider a fixed numerable set of variables:
 $v_1, \dots, v_n, \dots$. We say that a context $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$ is in 
 \textbf{$\alpha$-normal form} iff $x_i \equiv v_i$ for all $1 \leq i \leq n$.
@@ -412,13 +380,13 @@ two contexts $\Gamma$ and $\Delta$ equal iff $\Gamma = \Delta$ is derivable.
 By induction over the structure of derivations, one can see that $\Gamma = \Delta$ implies that $\Gamma$ and
 $\Delta$ have the same length as pre-contexts, so we can define the $\level$ of an object of $\mathcal{C}_I$ as the length
 of any of its representatives. We will write $[\Gamma]$ to represent the class containing $\Gamma$.
-If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible context, then we define
+If $\Gamma = v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible context, then we define
 \[
     \parent[\Gamma] = [ v_1 \colon A_1, \dots, v_{n-1} \colon A_{n-1} ],
 \]
-that is well defined according to rule \ref{rule:crefl}1.
+that is well defined according to rule \ref{rule:crefl}.
 
-If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta \equiv v_1 \colon B_1, \dots, v_m \colon B_m$
+If $\Gamma = v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta = v_1 \colon B_1, \dots, v_m \colon B_m$
 are admissible contexts, a morphism from $[\Gamma]$ to $[\Delta]$ is given by a $m$-tuple $\langle t_1, \dots, t_m \rangle$
 of terms such that for $i$, $1 \leq i \leq m$, 
 \[
@@ -433,25 +401,25 @@ iff for $i$, $1 \leq i \leq m$
 \[
     \Gamma \vdash t_i = s_i \colon B_i[v_1  \leftarrow  s_1, \dots, v_{i-1}  \leftarrow  s_{i-1}]
 \] is derivable,
-according to rules \ref{rule:crefl}1 and \ref{rule:crefl}2 the definition is independent from the choice of representatives.
+by the rule \ref{rule:crefl} the definition is independent from the choice of representatives.
 We write $[\langle t_1, \dots, t_m \rangle] \colon [\Gamma] \to [\Delta]$ for the class of $m$-tuples equatable to $\langle t_1, \dots, t_m \rangle$.
-If we consider $\Theta \equiv v_1 \colon C_1, \dots, v_k \colon C_k$ is another admissible context and 
+If we consider $\Theta = v_1 \colon C_1, \dots, v_k \colon C_k$ is another admissible context and 
 $[\langle s_1, \dots, s_k\rangle]\colon [\Delta] \to [\Theta]$, then the composition of $[\langle t_1, \dots, t_m \rangle]$
 with $[\langle s_1, \dots, s_k \rangle]$ is defined as
-\[
+\begin{align*}
     [\langle s_1, \dots, s_k \rangle] 
     \circ 
     [\langle t_1, \dots, t_m \rangle] 
     = 
     [\langle 
         s_1[v_1  \leftarrow  t_1, \dots, v_m  \leftarrow  t_m],
-        \dots,
+        \dots,& \\
         s_k[v_1  \leftarrow  t_1, \dots, v_m  \leftarrow  t_m]
-    \rangle].
-\]
-If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible context with $n \geq 1$ then the \textit{canonical projection}
+    \rangle].&
+\end{align*}
+If $\Gamma = v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible context with $n \geq 1$ then the \textit{canonical projection}
 map $p([\Gamma])\colon [\Gamma] \to \parent [\Gamma]$ is represented by the tuple $\langle v_1, \dots, v_{n-1} \rangle$.
-Let $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta \equiv v_1 \colon B_1, \dots, v_m \colon B_m$ 
+Let $\Gamma = v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta = v_1 \colon B_1, \dots, v_m \colon B_m$ 
 admissible contexts and $t = [\langle t_1, \dots, t_m \rangle] \colon [\Gamma] \to [\Delta]$ and 
 $C$ a pre-well-formed type expression with $\Delta \vdash C \type$, i.e. $\Delta, v_{m+1} \colon C$ derivable is
 an admissible context, then 
@@ -459,9 +427,9 @@ an admissible context, then
     t^*[\Delta, v_{m+1} \colon C] = [\Delta, v_{n+1} \colon C[v_1  \leftarrow  t_1, \dots, v_m  \leftarrow  t_m]]
 \]
 \[
-    q([t], [\Delta, v_{m+1} \colon C]) = [\langle t_1, \dots, t_m, v_{n+1}] \colon t^*[\Delta, v_{m+1} \colon C] \to [\Delta, v_{m+1} \colon C].
+    q([t], [\Delta, v_{m+1} \colon C]) = [\langle t_1, \dots, t_m, v_{n+1} \rangle] \colon t^*[\Delta, v_{m+1} \colon C] \to [\Delta, v_{m+1} \colon C].
 \]
-If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n, v_{n+1} \colon B, v_{n+2} \colon C$ is an admissible context
+If $\Gamma = v_1 \colon A_1, \dots, v_n \colon A_n, v_{n+1} \colon B, v_{n+2} \colon C$ is an admissible context
 we define 
 \[
     \Pi([\Gamma]) = [\Gamma, v_{n+1} \colon (\Pi v_{n+1} \colon B) C]
@@ -473,7 +441,7 @@ which can be seen to be a morphism from $[\Gamma, v_{n+1} \colon B, v_{n+2} \col
 over the object $[v_1 \colon A_1, \dots, v_n \colon A_n]$.
 The object $\Prop$ of $C_I$ is defined as $[v_1 \colon \Prop]$ and the object $T$ of $C_I$ is defined as the object
 $[v_1 \colon \Prop, v_2 \colon \Proof(v_1)]$.
-If $\Gamma \equiv v_1 \colon A_1, \dots, v_n \colon A_n, v_{n+1} \colon B$ and $[\langle p \rangle]$ is a morphism 
+If $\Gamma = v_1 \colon A_1, \dots, v_n \colon A_n, v_{n+1} \colon B$ and $[\langle p \rangle]$ is a morphism 
 from $[\Gamma]$ to $[v_1 \colon \Prop]$ then we define
 \[
     \forall([p]) = [\langle (\forall v_{n+1} \colon B) p \rangle] 
@@ -520,7 +488,7 @@ that $C_I$ does not interpret or identify more objects or terms that those that 
 \end{theorem}
 
 It can be also shown that $\mathcal{C}_I$ is the initial object of the category of doctrines of constructions and 
-structure preserving functors, named $\mathbf{DoC}$. Hence tha term model satisfies the properties of soundness, 
+structure preserving functors, named $\mathbf{DoC}$. Hence the term model satisfies the properties of soundness, 
 completeness and initiality that we wanted.
 
 \section[Extending CoC and its Interpretation]{Extending Calculus of Constructions and its \\Interpretation} \label{sect:extending-calculus-of-constructions-and-its-interpretation}
@@ -536,7 +504,7 @@ representing the current syntax of Calculus of Constructions. The category $\mat
 and the notion of interpretation morphism stays the same.
 
 Now, for the inductive step, assume we have defined $\Sigma$ as a valid signature, and the associated syntax
-$\text{CoC}_\Sigma$, category $\mathbf{DoC}_\Sigma$ and interpretation function $\mathcal{M}$. Then 
+$\text{CoC}_\Sigma$, category $\mathbf{DoC}_\Sigma$ and interpretation function $\mathcal{M}^\Sigma$. Then 
 \begin{itemize}
     \item \textbf{Adding a sort symbol:} 
           Let $\Gamma$ be a context in $\text{CoC}_\Sigma$. We can extend $\Sigma$
@@ -544,9 +512,9 @@ $\text{CoC}_\Sigma$, category $\mathbf{DoC}_\Sigma$ and interpretation function 
           Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ by adding a production of 
           pre-type-expressions $E \Coloneqq S$ and the inference rule $\Gamma \vdash S$.
           The category $\mathbf{DoC}_{\Sigma'}$ has as objects pairs $(\mathcal{C}, S_\mathcal{C})$, where 
-          $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $\mathcal{M}_\mathcal{C}[\Gamma] \lhd A_\mathcal{C}$.
-          Finally, we define $\mathcal{M}'_\mathcal{C}$, for each object $\mathcal{C}$ of $\mathbf{DoC}_{\Sigma'}$,
-          by adding $\mathcal{M}'_\mathcal{C}[\Gamma; S] = S_\mathcal{C}$.
+          $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $\mathcal{M}^\Sigma_\mathcal{C}[\Gamma] \lhd S_\mathcal{C}$.
+          Finally, we define $\mathcal{M}^{\Sigma'}_\mathcal{C}$, for each object $\mathcal{C}$ of $\mathbf{DoC}_{\Sigma'}$,
+          by adding $\mathcal{M}^{\Sigma'}_\mathcal{C}[\Gamma; S] = S_\mathcal{C}$.
     \item \textbf{Adding an operator symbol:}
           Let $\Gamma$ be a context and $A$ be a type under $\Gamma$ of $\text{CoC}_\Sigma$,
           we can extend $\Sigma$ with a new operator symbol $f$ relative to $\Gamma$ and $A$
@@ -554,17 +522,17 @@ $\text{CoC}_\Sigma$, category $\mathbf{DoC}_\Sigma$ and interpretation function 
           Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ by adding a production of 
           pre-object-expressions $t \Coloneqq f$ and the inference rule $\Gamma \vdash f \colon A$.
           The category $\mathbf{DoC}_{\Sigma'}$ has as objects pairs $(\mathcal{C}, f_\mathcal{C})$,
-          where $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $f_\mathcal{C}$ is a section of $\mathcal{M_C}[\Gamma, x \colon A]$.
-          Finally, we define $\mathcal{M}'_\mathcal{C}$, for each object $\mathcal{C}$ of $\mathbf{DoC}_{\Sigma'}$,
-          by adding $\mathcal{M}'_\mathcal{C}[\Gamma; f] = f_\mathcal{C}$.
+          where $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $f_\mathcal{C}$ is a section of $\mathcal{M}^\Sigma_\mathcal{C}[\Gamma, x \colon A]$.
+          Finally, we define $\mathcal{M}^{\Sigma'}_\mathcal{C}$, for each object $\mathcal{C}$ of $\mathbf{DoC}_{\Sigma'}$,
+          by adding $\mathcal{M}^{\Sigma'}_\mathcal{C}[\Gamma; f] = f_\mathcal{C}$.
     \item \textbf{Adding an equality of types:}
           Let $\Gamma$ be a context, $A, A'$ types under $\Gamma$ of $\text{CoC}_\Sigma$, we can extend $\Sigma$ with
           a new equation $A = A'$ relative to $\Gamma$, to obtain $\Sigma' = (\Sigma, (\Gamma, A, A'))$. % TODO: is this good notation?
           Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ by adding the inference rule 
           $\Gamma \vdash A = A'$.
           The category $\mathbf{DoC}_{\Sigma'}$ is a full subcategory of $\mathbf{DoC}_\Sigma$ containing the objects 
-          $\mathcal{C}$ of $\mathbf{DoC}_\Sigma$ such that $\mathcal{M_C}[\Gamma; A] = \mathcal{M_C}[\Gamma; A']$.
-          $\mathcal{M}'$ is the restriction of $\mathcal{M}$ to the objects of $\mathbf{DoC}_{\Sigma'}$.
+          $\mathcal{C}$ of $\mathbf{DoC}_\Sigma$ such that $\mathcal{M}^\Sigma_\mathcal{C}[\Gamma; A] = \mathcal{M}^\Sigma_\mathcal{C}[\Gamma; A']$.
+          $\mathcal{M}^{\Sigma'}$ is the restriction of $\mathcal{M}^\Sigma$ to the objects of $\mathbf{DoC}_{\Sigma'}$.
     \item \textbf{Adding an equality of terms:}
           Let $\Gamma$ be a context, $A$ a type under $\Gamma$ and $a, a'$ terms of type $A$ under $\Gamma$ 
           of $\text{CoC}_\Sigma$. We can extend $\Sigma$ with a new equation $a = a'$ relative to $\Gamma$ and $A$,
@@ -572,8 +540,8 @@ $\text{CoC}_\Sigma$, category $\mathbf{DoC}_\Sigma$ and interpretation function 
           Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ by adding the inference rule 
           $\Gamma \vdash a = a' \colon A$.
           The category $\mathbf{DoC}_{\Sigma'}$ is a full subcategory of $\mathbf{DoC}_\Sigma$ containing the objects 
-          $\mathcal{C}$ of $\mathbf{DoC}_\Sigma$ such that $\mathcal{M_C}[\Gamma; a] = \mathcal{M_C}[\Gamma; a']$.
-          $\mathcal{M}'$ is the restriction of $\mathcal{M}$ to the objects of $\mathbf{DoC}_{\Sigma'}$.
+          $\mathcal{C}$ of $\mathbf{DoC}_\Sigma$ such that $\mathcal{M}^\Sigma_\mathcal{C}[\Gamma; a] = \mathcal{M}^\Sigma_\mathcal{C}[\Gamma; a']$.
+          $\mathcal{M}^{\Sigma'}$ is the restriction of $\mathcal{M}^\Sigma$ to the objects of $\mathbf{DoC}_{\Sigma'}$.
 \end{itemize}
 
 Under this construction, we can consider $\mathcal{C}_\Sigma$ to be the exact same construction as $\mathcal{C}_I$,
@@ -589,7 +557,7 @@ similar categorical terms. Then we will propose an extended version of the Expan
 The problem now can be formalized as follows:
 Given a valid signature of Calculus of Constructions $\Sigma$ and a derivable sequent $\Gamma \vdash A \type$ in 
 $\text{CoC}_\Sigma$, we want to find a pre-object-expression $t$ such that 
-$\Gamma \vdash t \colon A$ is a derivable rule in $\text{CoC}_\Sigma$.
+$\Gamma \vdash t \colon A$ is a derivable sequent in $\text{CoC}_\Sigma$.
 
 We can consider this from the point of view of the category $\mathcal{C}_\Sigma$ introduced in the previous section.
 This means that our problem is equivalent to finding a section $s$ of 
@@ -659,9 +627,9 @@ by considering the category over a base object. To do it we need the following r
     products of families of types.
 
     Now we see that $T_A = p(A)^*T$ is indeed a collection of types of $\mathcal{C}_A$. Consider then two morphisms $f, g \colon J \to \parent(T_A)$,
-    for some object $A$ in $\mathcal{C}_A$, such that $f^*T_A = g^*T_A$. We want to see that indeed $f = g$. We have that $f^*(q(p(A),\Prop)^*T) = g^*(q(p(A), \Prop)^*T)$
-    and we derive that $(q(p(A), \Prop) \circ f)^*T = (q(p(A), \Prop) \circ g)^*T$. As $T$ is a collection of types in $\mathcal{C}$,
-    $q(p(A), \Prop) \circ f = q(p(A), \Prop) \circ g$. And finally $f = g$ as both make the following pullback diagram commute: \[
+    for some object $A$ in $\mathcal{C}_A$, such that $f^*T_A = g^*T_A$. We want to see that indeed $f = g$. We have that $$f^*(q(p(A),\Prop)^*T) = g^*(q(p(A), \Prop)^*T)$$
+    and we derive that $$(q(p(A), \Prop) \circ f)^*T = (q(p(A), \Prop) \circ g)^*T.$$ As $T$ is a collection of types in $\mathcal{C}$,
+    $$q(p(A), \Prop) \circ f = q(p(A), \Prop) \circ g.$$ And finally $f = g$ as both make the following pullback diagram commute: \[
         \begin{tikzcd}[column sep=3cm]
             J 
                 \arrow[rd, "{f = g}"]
@@ -724,82 +692,61 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
 \begin{enumerate}
     \ruleitem{E1}{sort-symbol-intro-2}
         For each sort symbol in the signature $\Sigma$, with an introductory rule $\Omega \vdash S \type$,
-        such that $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, $\Omega \equiv z_1 \colon C_1, \dots, z_w \colon C_w$ and
-        $G_n$ contains sections
+        where $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, $\Omega = z_1 \colon C_1, \dots, z_w \colon C_w$,
+        if $G_n$ contains sections
         \begin{align*}
-            [ \Delta ] 
-                &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma} 
-                [ \Delta, z_1 \colon C_1 ] \\
-            [ \Delta ] 
-                &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma} 
-                [ \Delta, z_2 \colon C_2[z_1  \leftarrow  t_1] ] \\
-            & \vdots \\
-            [ \Delta ] 
-                &\xrightarrow{\langle y_1, \dots, y_m, t_w \rangle_\Gamma} 
-                [ \Delta, z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}] ].
+            [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_1 \colon C_1] \\
+            [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_2 \colon C_2[z_1 \leftarrow t_1]] \\
+            &\vdots \\
+            [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_w \colon C_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]],
         \end{align*}
-        Then we add $[ \Delta, y \colon A[z_1  \leftarrow  t_1, \dots, z_w  \leftarrow  t_w] ]$ and its projection to $G_{n+1}$.
+        then we add $[ \Delta, y \colon A[z_1  \leftarrow  t_1, \dots, z_w  \leftarrow  t_w] ]$ to $G_{n+1}$.
     \ruleitem{E2}{variable-duplication-2}
-        If $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, then we add the sections 
+        If $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, then we add the sections 
         \[
-            [\Delta] \xrightarrow{\langle y_1, \dots, y_m, y_i \rangle_\Gamma} [\Delta, y \colon B_i] 
-        \]\[
-            [\Delta] \xrightarrow{\langle y_1, \dots, y_m, x_j \rangle_\Gamma} [\Delta, x \colon A_j]
+            [\langle y_1, \dots, y_m, x_i \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A_i]
+        \] \[
+            [\langle y_1, \dots, y_m, y_j \rangle_\Gamma] \colon [\Delta] \to [\Delta, y \colon B_j]
         \]
-        and their corresponding projections for each $1 \leq i \leq m$ and each $1 \leq j \leq n$.
+        for each $1 \leq i \leq n$ and each $1 \leq j \leq m$.
     \ruleitem{E3}{operator-symbol-intro-2}
         For each sort symbol in the signature $\Sigma$, with an introductory rule $\Omega \vdash F \colon A$,
-        such that $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, $\Omega \equiv z_1 \colon C_1, \dots, z_w \colon C_w$
-        and the following sections exist in $G_n$
+        where $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, $\Omega = z_1 \colon C_1, \dots, z_w \colon C_w$
+        if the following sections exist in $G_n$:
         \begin{align*}
-            [ \Delta ]
-                &\xrightarrow{\langle y_1, \dots, y_m, t_1 \rangle_\Gamma}
-                [ \Delta, z_1 \colon C_1 ] \\
-            [ \Delta ]
-                &\xrightarrow{\langle y_1, \dots, y_m, t_2 \rangle_\Gamma}
-                [ \Delta, z_2 \colon C_2[z_1  \leftarrow  t_1] ] \\
+            [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_1 \colon C_1] \\
+            [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_2 \colon C_2[z_1 \leftarrow t_1]] \\
             & \vdots \\
-            [ \Delta ]
-                &\xrightarrow{\langle y_1, \dots, y_m, t_w\rangle_\Gamma}
-                [ \Delta, z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}] ]
+            [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_w \colon C_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]],
         \end{align*}
-        we add the section
-        \[
-            [ \Delta ]
-            \xrightarrow{\langle y_1, \dots, y_m, F [z_1  \leftarrow  t_1, \dots, z_w  \leftarrow  t_w] \rangle_\Gamma}
-            [ \Delta, z \colon A[z_1  \leftarrow  t_1, \dots, z_w  \leftarrow  t_w] ].
-        \]
+        then we add the section
+        \begin{align*}
+            [\langle y_1, \dots, y_m, F[z_1 \leftarrow t_1, &\dots, z_w \leftarrow t_w] \rangle_\Gamma] \colon \\ &[\Delta] \to [\Delta, z \colon A[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]].
+        \end{align*}        
     \ruleitem{E4}{pullback-2}
-        If $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, 
+        If $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$, 
         for every morphism \[
             [\langle t_1, \dots, t_{m-1} \rangle_\Gamma]
             \colon [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w ]
             \to [\Gamma y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1} ]
         \]
-        we construct the corresponding pullback:
+        we construct the corresponding pullback to $G_{n+1}$:
         \[
-        \begin{tikzcd}
-            \Gamma, 
-            z_1 \colon C_1, \dots, z_w \colon C_w,
-            y_m \colon B_m[y_1  \leftarrow  t_1, \dots, y_{m-1}  \leftarrow  t_{m-1}]
-                \arrow[r, "{\langle t_1, \dots, t_{m-1}, y_m \rangle_\Gamma}"]
-                \arrow[d, open] 
-            & 
-            \Gamma,
-            y_1 \colon B_1, \dots, y_m \colon B_m
-                \arrow[d, open]
-            \\ 
-            \Gamma,
-            z_1 \colon C_1, \dots, z_w \colon C_w 
-                \arrow[r, "{\langle t_1, \dots, t_{m-1} \rangle_\Gamma}"]
-            &
-            \Gamma,
-            y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}
-        \end{tikzcd}
+            \begin{tikzcd}[column sep=large]
+                {\begin{array}{c}
+                [\Gamma, z_1: C_1, \dots, z_w: C_w, \\
+                y_m: B_m[t_1 \leftarrow y_1, \dots, t_{m-1} \leftarrow y_{m-1}]]
+                \end{array}}
+                \arrow[r, "{[\langle t_1, \dots, t_{m-1}, y_m \rangle_\Gamma]}"] \arrow[d, open] 
+                & {[\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m]}
+                \arrow[d, open] \\
+                {[\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]}
+                \arrow[r, "{[\langle t_1 {,} \dots {,} t_{m-1} \rangle_\Gamma]}"]
+                & {[\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}]}
+            \end{tikzcd}
         \]
-        to $G_{n+1}$.
     \ruleitem{E5}{product-formation-2}
-        If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, v_{m+1} \colon C, v_{n+2} \colon D$
+        If $\Delta = \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, v_{m+1} \colon C, v_{n+2} \colon D$
         we add \[
             \Pi([\Delta]) = [
                 \Gamma,
@@ -814,24 +761,23 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
             \rangle_\Gamma].
         \]
         a morphism from $[\Gamma, v_1 \colon A_1, \dots, v_m \colon B_m, v_{n+1} \colon C, v_{n+2} \colon (\Pi v_{n+1} \colon B)C ]$
-        to $[\Delta]$, and the corresponding projections.
+        to $[\Delta]$.
     \ruleitem{E6}{proof-forall-intro-2}
-        If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, v_{m+1} \colon C$,
-        for any morphism $[\langle v_1, \dots, v_m, v_{m+1}, p \rangle_\Gamma] \colon [\Delta] \to [ \Delta, x \colon \Prop]$
-        we add \[ 
-            [ \langle v_1, \dots, v_m, (\forall \colon v_{m+1} C)p \rangle_\Gamma]
-            \colon [\Gamma, v_1 \colon B_1, \dots, v_m \colon B_m]
+        If $\Delta = \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, v_{m+1} \colon C$,
+        for any morphism $$[\langle v_1, \dots, v_m, v_{m+1}, p \rangle_\Gamma] \colon [\Delta] \to [ \Delta, x \colon \Prop]$$
+        we add \begin{align*}
+            [ \langle v_1, \dots, v_m, &(\forall \colon v_{m+1} C)p \rangle_\Gamma] \colon \\ 
+            &[\Gamma, v_1 \colon B_1, \dots, v_m \colon B_m]
             \to [ \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, x \colon \Prop]
-        \]
+        \end{align*}
         \[
             [\Delta, x \colon \Proof(p)]
         \]
-        and its corresponding projection. 
     \ruleitem{E7}{application-2}
-        If $\Delta \equiv \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m$, for every morphism of the form 
-        $\langle v_1, \dots, v_m, t \rangle_\Gamma \colon [\Delta] \to [\Delta, f \colon (\Pi x\colon A)B]$
-        and every morphism $\langle v_1, \dots, v_m, s \rangle_\Gamma \colon [\Delta] \to [\Delta, x \colon A]$,
-        such that $[\Delta, y \colon B[x  \leftarrow  s]]$ exists in $G_n$, add \[
+        If $\Delta = \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m$, 
+        for every pair of sections $\langle v_1, \dots, v_m, t \rangle_\Gamma$ and $\langle v_1, \dots, v_m, s \rangle_\Gamma$
+        of $[\Delta, f \colon (\Pi x \colon A) B]$ and $[\Delta, x \colon A]$ respectively,
+        we add \[
             [\langle v_1, \dots, v_m, \App([x \colon A] B, t, s)\rangle_\Gamma]
             \colon [\Delta] \to [\Delta, y \colon B[x  \leftarrow  s]]
         \]
@@ -847,14 +793,14 @@ As in the case of GATs, when adding a morphism we are implicitly adding its endp
 
 Now we prove the exhaustivity theorem. In order to do it we will have to prove some previous lemmas:
 
-First, we introduce inversion (or generation) lemmas: given a derivable sequent, they characterize the syntactic form of its principal expression. The proof method is simultaneous structural induction on derivation height, and is detailed in Appendix \ref{app:inversion-lemmas}
+First, we introduce inversion (or generation) lemmas: given a derivable sequent, they characterize the syntactic form of its principal expression. The proof method is simultaneous structural induction on derivation height, and is detailed in Appendix \ref{app:inversion-lemmas}.
 \begin{lemma} \label{lemma:t-rule-cases}
     Given a derivable sequent of the form $\Gamma \vdash A \type$ there are 4 possible cases:
     \begin{enumerate}
         \item $A$ is equal to $\Prop$;
         \item $A$ is equal to $\Proof(p)$ for some pre-object-expression $p$ and $\Gamma \vdash p \colon \Prop$ is derivable;
         \item $A$ is equal to $(\Pi x \colon B) C$ for pre-type-expressions $B, C$ and a variable $x$, such that $\Gamma, x \colon B \vdash C \type$ is a derivable sequent;
-        \item There exists a sort symbol $S$ in $\Sigma$ with an introductory rule $y_1 \colon B_1, \dots, y_m \colon B_m \vdash S \type$ and sequents 
+        \item There exists a sort symbol $S$ in $\Sigma$ with an introductory rule $$y_1 \colon B_1, \dots, y_m \colon B_m \vdash S \type$$ and sequents 
             \begin{align*}
                 \Gamma \vdash t_1 &\colon B_1 \\
                 \Gamma \vdash t_2 &\colon B_2[y_1 \leftarrow t_1] \\
@@ -872,7 +818,7 @@ First, we introduce inversion (or generation) lemmas: given a derivable sequent,
         \item $t$ is equal to $(\lambda x \colon B) s$ and $A$ is equal to $(\Pi x \colon B) C$ for some pre-type-expressions $B, C$, a pre-object-expression $s$ and variable $x$;
         \item $t$ is equal to $\App([x \colon B] C, s, r)$ and $A$ is equal to $C[x \leftarrow r]$ for some pre-type-expressions $B, C$, pre-object-expressions $s, r$ and variable $x$;
         \item $t$ is equal to $(\forall x \colon B) s$ and $A$ is equal to $\Prop$ for some pre-type-expression $B$, pre-object-expression $s$ and variable $x$;
-        \item there exist an operator symbol $F$ in $\Sigma$ with an introductory rule $y_1 \colon B_1, \dots, y_m \colon B_m \vdash F \colon B$ and sequents
+        \item there exist an operator symbol $F$ in $\Sigma$ with an introductory rule $$y_1 \colon B_1, \dots, y_m \colon B_m \vdash F \colon B$$ and sequents
              \begin{align*}
                 \Gamma \vdash t_1 &\colon B_1 \\
                 \Gamma \vdash t_2 &\colon B_2[y_1 \leftarrow t_1] \\
@@ -891,18 +837,18 @@ Now we expand the concept of $\depth$ to this new syntax:
         \item if $x$ is a variable, then $\depth[x] = 1$;
         \item $\depth[\Prop] = 1$;
         \item if $A$ is a pre-type-expression, then $\depth[\Proof(A)] = \depth[A] + 1$;
-        \item if $x$ is a variable, $A, B$ are pre-type-expression and $t, s$ are pre-type-expressions, then
+        \item if $x$ is a variable, $A$ and $B$ are pre-type-expressions, and $t$ and $s$ are pre-type-expressions, then
             \begin{align*}
                 \depth[(\Pi x \colon A) B] &= \depth[A] + \depth[B] + 1 \\
                 \depth[(\lambda x \colon A) t] &= \depth[A] + \depth[t] + 1 \\
                 \depth[(\forall x \colon A) t] &= \depth[A] + \depth[t] + 1 \\
                 \depth[\App[x \colon A]B, t, s] &= \depth[A] + \depth[B] + \depth[t] + \depth[s] + 1;
             \end{align*}
-        \item if $S$ is a sort symbol from $\Sigma$ with an introductory rule $z_1 \colon C_1, \dots z_w \colon C_w \vdash S \type$,
+        \item if $S$ is a sort symbol from $\Sigma$ with an introductory rule $$z_1 \colon C_1, \dots z_w \colon C_w \vdash S \type,$$
             and $t_1, \dots, t_w$ are pre-term-expressions, then \[
                 \depth[S[z_1  \leftarrow  t_1, \dots, z_w  \leftarrow  t_w]] = 1 + \sum_{i=0}^w \depth[t_i];
             \]
-        \item if $F$ is an operator symbol from $\Sigma$ with an introductory rule $z_1 \colon C_1, \dots, z_w \colon C_w \vdash F \colon A$,
+        \item if $F$ is an operator symbol from $\Sigma$ with an introductory rule $$z_1 \colon C_1, \dots, z_w \colon C_w \vdash F \colon A,$$
             and $t_1, \dots, t_w$ are pre-term-expressions, then \[
                 \depth[F[z_1  \leftarrow  t_1, \dots, z_w  \leftarrow  t_w]] = 1 + \sum_{i=0}^w \depth[t_i]
             \]
@@ -925,7 +871,7 @@ We use it to prove the following lemma:
             \]
     \end{enumerate}
 
-    Consider then a context $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. We want to see that $[\Delta]$
+    Consider then a context $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. We want to see that $[\Delta]$
     is constructible by expansion. 
     If $\degree[\Delta] = 0$, then it is the case $\Delta = \Gamma$, and hence it is constructible by expansion. 
     Consider now the case $\degree[\Delta] > 0$.
@@ -954,7 +900,7 @@ We use it to prove the following lemma:
                 \begin{tikzcd}
                     {[\Delta']} & {[\Delta', x \colon A]} \arrow[l, open] & {[\Delta', x \colon A, y \colon B]} \arrow[l, open]
                 \end{tikzcd}
-            \] is constructible by expansion. By applying expansion rule \ref{rule:product-formation-2} to $[\Delta', x \colon A, y \colon B]$ we have that \[
+            \] is constructible by expansion. By applying expansion rule \ref{rule:product-formation-2} to the object $[\Delta', x \colon A, y \colon B]$ we have that \[
                 \Pi([\Delta, x \colon A, y \colon B]) = [\Delta', x \colon (\Pi x \colon A) B]
             \] is constructible by expansion. Then, so is $[\Delta] = [\Delta', x \colon (\Pi x \colon A) B]$ as they only differ on the naming of bound variables.
         \item We have that there exists a sort symbol $S$ in $\Sigma$ with an introductory rule $z_1 \colon C_1, \dots, z_w \colon C_w \vdash S \type$ and sequents
@@ -972,7 +918,7 @@ We use it to prove the following lemma:
                 & \vdots \\
                 [\langle y_1, \dots, y_{m-1}, t_w \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_w \colon C_w[z_1 \leftarrow t_1, \dots, z_{w-1} \leftarrow t_{w-1}]] 
             \end{align*}
-            So by applying the expansion rule \ref{rule:sort-symbol-intro-2} to $[\Delta']$, we have that $[\Delta', x \colon S[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]]$ is constructible by expansion.
+            So by applying the expansion rule \ref{rule:sort-symbol-intro-2} to $[\Delta']$, we have that $$[\Delta', x \colon S[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]]$$ is constructible by expansion.
             Hence, so is $[\Delta] = [\Delta', x \colon S[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]]$ as they differ only in the naming of bound variables.
     \end{enumerate}
 
