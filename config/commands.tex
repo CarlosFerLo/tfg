@@ -2,41 +2,58 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % theorem environments
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\theoremstyle{definition}
-\newtheorem{defn0}{Definition}[chapter]
-\newtheorem{example0}[defn0]{Example}
+\declaretheorem[
+    style=definition,
+    name=Definition,
+    numberwithin=chapter
+]{definition}
+\declaretheorem[
+    style=definition,
+    name=Example,
+    sibling=definition
+]{example}
 
-\theoremstyle{plain}
-\newtheorem{prop0}[defn0]{Proposition}
-\newtheorem{thm0}[defn0]{Theorem}
-\newtheorem{lemma0}[defn0]{Lemma}
-\newtheorem{corollary0}[defn0]{Corollary}
+\declaretheorem[
+    style=plain,
+    name=Proposition,
+    sibling=definition,
+    preheadhook=\bigskip
+]{proposition}
+\declaretheorem[
+    style=plain,
+    name=Theorem,
+    sibling=definition,
+    preheadhook=\bigskip
+]{theorem}
+\declaretheorem[
+    style=plain,
+    name=Lemma,
+    sibling=definition,
+    preheadhook=\bigskip
+]{lemma}
+\declaretheorem[
+    style=plain,
+    name=Corollary,
+    sibling=definition,
+    preheadhook=\bigskip
+]{corollary}
 
-\theoremstyle{remark}
-\newtheorem{remark0}[defn0]{Remark}
-\newtheorem{observation0}[defn0]{Observation}
-\newtheorem{conjecture0}[defn0]{Conjecture}
-
-\newenvironment{definition}{ \begin{defn0}}{\end{defn0}}
-\newenvironment{proposition}{\bigskip \begin{prop0}}{\end{prop0}}
-\newenvironment{theorem}{\bigskip \begin{thm0}}{\end{thm0}}
-\newenvironment{lemma}{\bigskip \begin{lemma0}}{\end{lemma0}}
-\newenvironment{corollary}{\bigskip \begin{corollary0}}{\end{corollary0}}
-\newenvironment{example}{ \begin{example0}\rm}{\end{example0}}
-\newenvironment{observation}{\bigskip \begin{observation0}}{\end{observation0}}
-\newenvironment{remark}{ \begin{remark0}\rm}{\end{remark0}}
-\newenvironment{conjecture}{\begin{conjecture0}}{\end{conjecture0}}
-
-\newcommand{\defref}[1]{Definition~\ref{#1}}
-\newcommand{\propref}[1]{Proposition~\ref{#1}}
-\newcommand{\thmref}[1]{Theorem~\ref{#1}}
-\newcommand{\lemref}[1]{Lemma~\ref{#1}}
-\newcommand{\corref}[1]{Corollary~\ref{#1}}
-\newcommand{\exref}[1]{Example~\ref{#1}}
-\newcommand{\secref}[1]{Section~\ref{#1}}
-\newcommand{\remref}[1]{Remark~\ref{#1}}
-\newcommand{\conjref}[1]{Conjecture~\ref{#1}}
-
+\declaretheorem[
+    style=remark,
+    name=Remark,
+    sibling=definition
+]{remark}
+\declaretheorem[
+    style=remark,
+    name=Observation,
+    sibling=definition,
+    preheadhook=\bigskip
+]{observation}
+\declaretheorem[
+    style=remark,
+    name=Conjecture,
+    sibling=definition
+]{conjecture}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % environments per la intro i pel resum en catal{\`a} %
@@ -166,12 +183,15 @@
 
 \makeatletter
 \newcommand{\ruleitem}[2]{%
-  \item[\textsc{#1}]\def\@currentlabel{\textsc{#1}}\label{rule:#2}%
+  \item[\textsc{#1}]%
+  \phantomsection%
+  \def\@currentlabel{\textsc{#1}}\label{rule:#2}%
 }
 \makeatother
 
 \makeatletter
 \newcommand{\RuleLabel}[2]{%
+  \phantomsection%
   \def\@currentlabel{\textsc{#1}}% Tells \ref{} to output the label name
   \label{rule:#2}% Creates the actual reference hook
   \textsc{#1}% Prints the visual text next to the line

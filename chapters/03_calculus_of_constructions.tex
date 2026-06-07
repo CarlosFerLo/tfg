@@ -794,7 +794,7 @@ As in the case of GATs, when adding a morphism we are implicitly adding its endp
 Now we prove the exhaustivity theorem. In order to do it we will have to prove some previous lemmas:
 
 First, we introduce inversion (or generation) lemmas: given a derivable sequent, they characterize the syntactic form of its principal expression. The proof method is simultaneous structural induction on derivation height, and is detailed in Appendix \ref{app:inversion-lemmas}.
-\begin{lemma} \label{lemma:t-rule-cases}
+\begin{restatable}{lemma}{trulecases} \label{lemma:t-rule-cases}
     Given a derivable sequent of the form $\Gamma \vdash A \type$ there are 4 possible cases:
     \begin{enumerate}
         \item $A$ is equal to $\Prop$;
@@ -809,9 +809,9 @@ First, we introduce inversion (or generation) lemmas: given a derivable sequent,
             \end{align*}
             such that $A$ is equal to $S[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]$.
     \end{enumerate}
-\end{lemma}
+\end{restatable}
 
-\begin{lemma} \label{lemma:in-rule-cases}
+\begin{restatable}{lemma}{inrulecases} \label{lemma:in-rule-cases}
     Given a derivable sequent of the form $\Gamma \vdash t \colon A$ there are 5 possible cases:
     \begin{enumerate}
         \item there exists a variable $x$ in $\Var(\Gamma)$, such that $t$ equals $x$;
@@ -827,7 +827,7 @@ First, we introduce inversion (or generation) lemmas: given a derivable sequent,
             \end{align*}
             such that $t$ is equal to $F[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]$.
     \end{enumerate}
-\end{lemma}
+\end{restatable}
 
 Now we expand the concept of $\depth$ to this new syntax:
 
