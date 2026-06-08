@@ -55,7 +55,7 @@ Now we proof the inversion lemmas by simultaneous structural induction on deriva
         The sub-derivation $\pi' \colon \Gamma \vdash t \colon A$ satisfies $|\pi'| < |\pi|$. Apply Lemma \ref{lemma:in-rule-cases} by induction hypothesis to $\pi'$, we get 5 cases:
         \begin{itemize}
             \item[Case 1] Let $\Gamma = \Gamma_0, x\colon A, \Gamma_1$. Context $\Gamma$ was formed by \ref{rule:cont-intro} from $\Gamma_0 \vdash A \type$. By applying \ref{rule:thin}, $\Gamma \vdash A \type$ is derivable by a shorter derivation. Apply the IH.
-            \item[Case 2] From $\Gamma,x\colon B \vdash s\colon C$, apply \ref{rule:reflection2} (strictly smaller height) to get $\Gamma,x\colon B \vdash C \type$. This is Case 3.
+            \item[Case 2] From $\Gamma,x\colon B \vdash s\colon C$, apply \ref{rule:reflection2} to get $\Gamma,x\colon B \vdash C \type$. This is Case~3.
             \item[Case 3] From $\Gamma,x\colon B \vdash C \type$ and $\Gamma \vdash r\colon B$, apply \ref{rule:sub} to obtain $\Gamma \vdash C[x\leftarrow r] \type$ by a shorter derivation. Apply the IH.
             \item[Case 4] This is Case 1.
             \item[Case 5] Apply \ref{rule:reflection2} to $\Gamma \vdash F[z_i\leftarrow t_i] \colon D[z_i\leftarrow t_i]$ (shorter) to get $\Gamma \vdash A \type$. Apply the IH.

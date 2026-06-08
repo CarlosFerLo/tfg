@@ -363,8 +363,8 @@ must be fulfilled:
     \item for all pre-contexts $\Gamma$ and $\Delta$ and pre-type-expressions $A$ and $B$, if 
           $\mathcal{M}[\Gamma; A] = \mathcal{M}[\Delta; B]$, then $\Gamma = \Delta$ and 
           $\Gamma \vdash A = B$ are derivable;
-    \item for all pre-contexts $\Gamma$ and $\Delta$, pre-type-expressions $A$ and $B$ and pre-object-expressions
-          $t$ and $s$, if $\mathcal{M}[\Gamma; t] = \mathcal{M}[\Delta; s]$ is a section of $\mathcal{M}[\Gamma; A] = \mathcal[\Delta; B]$,
+    \item for all pre-contexts $\Gamma, \Delta$, pre-type-expressions $A, B$ and pre-object-expressions
+          $t, s$, if $\mathcal{M}[\Gamma; t] = \mathcal{M}[\Delta; s]$ is a section of $\mathcal{M}[\Gamma; A] = \mathcal[\Delta; B]$,
           then $\Gamma = \Delta$, $\Gamma \vdash A = B$ and $\Gamma \vdash t = s \colon A$ are derivable.
 \end{enumerate}
 
@@ -420,8 +420,8 @@ with $[\langle s_1, \dots, s_k \rangle]$ is defined as
 If $\Gamma = v_1 \colon A_1, \dots, v_n \colon A_n$ is an admissible context with $n \geq 1$ then the \textit{canonical projection}
 map $p([\Gamma])\colon [\Gamma] \to \parent [\Gamma]$ is represented by the tuple $\langle v_1, \dots, v_{n-1} \rangle$.
 Let $\Gamma = v_1 \colon A_1, \dots, v_n \colon A_n$ and $\Delta = v_1 \colon B_1, \dots, v_m \colon B_m$ 
-admissible contexts and $t = [\langle t_1, \dots, t_m \rangle] \colon [\Gamma] \to [\Delta]$ and 
-$C$ a pre-well-formed type expression with $\Delta \vdash C \type$, i.e., $\Delta, v_{m+1} \colon C$ derivable is
+admissible contexts, $t = [\langle t_1, \dots, t_m \rangle]$ a morphism from $[\Gamma]$ to $[\Delta]$ and 
+$C$ a pre-well-formed type expression with $\Delta \vdash C \type$, i.e., $\Delta, v_{m+1} \colon C$ is
 an admissible context, then 
 \[
     t^*[\Delta, v_{m+1} \colon C] = [\Delta, v_{n+1} \colon C[v_1  \leftarrow  t_1, \dots, v_m  \leftarrow  t_m]]
@@ -778,7 +778,8 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
         \]
     \ruleitem{E7}{application-2}
         If $\Delta = \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m$, 
-        for every pair of sections $\langle v_1, \dots, v_m, t \rangle_\Gamma$ and $\langle v_1, \dots, v_m, s \rangle_\Gamma$
+        for every pair of sections $[\langle v_1, \dots, v_m, t \rangle_\Gamma]$ and \\ % LINE BREAK
+        $[\langle v_1, \dots, v_m, s \rangle_\Gamma]$
         of $[\Delta, f \colon (\Pi x \colon A) B]$ and $[\Delta, x \colon A]$ respectively,
         we add \[
             [\langle v_1, \dots, v_m, \App([x \colon A] B, t, s)\rangle_\Gamma]
@@ -787,7 +788,7 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
 \end{enumerate}
 After each expansion, we complete the category in the following way:
 for every product object, i.e., for each object $[\Delta]$ with $\Delta$
-of the form $\Omega, (\Pi x \colon A) B$, and every section 
+of the form $\Omega, f \colon (\Pi x \colon A) B$, and every section 
 $s = \langle x, a \rangle_\Omega$ of $[\Omega, x \colon A, y \colon B]$
 we add $\curry(s) = \langle (\lambda x \colon A) a \rangle_\Omega$
 as a section of $[\Delta]$.
@@ -903,10 +904,10 @@ We use it to prove the following lemma:
                 \begin{tikzcd}
                     {[\Delta']} & {[\Delta', x \colon A]} \arrow[l, open] & {[\Delta', x \colon A, y \colon B]} \arrow[l, open]
                 \end{tikzcd}
-            \] is constructible by expansion. By applying expansion rule \ref{rule:product-formation-2} to the object $[\Delta', x \colon A, y \colon B]$ we have that \[
+            \] is constructible by expansion. By applying rule \ref{rule:product-formation-2} to the object $[\Delta', x \colon A, y \colon B]$ we have that \[
                 \Pi([\Delta, x \colon A, y \colon B]) = [\Delta', x \colon (\Pi x \colon A) B]
             \] is constructible by expansion. Then, so is $[\Delta] = [\Delta', x \colon (\Pi x \colon A) B]$ as they only differ on the naming of bound variables.
-        \item We have that there exists a sort symbol $S$ in $\Sigma$ with an introductory rule $z_1 \colon C_1, \dots, z_w \colon C_w \vdash S \type$ and sequents
+        \item We have that there exists a sort symbol $S$ in $\Sigma$ with an introductory rule $$z_1 \colon C_1, \dots, z_w \colon C_w \vdash S \type$$ and sequents
             \begin{align*}
                 \Gamma \vdash t_1 &\colon C_1 \\
                 \Gamma \vdash t_2 &\colon C_2[z_1 \leftarrow t_1] \\
@@ -934,21 +935,21 @@ We use it to prove the following lemma:
         \item Then, there is an $i$, $1 \leq i \leq m$, such that $t = y_i$. By induction hypothesis, $[\Delta]$ is constructible by expansion. 
             By applying the expansion rule \ref{rule:variable-duplication-2} to $[\Delta]$, we have that the section $[\langle y_1, \dots, y_m, y_i \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon B_i]$ is constructible by expansion,
             and so is $[\langle y_1, \dots, y_m, t \rangle_\Gamma] = [\langle y_1, \dots, y_m-1, y_i \rangle_\Gamma]$.
-        \item We have that $t = (\lambda x \colon B) s$ and $A = (\Pi x \colon B) C$ for some pre-type-expressions $B, C$, a pre-object-expression $s$ and a variable $x$.
+        \item We have that $t = (\lambda x \colon B) s$ and $A = (\Pi x \colon B) C$ for pre-type-expressions $B, C$, a pre-object-expression $s$ and a variable $x$.
             By induction hypothesis, we have that $[\Delta, x \colon A, y \colon B]$ and its section $[\langle y_1, \dots, y_m, x, s \rangle_\Gamma]$ are constructible by expansion.
             Then, by applying $\curry$ completion, we have that $[\langle y_1, \dots, y_m, (\lambda x \colon B) s \rangle_\Gamma] = [\langle y_1, \dots, y_m, t \rangle_\Gamma]$.
-        \item We have that $t = \App([x \colon B] C, s, r)$ and $A = C[x \leftarrow r]$ for some pre-type-expressions $B, C$, pre-object-expressions $s, r$ and a variable $x$.
+        \item We have that $t = \App([x \colon B] C, s, r)$ and $A = C[x \leftarrow r]$ for pre-type-expressions $B, C$, pre-object-expressions $s, r$ and a variable $x$.
             By induction hypothesis, we have that $[\langle y_1, \dots, y_m, s \rangle_\Gamma] \colon [\Delta] \to [\Delta, f \colon (\Pi x \colon B)C]$ and $[\langle y_1, \dots, y_m, r \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon B]$
             are constructible by expansion. Then, by applying the expansion rule \ref{rule:application-2} we have that \[
                 [\langle y_1, \dots, y_m, t \rangle_\Gamma] = [\langle y_1, \dots, y_m, \App([x \colon B]C, s, r)\rangle_\Gamma] \colon [\Delta] \to [\Delta, y \colon B[x \leftarrow r]]
             \]
             is constructible by expansion.
-        \item We have that $t = (\forall x \colon B) s$ and $A = \Prop$ for some pre-type-expression $B$, pre-object-expression $s$ and variable $x$.
-            By induction hypothesis, we have that $[\langle y_1, \dots, y_m, x, s \rangle_\Gamma] \colon [\Delta, x \colon B] \to [\Delta, x \colon B, p \colon \Prop]$ is constructible by expansion.
+        \item We have that $t = (\forall x \colon B) s$ and $A = \Prop$ for pre-type-expression $B$, pre-object-expression $s$ and variable $x$.
+            By induction hypothesis, we have that $$[\langle y_1, \dots, y_m, x, s \rangle_\Gamma] \colon [\Delta, x \colon B] \to [\Delta, x \colon B, p \colon \Prop]$$ is constructible by expansion.
             And by applying the expansion rule \ref{rule:proof-forall-intro-2} the morphism \[
                 [\langle y_1, \dots, y_m, (\forall x \colon B) \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon \Prop]
             \] is constructible by expansion.
-        \item Then, there exists an operator symbol $F$ in $\Sigma$ with an introductory rule $z_1 \colon C_1, \dots, z_m \colon C_m \vdash F \colon B$ and sequents 
+        \item Then, there exists an operator symbol $F$ in $\Sigma$ with an introductory rule $$z_1 \colon C_1, \dots, z_m \colon C_m \vdash F \colon B$$ and sequents 
             \begin{align*}
                 \Gamma \vdash t_1 &\colon C_1 \\
                 \Gamma \vdash t_2 &\colon C_2[z_1 \leftarrow t_1] \\

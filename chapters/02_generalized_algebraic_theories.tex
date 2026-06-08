@@ -286,7 +286,7 @@ Now we tackle the problem of well-formedness of rules.
 \end{definition}
 
 Lastly, we introduce \textit{substitution}.
-Given expressions $\Delta, t_1, \dots, t_n$ and variables $x_1, \dots, x_n$,
+Given the expressions $\Delta, t_1, \dots, t_n$ and the variables $x_1, \dots, x_n$,
 we define the expression $\Delta[x_1 \leftarrow t_1, \dots, x_n \leftarrow t_n]$
 as the result of simultaneous replacement of $x_1, \dots, x_n$ in $\Delta$
 by $t_1, \dots, t_n$. We call this the \textit{substitution operation}.
@@ -629,7 +629,7 @@ arises naturally from the definition of $C(U)$:
             is a context, i.e., if $[\Gamma, x \colon A]$
             is an object of $C(U)$.
         \item The $\in$-rule $\Gamma \vdash t \colon A$, for $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, is derivable if and only if
-            $[\langle x_1, \dots, x_n, t \rangle]$ is a section of 
+            $$[\langle x_1, \dots, x_n, t \rangle] \colon [\Gamma] \to [\Gamma, x \colon A]$$ is a section of 
             $[\Gamma, x \colon A]$
             in $C(U)$.
         \item If the $T$-rules $\Gamma \vdash A_1 \type$ and $\Gamma \vdash A_2 \type$ are derivable, 
@@ -660,7 +660,7 @@ initial object of the category of interpretations of $U$.
     Given a contextual category $\mathcal{C}$ and a theory $U$, an \textit{interpretation} of $U$ in $\mathcal{C}$
     is a mapping $\mathcal{M}$ from the $T$- and $\in$-rules of $U$ to the $\mathcal{C}$ such that
     \begin{enumerate}
-        \item if $R$ is a derived $T$-rule \(
+        \item if $R$ is the derived $T$-rule \(
                 x_1 \colon A_1, \dots, x_n \colon A_n
                 \vdash
                 A \type    
@@ -718,7 +718,7 @@ Now we shall define the concept of homomorphism between interpretations of a the
         \item if $R_t$ is a $\in$-rule, then $F \mathcal{M_C}[R_t] = \mathcal{M_{C'}}[R_t]$.
     \end{enumerate}
 \end{definition}
-So we can define the category $\mathbf{Con}_U$ as the category with pairs of contextual categories and $U$-interpretations
+So we define the category $\mathbf{Con}_U$ as the category with pairs of contextual categories and $U$-interpretations
 and their homomorphisms. We can easily see that $(C(U), \mathcal{M})$ is an
 initial object of $\mathbf{Con}_U$. Consider an object $(\mathcal{C}, \mathcal{N})$ of
 $\mathbf{Con}_U$. Let us construct a morphism $F \colon ((C(U), \mathcal{M})) \to (\mathcal{C}, \mathcal{N})$, i.e., we have to construct
@@ -879,7 +879,7 @@ prove a the result by induction. This definition is inspired by the one in the n
         \item if $F$ is an operator symbol, and $t_1, \dots, t_n$ are expressions, then \[
             \depth[F(t_1, \dots, t_n)] = 1 + \sum_{i=1}^n \depth[t_i];
         \]
-        \item if $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$ is a premise, then \[
+        \item if $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$ is a premise, then \[
             \depth[\Gamma] = \sum_{i = 1}^n \depth[A_i].
         \]
     \end{enumerate}

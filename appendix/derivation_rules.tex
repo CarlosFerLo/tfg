@@ -359,14 +359,13 @@ Rules for products of types:
         \inferrule
             {\Gamma, x \colon A \vdash t \colon B}
             {\Gamma \vdash (\lambda x \colon A) t \colon (\Pi x \colon A) B}
-
+\end{mathpar}
+\begin{mathpar}
     \RuleLabel{$\xi$-Rule}{xi-rule} \quad
         \inferrule
             {\Gamma, x \colon A_1 \vdash t_1 = t_2  \colon B \\ \Gamma \vdash A_1 = A_2}
             {\Gamma \vdash (\lambda x \colon A_1) t_1 = (\lambda x \colon A_2) t_2 \colon (\Pi x \colon A_1) B}
 
-\end{mathpar} % --- Page Break ---
-\begin{mathpar}
 
     \RuleLabel{$\Pi$-Elim}{prod-elim} \quad
         \inferrule
@@ -375,7 +374,7 @@ Rules for products of types:
 
     \RuleLabel{$\Pi$-Elim-Equ}{prod-elim-equ} \quad
         \inferrule
-            {\Gamma \vdash A_1 = A_2 \\ \Gamma \vdash t_1 = t_2 \colon (\Pi x \colon A_1) B_1 \\ \Gamma, x \colon A_1 \vdash B_1 = B_2 \\ \Gamma \vdash s_1 = s_2 \colon A_1}
+            {\Gamma \vdash A_1 = A_2 \\\\ \Gamma \vdash t_1 = t_2 \colon (\Pi x \colon A_1) B_1 \\ \Gamma, x \colon A_1 \vdash B_1 = B_2 \\ \Gamma \vdash s_1 = s_2 \colon A_1}
             {\Gamma \vdash \App([x \colon A_1] B_1, t_1, s_1) =  \App([x \colon A_2] B_2, t_2, s_2) \colon B_1[x  \leftarrow  s_1]}
 
     \RuleLabel{$\beta$-Rule}{beta-rule} \quad

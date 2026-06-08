@@ -64,7 +64,7 @@ We can write this as a GAT signature as follows:
 This allows us to build upon the construction of $C(U)$ we made for the general case, but this will be rather difficult
 to follow. Hence, we look for a simplification of both the category and the expansion rules.
 Consider $\Gamma$ a simple type expression of $\textbf{CL}_\to$, let $A_1, \dots, A_n$ be the type variables appearing on $\Gamma$,
-and let $\Delta$ be the context $A_1 \colon \Prop, \dots, A_n \colon \Prop$. We center our search on the relativization of $C(U)$ by $\Delta$,
+and let $\Delta = A_1 \colon \Prop, \dots, A_n \colon \Prop$. We center our search on the relativization of $C(U)$ by $\Delta$,
 $\mathcal{C}_\Delta$. Although the category $\mathcal{C}_\Delta$ carries a lot of information, i.e., its tree structure, dependent types and pullbacks,
 in this simple case it becomes somehow redundant. We then consider the full category composed by the first level of objects and the terminal object,
 this subcategory contains all possible types in $A_1, \dots, A_n$ and the relations between them.  
@@ -127,7 +127,8 @@ First we initialize an \textsc{implica} graph and we add the proposition $A \to 
 
 Now, to perform one expansion iteration we execute the following code:
 \begin{minted}{python}
-    # Mark all current nodes as 'existed' to differentiate them from new generations
+    # Mark all current nodes as 'existed' to differentiate them 
+    # from new generations
     graph.query().match("(N:*)").set("N", { "existed" : True }).execute()
 
     # Rule 1 & 2: K-Combinator Expansions
