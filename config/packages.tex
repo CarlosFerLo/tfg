@@ -12,6 +12,7 @@
 \usepackage[dvips]{graphics}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{float}
 %\usepackage{moreverb}
 \usepackage{multicol}
 
@@ -36,7 +37,12 @@
 \linespread{1.1} % Palatino needs more leading (space between lines)
 
 \usepackage[latin1]{inputenc}
-\usepackage[twoside,bindingoffset=1cm]{geometry}
+\usepackage[
+    twoside,
+    bindingoffset=1cm,
+    inner=60pt,
+    outer=85pt
+]{geometry}
 
 \usepackage{mathpartir}
 \usepackage{proof}
