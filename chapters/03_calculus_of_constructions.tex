@@ -371,7 +371,7 @@ must be fulfilled:
 % TODO : we should get rid of this.
 In order to be able to identify contexts up to $\alpha$-conversion, we consider a fixed numerable set of variables:
 $v_1, \dots, v_n, \dots$. We say that a context $\Gamma \equiv x_1 \colon A_1, \dots, x_n \colon A_n$ is in 
-\textbf{$\alpha$-normal form} iff $x_i \equiv v_i$ for all $1 \leq i \leq n$.
+\textit{$\alpha$-normal form} iff $x_i \equiv v_i$ for all $1 \leq i \leq n$.
 Moreover, we  say that a pre-context $\Gamma$ is admissible iff it is in $\alpha$-normal form and $\vdash \Gamma \ok$.
 
 Now we  define $\mathcal{C}_I$:
@@ -865,7 +865,7 @@ We use it to prove the following lemma:
         \item if $\Delta$ is a context over $\Gamma$, then \[
             \degree[\Delta] = \depth[\Delta] - \depth[\Gamma]
         \]
-        \item if $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$ is a context and 
+        \item if $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$ is a context and 
             $[\langle y_1, \dots, y_m, t \rangle_\Gamma]$ is a section of $[\Delta, x \colon A]$, then \[
                 \degree[\langle y_1, \dots, y_m, t \rangle_\Gamma] = \degree[\Delta] + \depth[t]
             \]
