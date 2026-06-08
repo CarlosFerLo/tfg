@@ -1,13 +1,15 @@
 % !TEX root = ../main.tex
 \chapter{Implementation of the Expansion Algorithm}
 
-In this chapter we explain the basic ideas of how to use the
-expansion algorithm jointly with graph neural networks with the objective of generating terms
-of a specific type in a given theory. We also present a demo of the 
-raw expansion algorithm for generating terms on simply typed combinatory logic
-in order to give some intuition on how the algorithm works.
+In this chapter, we explain the basic ideas of how to use the Expansion Algorithm 
+jointly with graph neural networks to generate terms of a specific type. Before attempting to 
+navigate the complex, strictly functorial pullbacks required by CoC, we must prove that 
+GNN-guided graph exploration is viable in a minimal setting. Therefore, we present a demo 
+of the raw Expansion Algorithm on Simply Typed Combinatory Logic ($\textbf{CL}_{\rightarrow}$) to 
+serve as a chronological and computational baseline, providing intuition on how the algorithm works
+and demonstrating the inherent combinatorial explosion.
 
-\section{Term Generation in Simply Typed Combinatory Logic}
+\section{Term Generation in Simply Typed Combinatory Logic} \label{sect:implica}
 
 Now we present the \textsc{implica} package for Python \cite{fernandez}, a graph engine built on Rust
 that we built for the purpose of this demonstration.
@@ -99,10 +101,12 @@ composition of morphisms in order for it to be a subcategory of $\mathcal{C}$.
 When adding an object we are also adding its projection to $1$.
 The exhaustivity of this expansion algorithm is easy to check, as it follows directly from the definitions.
 
-Now we show how to code the expansion algorithm using Python and the \textsc{implica} package. One peculiarity
-we developed into \textsc{implica} that is not part of our current definition is the fact that all terms of a type are 
-considered equal, as we just care about having a witness, not the nature of it. In order to add this condition to the 
-GAT signature, it is enough to add the following equation:
+Now we show how to code the expansion algorithm using Python and the \textsc{implica} package. 
+For this initial $\textbf{CL}_{\rightarrow}$ baseline, we adopt a classical approach where all proofs 
+of a proposition are treated as geometrically identical. While this deliberately collapses the constructive 
+proof relevance inherent to dependent type theories, it allows us to isolate and observe the raw combinatorial 
+explosion of the Expansion Algorithm without the added overhead of undecidable object identity. 
+In order to add this condition to the GAT signature, it is enough to add the following equation:
 \[
     p \colon \Prop, t_1, t_2 \colon \Proof(p) \vdash t_1 = t_2.
 \]
@@ -249,9 +253,11 @@ We break down the architecture into four primary components:
 
     \item \textbf{Node Embedding:} This component assigns numerical vectors (embeddings) to the input graph's nodes,
         capturing their core syntactic meaning independent of the broader graph structure. If operating with 
-        a fixed signature, the model can learn basic embeddings for all sort and operator symbols, assign 
-        deterministic (non-learnable) embeddings to variables based on their names, and use small 
-        transformer-based encoders to generate embeddings for complex expressions. Developing a 
+        a fixed signature, the model can learn basic embeddings for all sort and operator symbols. 
+        To strictly preserve $\alpha$-equivalence and prevent the model from treating structurally identical 
+        graphs differently, variable embeddings are generated deterministically using the de Bruijn indices. 
+        This guarantees that bound variables share the exact same geometric representation regardless of their syntactic naming. 
+        Then use small transformer-based encoders to generate embeddings for complex expressions. Developing a 
         foundational model for any arbitrary signature by solely learning aggregation operations remains an 
         area for future research.
     
@@ -282,10 +288,14 @@ target type (e.g., $A \to A$), ensuring the expansion finds a term in very few i
 successful expansion paths form a foundational graph, providing reliable, simple examples to initially 
 train the Conjecturer
 
-Once the unsupervised training loop begins, an untrained Prover will inherently output low-confidence, 
-near-random predictions. If permitted to dictate the partial expansion path immediately, the Prover 
-would likely trigger catastrophic failures by aggressively pruning vital nodes, leaving the model 
-with no successful generative paths to learn from.
+Because the uncapped Expansion Algorithm grows super-exponentially (as evidenced in Table \ref{tab:node_explosion}), 
+an untrained Prover making greedy, near-random softmax predictions will face extreme reward sparsity ---it will exhaust 
+computational memory before ever finding a valid proof path to learn from. If permitted to dictate the partial expansion 
+path immediately, the Prover would likely trigger catastrophic failures by aggressively pruning vital nodes. 
+Therefore, the decaying confidence threshold is strictly paired with Curriculum Learning. 
+By seeding the model entirely with trivial theorems during pre-training 
+(where the baseline algorithm naturally terminates), we guarantee initial positive reward signals. 
+This allows the GNN to learn basic pruning heuristics before the threshold decays and more complex search spaces are introduced.
 
 To mitigate this and stabilize early training, we introduce a dynamic confidence threshold for the 
 \textsc{Delete} action, denoted as a function $f(x)$, where $x$ represents the current training step. 

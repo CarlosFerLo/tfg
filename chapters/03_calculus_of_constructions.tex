@@ -515,7 +515,9 @@ $\text{CoC}_\Sigma$, category $\mathbf{DoC}_\Sigma$ and interpretation function 
           Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ by adding a production of 
           pre-type-expressions $E \Coloneqq S$ and the inference rule $\Gamma \vdash S$.
           The category $\mathbf{DoC}_{\Sigma'}$ has as objects pairs $(\mathcal{C}, S_\mathcal{C})$, where 
-          $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $\mathcal{M}^\Sigma_\mathcal{C}[\Gamma] \lhd S_\mathcal{C}$.
+          $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $\mathcal{M}^\Sigma_\mathcal{C}[\Gamma] \lhd S_\mathcal{C}$;
+          and morphisms from $(\mathcal{C}, S_\mathcal{C})$ to $(\mathcal{D}, S_\mathcal{D})$ are morphisms $F$ from $\mathcal{C}$ to $\mathcal{D}$ in $\mathbf{DoC}_\Sigma$
+          such that $F S_\mathcal{C} = S_\mathcal{D}$.
           Finally, we define $\mathcal{M}^{\Sigma'}_\mathcal{C}$, for each object $\mathcal{C}$ of $\mathbf{DoC}_{\Sigma'}$,
           by adding $\mathcal{M}^{\Sigma'}_\mathcal{C}[\Gamma; S] = S_\mathcal{C}$.
     \item \textbf{Adding an operator symbol:}
@@ -525,7 +527,9 @@ $\text{CoC}_\Sigma$, category $\mathbf{DoC}_\Sigma$ and interpretation function 
           Then, we extend $\text{CoC}_\Sigma$ to obtain $\text{CoC}_{\Sigma'}$ by adding a production of 
           pre-object-expressions $t \Coloneqq f$ and the inference rule $\Gamma \vdash f \colon A$.
           The category $\mathbf{DoC}_{\Sigma'}$ has as objects pairs $(\mathcal{C}, f_\mathcal{C})$,
-          where $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $f_\mathcal{C}$ is a section of $\mathcal{M}^\Sigma_\mathcal{C}[\Gamma, x \colon A]$.
+          where $\mathcal{C}$ is an object of $\mathbf{DoC}_\Sigma$ and $f_\mathcal{C}$ is a section of $\mathcal{M}^\Sigma_\mathcal{C}[\Gamma, x \colon A]$;
+          and morphisms from $(\mathcal{C}, f_\mathcal{C})$ to $(\mathcal{D}, f_\mathcal{D})$ are morphisms $F$ from $\mathcal{C}$ to $\mathcal{D}$ in $\mathbf{DoC}_\Sigma$
+          such that $F f_\mathcal{C} = f_\mathcal{D}$.
           Finally, we define $\mathcal{M}^{\Sigma'}_\mathcal{C}$, for each object $\mathcal{C}$ of $\mathbf{DoC}_{\Sigma'}$,
           by adding $\mathcal{M}^{\Sigma'}_\mathcal{C}[\Gamma; f] = f_\mathcal{C}$.
     \item \textbf{Adding an equality of types:}
@@ -547,9 +551,12 @@ $\text{CoC}_\Sigma$, category $\mathbf{DoC}_\Sigma$ and interpretation function 
           $\mathcal{M}^{\Sigma'}$ is the restriction of $\mathcal{M}^\Sigma$ to the objects of $\mathbf{DoC}_{\Sigma'}$.
 \end{itemize}
 Under this construction, we can consider $\mathcal{C}_\Sigma$ to be the exact same construction as $\mathcal{C}_I$,
-but with $\text{CoC}_\Sigma$ instead of $\text{CoC}_\emptyset$. Following a similar proof as the original proof
-for $\mathcal{C}_I$ in \cite{streicher}, we can prove the corresponding \textit{Completeness Theorems} and 
-that $\mathcal{C}_\Sigma$ is the initial object of $\mathbf{DoC}_\Sigma$. 
+but with $\text{CoC}_\Sigma$ instead of $\text{CoC}_\emptyset$. 
+Constructing the quotiented subcategory $\mathbf{DoC}_{\Sigma}$ introduces profound complexities, primarily because adding contextual 
+equality rules makes object identity within the category undecidable. While the syntactic extension and interpretations map cleanly,
+rigorously proving the initiality of this specific quotiented term model requires verifying coherence conditions that fall outside the 
+scope of this thesis. We leave the formal proof of initiality for $\mathbf{DoC}_{\Sigma}$ as an open challenge for future work.
+
 
 \section{Expansion Algorithm for CoC}
 

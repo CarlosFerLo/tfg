@@ -14,6 +14,12 @@ Intelligence, lead us to consider working with categorical representations
 of our type theory in order to leverage its geometrical properties to 
 give the model a complete picture of the semantics of the theory.
 
+This motivated the development of \textsc{implica}, discussed in Section \ref{sect:implica}. 
+Although it served to showcase the base concepts behind the expansion algorithm, its design
+helped to make future versions of this engines more efficient.
+One design mistake we made was to make the API too general, similar to Cypher \cite{francis2018}, 
+but it ended up making everything too slow and we did not take any advantage of this general API.
+
 The first representation we found promising Cartmell's Generalized Algebraic
 Theories and Contextual Categories \cite{cartmell1978, cartmell1986}, whose term models
 sit close enough to the syntax of a theory to be
@@ -21,7 +27,7 @@ computationally manageable, while still carrying the
 geometric structure needed for a GNN-based approach. 
 In Section \ref{sect:relevance-of-the-context-category} we revised the definition of model of a GAT, that originally is thought as a mapping to the category of sets, families of sets, families of families of sets, \dots;
 but we thought it was more natural to think of an interpretation as a mapping directly to a contextual category.
-With this revised notion of model, we proposed a new proof for the initiality conjecture for GATs.
+With this revised notion of model, we adapted the proof of initiality of the term model for GATs to our new notion of model.
 Then we designed the Expansion Algorithm to construct sections within the term model, equivalent to generating terms of a given type.
 This model was thought to work together with a GNN in order to surpass the 
 complexity barrier.
@@ -32,8 +38,8 @@ which provided both a proof of the initiality conjecture for CoC
 and a framework for extending type theories beyond GATs. 
 In Section \ref{sect:extending-calculus-of-constructions-and-its-interpretation}, we extended this framework 
 to CoC enriched with a GAT signature, constructed the corresponding 
-term model, following ideas 
-from \cite{bezem2021}, and proposed an outline of the proof of its initiality based on the original proof.
+term model, following ideas from \cite{bezem2021}, 
+the proofs of completeness and initiality of this term model are still open for future work.
 We then extended the Expansion Algorithm to this 
 richer setting. To do this, we extended the concept of relativization to Doctrines of Constructions. 
 In the course of this work, we also identified a 
@@ -47,7 +53,7 @@ it remains to formally extend the term model construction
 and prove the initiality conjecture for Doctrines of 
 Constructions with $\Sigma$-types, identity types, and a universe 
 hierarchy, as described in \cite{streicher}, and ultimately for the full 
-Calculus of Inductive Constructions \cite{coquand1990} \cite{paulin-mohring1993} and the Lean type 
+Calculus of Inductive Constructions \cite{coquand1990,paulin-mohring1993} and the Lean type 
 theory \cite{demoura2015}. The initiality conjecture for full Martin-L\"of type theory 
 has been formalized in Agda by Brunerie and Lumsdaine \cite{bruneire2020}, 
 and a similar formalization effort for our extended setting 
