@@ -5,7 +5,7 @@ In this chapter, we introduce Generalized Algebraic Theories (GATs), a framework
 dependent types. GATs allow us to construct the concept of \textit{contextual category},
 the foundational categorical structure to deal with dependent types. We use contextual categories as a baseline 
 for interpreting the more complex Calculus of Constructions in Chapter 2.
-Finally, we formalize the \textit{term generation problem} and introduce the expansion algorithm, our approach to term generation.
+Near the end of Chapter 1, we formalize the \textit{term generation problem} and introduce the expansion algorithm, our approach to term generation.
 
 \section{Syntax of GATs}
 
@@ -25,19 +25,26 @@ Informally, a generalized
 algebraic theory consists of:
 \begin{enumerate}
     \item a set of sorts, that can be constant or variable;
-    \item a set of operators, with the sorts of the arguments and value specified;
-    \item a set of axioms, where each axiom is an identity between similar expressions. 
+    \item a set of operators, with the sorts of the arguments and the sort of the value specified;
+    \item a set of axioms, where each axiom is an identity between expressions. 
 \end{enumerate}
 
-To build intuition, consider the theory of categories.
-The set of sorts contains two elements $\Ob$ and $\Hom$.
+To build intuition, we consider the theory of categories.
+The set of sorts contains two elements $\Ob$ and $\Hom$, standing for `objects' and `homomorphisms' respectively.
 $\Ob$ is a constant type and $\Hom$ is a variable type;
 for any two terms $x, y$ of type $\Ob$, we have a type $\Hom(x,y)$.
-Here, we see a key feature of GATs: types vary over terms, not over types.
+Here, we see a key feature of GATs: types vary over terms, not over types% 
+\footnote{
+  This corresponds to the \emph{dependent types} axis of Barendregt's
+  \(\lambda\)-cube ---the dimension that extends the simply-typed
+  \(\lambda\)-calculus by allowing types to be indexed by terms
+  (\(\lambda P\) in cube notation).
+  The canonical reference is~\cite{barendregt1992}.
+}.
 The set of operators also has two elements $\id$ and $\circ$.
 The $\id$ operator has one argument $x$ of type $\Ob$,
 and returns a value of type $\Hom(x, x)$. This shows
-how the type of value of an operator might vary depending
+how the type of the value of an operator might vary depending
 on the arguments. 
 The $\circ$ operator (or composition) expects 5 arguments:
 three terms $x, y, z$ of type $\Ob$, one term $f$ of type $\Hom(x, y)$,
@@ -60,7 +67,7 @@ To do this, we write
 \begin{equation*}
     x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A
 \end{equation*}
-that reads as follows: if $x_1$ is a variable of type $A_1$, \dots and if $x_n$ is a variable of type $A_n$,
+that reads as follows: if $x_1$ is a variable of type $A_1$, \dots and, if $x_n$ is a variable of type $A_n$,
 then $t$ is a term of type $A$. 
 Similarly, if we want to assert that if $x_1$ is a variable of type $A_1$,
 \dots and if $x_n$ is a variable of type $A_n$,
@@ -88,10 +95,10 @@ We will be writing $x, y \colon A$ to mean $x \colon A, y \colon A$, as a shorth
 To continue with the previous example, we can write the axioms
 of category theory as follows:
 \begin{alignat*}{2}
-    &x, y \colon Ob, f \colon Hom(x, y)  \vdash  \circ(id(x), f) = f, \\
-    &x, y \colon Ob, f \colon Hom(x, y)  \vdash  \circ(f, id(y)) = f, \\
-    &w, x, y, z \colon Ob, f \colon Hom(w, x), g \colon Hom(x, y), h \colon Hom(y, z) \\ 
-        &\qquad\vdash \circ(\circ(f, g), h) = \circ(f, \circ(g, h)).
+    &x, y \colon Ob, f \colon \Hom(x, y)  \vdash  \circ(id(x), f) = f \colon \Hom(x, y), \\
+    &x, y \colon Ob, f \colon \Hom(x, y)  \vdash  \circ(f, id(y)) = f \colon \Hom(x, y), \\
+    &w, x, y, z \colon Ob, f \colon \Hom(w, x), g \colon \Hom(x, y), h \colon \Hom(y, z) \\ 
+        &\qquad\vdash \circ(\circ(f, g), h) = \circ(f, \circ(g, h)) \colon \Hom(x, z).
 \end{alignat*}
 
 When presenting a theory's language, i.e., the sets of sorts and operators,
@@ -112,7 +119,7 @@ suffices to specify the types of the arguments and the type of the value of $F$.
 Finally, to present a theory we give a set of symbols,
 each associated to its introductory rule, and a set of axioms.
 And, of course, everything must be well-formed, something we will address shortly.
-Now we give a formal presentation of category theory using GAT notation: 
+Now we give a slightly more formal presentation of category theory using GAT notation: 
 in Table \ref{table:categories-symbols} we state the symbols of the theory together with their introductory rules
 and in Table \ref{table:categories-axioms} we state the axioms of the theory as rules.
 
@@ -168,7 +175,7 @@ as a well-formed pre-theory.
 
 We assume given a countable set of variables $V$.
 Let us define the notion of rule on an alphabet $W$,
-whose elements are called symbols.
+whose elements are called \textit{symbols}.
 
 \begin{definition}
     The set of \textit{expressions} $\mathcal{E}$, is defined inductively
@@ -182,6 +189,9 @@ whose elements are called symbols.
               then $L(e_1, \dots, e_n)$ is an expression.
     \end{enumerate}
 \end{definition}
+\begin{remark}
+    Non-arity-respecting expressions are expressions, but they have no means to enter the calculus.
+\end{remark}
 
 Now we can define the building blocks of a rule:
 \begin{definition}
@@ -214,34 +224,33 @@ Now we can define a \textit{pre-theory} and later a \textit{theory}.
     A \textit{pre-theory} consists of
     \begin{enumerate}
         \item a set of sort symbols $\mathcal{S}$;
-        \item a set of operator symbols $\mathcal{Z}$;
+        \item a set of operator symbols $\mathcal{O}$;
         \item for each sort symbol $A \in \mathcal{S}$, an associated rule 
-              of the alphabet $\mathcal{S} \cup \mathcal{Z}$:
+              of the alphabet $\mathcal{S} \cup \mathcal{O}$:
               \begin{equation*}
                 x_1 \colon A_1, \dots, x_n \colon A_n \vdash A(x_1, \dots, x_n) \type
               \end{equation*}
               for some $n \geq 0$. It is called the \textit{introductory
               rule} of $A$;
-        \item for each operator symbol $F \in \mathcal{Z}$, an associated rule
-              of the alphabet $\mathcal{S} \cup \mathcal{Z}$:
+        \item for each operator symbol $F \in \mathcal{O}$, an associated rule
+              of the alphabet $\mathcal{S} \cup \mathcal{O}$:
               \begin{equation*}
                 x_1 \colon A_1, \dots, x_n \colon A_n \vdash F(x_1, \dots, x_n) \colon A
               \end{equation*}
               for some $n \geq 0$. It is called the \textit{introductory
               rule} of $F$;
         \item a set of axioms. Where each axiom is either a $T{=}$rule or
-              a $\in=$rule of the alphabet $S \cup Z$.
+              a $\in=$rule of the alphabet $S \cup \mathcal{O}$.
 
     \end{enumerate}
 \end{definition}
 
-\begin{definition}
-    A pre-theory is \textit{well-formed} if all of its introductory
-    rules are well-formed.
-    A \textit{theory} is a well-formed pre-theory.
-\end{definition}
-
 Now we tackle the problem of well-formedness of rules.
+
+\begin{definition}
+    The set of \textit{derived rules} of a pre-theory $U$ is the
+    set of rules derivable by the derivation rules presented in Appendix \ref{app:derivation-rules-gat}.
+\end{definition}
 
 \begin{definition}
     If $U$ is a pre-theory, then
@@ -251,7 +260,7 @@ Now we tackle the problem of well-formedness of rules.
             \begin{equation*}
                 x_1 \colon A_1, \dots, x_{n-1}\colon A_{n-1} \vdash A_n \type
             \end{equation*}
-            is a derived rule such that $x_n$ is distinct from all of $x_1, \dots, x_n$.
+            is a derived rule such that $x_n$ is distinct from all of $x_1, \dots, x_{n-1}$.
         \item \begin{enumerate}
             \item the rule $\Gamma \vdash A \type$
                   is \textit{well-formed} if the premise $\Gamma$ is a context.
@@ -271,8 +280,9 @@ Now we tackle the problem of well-formedness of rules.
 \end{definition}
 
 \begin{definition}
-    The set of \textit{derived rules} of a pre-theory $U$ is the
-    set of rules derivable by the derivation rules presented in Appendix \ref{app:derivation-rules-gat}.
+    A pre-theory is \textit{well-formed} if all of its introductory
+    rules are well-formed.
+    A \textit{theory} is a well-formed pre-theory.
 \end{definition}
 
 Lastly, we introduce \textit{substitution}.
@@ -298,7 +308,7 @@ we construct a category out of the theory syntax.
     Given two contexts $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$ and 
     $\Delta = y_1 \colon B_1, \dots, y_m \colon B_m$ of $U$, a morphism from $\Gamma$ to $\Delta$,
     or a \textit{realization} of $\Delta$ from $\Gamma$, is an $m$-tuple $\langle t_1, \dots, t_m \rangle$ 
-    such that for each $j$, $1 \leq j \leq m$, the rule 
+    such that for each $j$, with $1 \leq j \leq m$, the rule 
     \[
         \Gamma \vdash t_j \colon B_j[y_1  \leftarrow  t_1, \dots, y_{j-1}  \leftarrow  t_{j-1}] 
     \]
@@ -344,14 +354,14 @@ with the empty context as its least element and
     = 
     \langle x_1 \colon A_1, \dots, x_{n-1} \colon A_{n-1} \rangle
 \).
-Moreover, given a context $x_1 \colon A_1, \dots, x_n \colon A_n, x_{n+1} \colon A_{n+1}, \dots x_{n+m}$
+Moreover, given a context $x_1 \colon A_1, \dots, x_n \colon A_n, x_{n+1} \colon A_{n+1}, \dots x_{n+m} \colon A_{n+m}$
 of $U$, $\langle x_1, \dots, x_n \rangle$ is a realization of $x_1 \colon A_1, \dots, x_n \colon A_n$
-with regard to $x_1 \colon A_1, \dots, x_n \colon A_n, x_{n+1} \colon A_{n+1}, \dots, x_{n+m} \colon A_{n+m}$, and is noted
+with regard to $x_1 \colon A_1, \dots, x_n \colon A_n, x_{n+1} \colon A_{n+1}, \dots, x_{n+m} \colon A_{n+m}$, and is denoted
 as $p(\langle x_1 \colon A_1, \dots, x_{n+m} \colon A_{n+m} \rangle, \langle x_1 \colon A_1, \dots, x_n \colon A_n \rangle)$.
 Hence, if we consider $\Gamma, \Delta \in \Ob R(U)$ such that $\Gamma \leq \Delta$, then $p(\Delta, \Gamma)$ is defined and 
 $p(\Delta, \Gamma) \colon \Delta \to \Gamma$ in $R(U)$.
 
-Additionally, for contexts $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, $\Gamma' = y_1 \colon B_1, \dots, y_m \colon B_m$
+Additionally, for contexts $\Gamma = x_1 \colon A_1, \dots, x_n \colon A_n$, and $\Gamma' = y_1 \colon B_1, \dots, y_m \colon B_m$,
 and $\Delta = y_1 \colon B_1, \dots, y_{m+w} \colon B_{m+w}$, and morphism
 $f = \langle t_1, \dots, t_m \rangle \colon \Gamma \to \Gamma'$ in $R(U)$, 
 \[
@@ -363,13 +373,13 @@ $f = \langle t_1, \dots, t_m \rangle \colon \Gamma \to \Gamma'$ in $R(U)$,
 is a pullback diagram in $R(U)$, where % TODO: revise if should substitute x_1, \dots, x_n by \Gamma
 \begin{align*}
     f^*\Delta &= x_1 \colon A_1, \dots, x_n \colon A_n, \\
-    &\quad y_{m+1} \colon B[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m], \dots, y_{m+w} \colon B[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]
+    &\quad y_{m+1} \colon B_{m+1}[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m], \dots, y_{m+w} \colon B_{m+w}[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]
 \end{align*}
 \[
     q(f, \Delta) = \langle t_1, \dots, t_m, y_{m+1}, \dots, y_{m+w} \rangle.
 \]
 
-This motivates the following definition:
+This motivates the definition of Contextual Categories.
 
 \section{Contextual Categories}
 
@@ -428,8 +438,7 @@ relation $\equiv$ between derived $T$- and $\in$- rules as follows:
 \]
 if and only if $m = n$ and, for each $1 \leq i \leq n + 1$, \[
      x_1 \colon A_1, \dots, x_{i-1} \colon A_{i-1} \vdash A_i = B_i[y_1  \leftarrow  x_1, \dots, y_{i-1}  \leftarrow  x_{i-1}]
-\] is derivable,
-and 
+\] is derivable. Similarly,
 \[
         x_1 \colon A_1, \dots, x_n \colon A_n 
         \vdash 
@@ -533,9 +542,9 @@ More formally:
 \end{definition}
 
 Now we see that any morphism $f \colon B \to A$ in $\mathcal{C}$ induces a pullback functor 
-$f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which is a contextual functor. The proof of the following 
-theorems is included in \cite{streicher}.
+$f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which is a contextual functor. 
 This functor can be thought as a way of embedding the knowledge over the context $A$ onto the context $B$.
+The proofs of the following theorems are included in \cite{streicher}.
 
 \begin{lemma}
     Let $\mathcal{C}$ be a contextual category, and $f \colon B \to A$ a morphism in $\mathcal{C}$.

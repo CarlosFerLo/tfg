@@ -47,8 +47,8 @@ Calculus of Constructions (CoC) \cite{coquand1988} into categorical structures
 we obtain term models that carry a rich geometric graph structure. 
 The soundness of this translation is guaranteed by the term 
 model being the initial object of the category of models of 
-the underlying type theory, a result known as the initiality
-conjecture, due to Voevodsky \cite{voevodsky2017}. 
+the underlying type theory, a result known as the Initiality
+Conjecture, due to Voevodsky \cite{voevodsky2017}. 
 It was first proved by Streicher \cite{streicher} for CoC, and later for
 full Martin-L\"of type theory by Brunerie and Lumsdaine \cite{bruneire2020}.
 
@@ -79,11 +79,11 @@ proof for CoC together with a GAT signature.
 Then, once established the mathematical significance of objects and morphisms in the term model,
 we present the expansion algorithm, an algorithm to construct any object or morphism in a Contextual 
 Category or Contextual Doctrine, which is designed to work together with a graph neural network to efficiently
-solve the problem in hand.
+solve the problem at hand.
 In order to do this, we extend the concept of relativization from Context Categories to Doctrines of Constructions.
 Then we implement the expansion algorithm for simply typed combinatory logic, as a manageable example to provide intuition
 about how the expansion process works. 
-Finally, we design a proposal of a GNN-based model thought to optimize term generation.
+Finally, we design a proposal of a GNN-based model designed to optimize term generation.
 
 \section*{Prerequisites}
 
@@ -100,10 +100,10 @@ to the practical implementation of AI-guided theorem proving:
 \begin{itemize}
     \item \textbf{Chapter 1: Syntax and Semantics of Generalized Algebraic Theories.}
         We introduce Cartmell's Generalized Algebraic Theories and define their syntax and semantics, as 
-        they were originally presented in \cite{cartmell1978, cartmell1986} and incorporating some notions
+        they were originally presented in \cite{cartmell1978, cartmell1986} and incorporate some notions
         presented by Streicher in \cite{streicher}.
-        Then we provide a concept of model of a GAT $U$ together with a proof of the initiality of the term model $C(U)$.
-        Finally, define the problem of type inhabitation in categorical terms, and present the foundational Expansion Algorithm.
+        Then we provide a concept of model of a GAT together with a proof of the initiality of the term model.
+        Finally, we define the problem of type inhabitation in categorical terms, and present the foundational Expansion Algorithm.
     \item \textbf{Chapter 2: Calculus of Constructions.} We step up the complexity to the Calculus of 
         Constructions (CoC), introducing product types and the universe of propositions. 
         We present the definition of CoC together with the construction 
@@ -113,7 +113,7 @@ to the practical implementation of AI-guided theorem proving:
         Expansion Algorithm to handle this richer syntax.
     \item \textbf{Chapter 3: Implementation of the Expansion Algorithm.} We bring the theory into 
         practice. We demonstrate the raw Expansion Algorithm generating terms of Simply Typed Combinatory 
-        Logic ($\textbf{CL}_\to$) using \textsc{implica}, a custom Rust-based graph engine. 
+        Logic ($\textbf{CL}_\to$) using \textsc{implica}, a custom Rust-based graph engine written by the author (consists of $\sim 7.000$ lines of Rust code). 
         Finally, we outline the architecture for integrating Graph Neural Networks
         using a novel unsupervised "Conjecturer-Prover" training paradigm to optimize the expansion process.
 \end{itemize}
