@@ -1,7 +1,6 @@
 % !TEX root = ../main.tex
 \chapter{Figures} \label{app:figures}
-
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     % First row
     \begin{subfigure}[b]{0.48\textwidth}
@@ -35,6 +34,10 @@
         \label{fig:g4-graph}
     \end{subfigure}
 
-    \caption{Overview of the $G_1$ through $G_4$ subcategories.}
+    \caption{
+        Overview of the $G_1$ through $G_4$ subcategories.
+        Nodes represent propositions, they are blue if they have no witness or proof, and they are red if they have one.
+        Edges are implications between propositions, i.e., there is an edge between nodes $P$ and $Q$ if there is a proof of $P \to Q$. 
+    }
     \label{fig:g-grid}
 \end{figure}
