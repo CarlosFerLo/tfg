@@ -3,21 +3,21 @@
 \chapter*{Conclusion}
 
 This thesis develops a categorical approach to autonomous 
-theorem proving, grounded in the translation of type 
+theorem proving, grounded on the translation of type 
 inhabitation problems into geometric graph exploration 
 problems over term models.
 
 Our investigation began with the study of Lafforgue's 
-framework connecting Topos Theory \cite{lawvere1971} with artificial 
-intelligence. While Toposes offered a compelling 
+framework \cite{lafforgue2022, lafforgue2024}connecting Topos Theory \cite{lawvere1971} with Artificial 
+Intelligence. While toposes offered a compelling 
 theoretical foundation, they proved too abstract for direct 
 application. This led us to Cartmell's Generalized Algebraic
-Theories and contextual categories \cite{cartmell1978} \cite{cartmell1986}, whose term models
+Theories and contextual categories \cite{cartmell1978, cartmell1986}, whose term models
 sit close enough to the syntax of a theory to be
 computationally manageable, while still carrying the 
 geometric structure needed for a GNN-based approach. 
-We proved the initiality conjecture for GATs in Section 1.6, 
-establishing C(U) as the canonical categorical representation 
+We proved the initiality conjecture for GATs in Section \ref{sect:relevance-of-the-context-category}, 
+establishing $C(U)$ as the canonical categorical representation 
 of the semantics of a theory, and designed the Expansion Algorithm 
 to construct sections within it, equivalent to generating terms 
 of a given type.
@@ -30,7 +30,7 @@ In Section \ref{sect:extending-calculus-of-constructions-and-its-interpretation}
 to CoC enriched with a GAT signature, constructed the corresponding 
 term model, and proved its initiality following ideas 
 from \cite{bezem2021}. We then extended the Expansion Algorithm to this 
-richer setting, to do this we extend the concept of relativization to Doctrines of Constructions. 
+richer setting. To do this, we extended the concept of relativization to Doctrines of Constructions. 
 In the course of this work, we also identified a 
 connection between the concept of collections of types in Doctrines 
 of Constructions and the topos-theoretic notion of subobject 
@@ -40,10 +40,10 @@ investigation.
 Several directions remain open. On the theoretical side, 
 it remains to formally extend the term model construction
 and prove the initiality conjecture for Doctrines of 
-Constructions with Σ-types, identity types, and a universe 
+Constructions with $\Sigma$-types, identity types, and a universe 
 hierarchy, as described in \cite{streicher}, and ultimately for the full 
 Calculus of Inductive Constructions \cite{coquand1990} \cite{paulin-mohring1993} and the Lean type 
-theory \cite{demoura2015}. The initiality conjecture for full Martin-Löf type theory 
+theory \cite{demoura2015}. The initiality conjecture for full Martin-L\"of type theory 
 has been formalized in Agda by Brunerie and Lumsdaine \cite{bruneire2020}, 
 and a similar formalization effort for our extended setting 
 would be a natural next step.

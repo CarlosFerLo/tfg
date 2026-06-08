@@ -5,12 +5,12 @@ In this chapter, we introduce Generalized Algebraic Theories (GATs), a framework
 dependent types. GATs allow us to construct the concept of \textit{contextual category},
 the foundational categorical structure to deal with dependent types. We use contextual categories as a baseline 
 for interpreting the more complex Calculus of Constructions in Chapter 2.
-Finally, we formalize the term generation problem and introduce the expansion algorithm, our approach to term generation.
+Finally, we formalize the \textit{term generation problem} and introduce the expansion algorithm, our approach to term generation.
 
 \section{Syntax of GATs}
 
 Generalized Algebraic Theories, originally presented by J. Cartmell 
-in his thesis \cite{cartmell1978} \cite{cartmell1986},
+in his thesis \cite{cartmell1978, cartmell1986},
 is an abstraction of Martin-L\"of type theory
 and is a generalization of the usual notion of a many-sorted 
 algebraic theory in the following manner:
@@ -19,7 +19,7 @@ are constant types, interpreted as sets, in generalized
 algebraic theories sorts might be constant or variable,
 over a specified range of types. Variable types
 are interpreted as families of sets. 
-We will start by giving some intuition, and we will later give the formal definition.
+We start by giving some intuition, and we will later give the formal definition.
 
 Informally, a generalized
 algebraic theory consists of:
@@ -39,7 +39,7 @@ The $\id$ operator has one argument $x$ of type $\Ob$,
 and returns a value of type $\Hom(x, x)$. This shows
 how the type of value of an operator might vary depending
 on the arguments. 
-The $\circ$ operator (or composition) expects 5 arguments, 
+The $\circ$ operator (or composition) expects 5 arguments:
 three terms $x, y, z$ of type $\Ob$, one term $f$ of type $\Hom(x, y)$,
 and one term $g$ of type $\Hom(y, z)$. It returns
 a value of type $\Hom(x, z)$.
@@ -53,10 +53,10 @@ Now we introduce the notation we will be using when talking
 about terms and types. This notation will be formally defined
 in a later section. Given a set of variables $V$,
 we associate types to variables as required.
-When asserting that a term $t$ is of type $A$, we will write
+When asserting that a term $t$ is of type $A$, we write
 $t \colon A$. But if $t$ has variables $x_1, \dots, x_n$ occurring in it, this assertion
 does not make sense unless we assign some types to $x_1, \dots, x_m$.
-To do this we write 
+To do this, we write 
 \begin{equation*}
     x_1 \colon A_1, \dots, x_n \colon A_n \vdash t \colon A
 \end{equation*}
@@ -64,10 +64,13 @@ that reads as follows: if $x_1$ is a variable of type $A_1$, \dots and if $x_n$ 
 then $t$ is a term of type $A$. 
 Similarly, if we want to assert that if $x_1$ is a variable of type $A_1$,
 \dots and if $x_n$ is a variable of type $A_n$,
-then $A$ is a type, we can write: $$x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type$$
+then $A$ is a type, we can write: 
+\begin{equation*}
+    x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type.    
+\end{equation*}
 
-Such assertions are called rules or sequents. 
-Instead of considering expressions or judgments as basic units, we will use rules, 
+Such assertions are called \textit{rules} or \textit{sequents}. 
+Instead of considering expressions or judgments as basic units, we use rules, 
 as both expressions and judgments make sense only within a context.
 
 Axioms are also written as rules. The conclusion of those rules
@@ -91,7 +94,7 @@ of category theory as follows:
         &\qquad\vdash \circ(\circ(f, g), h) = \circ(f, \circ(g, h)).
 \end{alignat*}
 
-When presenting a theory's language i.e., the sets of sorts and operators,
+When presenting a theory's language, i.e., the sets of sorts and operators,
 we must present each symbol with a rule specifying the role
 of this symbol, either as a sort symbol or as specifically typed operator symbol. 
 These rules are called \textit{introductory rules}.
@@ -106,7 +109,7 @@ In the case of an operator symbol, a rule of the form
 \end{equation*}
 suffices to specify the types of the arguments and the type of the value of $F$.
 
-Finally, to present a theory we will give a set of symbols,
+Finally, to present a theory we give a set of symbols,
 each associated to its introductory rule, and a set of axioms.
 And, of course, everything must be well-formed, something we will address shortly.
 Now we give a formal presentation of category theory using GAT notation: 
@@ -142,10 +145,10 @@ and in Table \ref{table:categories-axioms} we state the axioms of the theory as 
     \toprule
     \textit{Axioms} \\
     \midrule
-    $x, y \colon \Ob, f \colon \Hom(x, y) \vdash \circ(\id(x), f) = f$ \\
-    $x, y \colon \Ob, f \colon \Hom(x, y) \vdash \circ(f, \id(y)) = f$ \\
+    $x, y \colon \Ob, f \colon \Hom(x, y) \vdash \circ(\id(x), f) = f \colon \Hom(x, y)$ \\
+    $x, y \colon \Ob, f \colon \Hom(x, y) \vdash \circ(f, \id(y)) = f \colon \Hom(x, y)$ \\
     $w, x, y, z \colon \Ob, f \colon \Hom(w, x), g \colon \Hom(x, y), h \colon \Hom(y, z)$ \\
-    $\quad \vdash \circ(\circ(f, g), h) = \circ(f, \circ(g, h))$ \\
+    $\quad \vdash \circ(\circ(f, g), h) = \circ(f, \circ(g, h)) \colon Hom(x, z)$ \\
     \bottomrule
   \end{tabular}
   \caption{Axioms (left unit, right unit, associativity).}
@@ -191,17 +194,17 @@ Now we can define the building blocks of a rule:
     We call a \textit{conclusion} to one of the following:
     \begin{enumerate}
         \item $T$-conclusion: defined by a single expression $A$
-              and written as '$A \type$'.
+              and written as `$A \type$'.
         \item $\in$-conclusion: defined by a pair of expressions $(t, A)$
-              and written as '$t \colon A$'.
-        \item $T=$conclusion: defined by a pair of expressions $(A_1, A_2)$
-              and written as '$A_1 = A_2$'.
+              and written as `$t \colon A$'.
+        \item $T{=}$conclusion: defined by a pair of expressions $(A_1, A_2)$
+              and written as `$A_1 = A_2$'.
         \item $\in=$conclusion: defined by a triple of expressions $(t_1, t_2, A)$
-              and written as '$t_1 = t_2 \colon A$'
+              and written as `$t_1 = t_2 \colon A$'
     \end{enumerate}
     Finally a \textit{rule} is determined by a premise $P$ and a
     conclusion $C$, and is written as $P \vdash C$.
-    We name the rule as $T$-rule, $\in$-rule, $T=$rule or $\in=$rule
+    We name the rule as $T$-rule, $\in$-rule, $T{=}$rule or $\in=$rule
     according to the form of the conclusion.
 \end{definition}
 
@@ -226,7 +229,7 @@ Now we can define a \textit{pre-theory} and later a \textit{theory}.
               \end{equation*}
               for some $n \geq 0$. It is called the \textit{introductory
               rule} of $F$;
-        \item a set of axioms. Where each axiom is either a $T=$rule or
+        \item a set of axioms. Where each axiom is either a $T{=}$rule or
               a $\in=$rule of the alphabet $S \cup Z$.
 
     \end{enumerate}
@@ -274,9 +277,9 @@ Now we tackle the problem of well-formedness of rules.
 
 Lastly, we introduce \textit{substitution}.
 Given expressions $\Delta, t_1, \dots, t_n$ and variables $x_1, \dots, x_n$,
-then we define the expression $\Delta[x_1 \leftarrow t_1, \dots, x_n \leftarrow t_n]$
+we define the expression $\Delta[x_1 \leftarrow t_1, \dots, x_n \leftarrow t_n]$
 as the result of simultaneous replacement of $x_1, \dots, x_n$ in $\Delta$
-by $t_1, \dots, t_n$. We call this the substitution operation.
+by $t_1, \dots, t_n$. We call this the \textit{substitution operation}.
 Then, as proven in the original paper \cite{cartmell1986}, 
 the set of derived rules of a theory is closed under the 
 operation of substitution of correctly typed terms 
@@ -330,10 +333,10 @@ We write $A \unlhd B$ if $A = \parent(B)$
 and $A \lhd B$ if $A \unlhd B$ and $A \neq B$.
 By Condition \ref{item:tree-ii}, there is a unique
 least element of $N$, which we call $1$.
-Finally, we will define, for any $A \in N$,
+Finally, we define, for any $A \in N$,
 $\level(A)$ to be the least $n \in \omega$ with 
 $\parent^n(A) = \parent^{n+1}(A)$.
-We will consider $\leq$ to be the transitive completion of the relation $\unlhd$.
+We consider $\leq$ to be the transitive completion of the relation $\unlhd$.
 We can see that the set of objects of $R(U)$, i.e., the set of contexts of $U$, is structured as a tree
 with the empty context as its least element and 
 \(
@@ -401,7 +404,7 @@ This motivates the following definition:
                             A \arrow[r, "f"] & A' \arrow[r, "f'"] & A''
                         \end{tikzcd}
                       \]
-                      in $\mathcal{C}$, then 
+                      is given in $\mathcal{C}$, then 
                       \[
                         (f' \circ f)^*B = f^*(f'^*B) 
                             \quad \text{ and } \quad 
@@ -497,10 +500,10 @@ It follows that $C(U)$ is itself a contextual category.
 \end{definition}
 $\mathbf{Con}$ denotes the category of contextual categories and contextual functors.
 
-Now, we will address some important properties of contextual categories we will be using later.
+Now, we address some important properties of contextual categories we will be using later.
 
 % generalized projection morphism
-The first useful result is about projections; Although we defined projections on pairs $A \lhd B$, 
+The first useful result is about projections. Although we defined projections on pairs $A \lhd B$, 
 we might extend the notion to pairs $A \leq B$ defined as \[
     p(B, A) = p(X_1) \circ \dots \circ p(X_n) \circ p(B),
 \] where $X_1, \dots, X_n$ is the unique sequence of objects in $\mathcal{C}$ such that
@@ -537,7 +540,7 @@ This functor can be thought as a way of embedding the knowledge over the context
 \begin{lemma}
     Let $\mathcal{C}$ be a contextual category, and $f \colon B \to A$ a morphism in $\mathcal{C}$.
     Then, for any object $D$ with $D \geq A$, we define an object $f^*D \geq B$ and a morphism 
-    $q(f, D) \colon f^*D \to D$ by induction over $\level D - \level A$:
+    $q(f, D) \colon f^*D \to D$ by induction over $\level (D) - \level (A)$:
     \begin{enumerate}
         \item if $D = A$, \[
                 f^*D = B \quad \text{ and } \quad q(f, D) = f;
@@ -577,12 +580,12 @@ This functor can be thought as a way of embedding the knowledge over the context
     Let $\mathcal{C}$ be a contextual category, $A$ and $B$ be objects of $\mathcal{C}$ such that $A \lhd B$.
     The set of \textit{sections} of $B$ is defined as 
     \begin{equation*}
-        \Sections(B) \coloneqq \{ s \colon A \to B   \leftarrow  p(B) \circ s = \id_A\}.
+        \Sections(B) \coloneqq \{ s \colon A \to B   \mid\  p(B) \circ s = \id_A\}.
     \end{equation*}
 \end{definition}
 If $\level(B) = 1$, then 
 \[
-    \Sections(B) = \{ s  \leftarrow  s \colon 1 \to B \},
+    \Sections(B) = \{ s  \mid\  s \colon 1 \to B \},
 \]
 as any morphism $s \colon 1 \to B$ satisfies $p(B) \circ s = \id_1$ since
 $1$ is a terminal object. In this case, the notion of section
@@ -604,10 +607,10 @@ The three main properties of these models are the following:
           or equivalently if it holds in the term model.
     \item \textbf{Initiality}: The term model is often the initial object of the category of all models.
 \end{enumerate}
-Because of completeness, navigating $C(U)$ is equivalent to manipulating the syntax of $U$.
+Because of completeness, navigating the context category $C(U)$ of a theory $U$ is equivalent to manipulating the syntax of $U$.
 
-We start by proving the completeness of $C(U)$. The following completeness theorem is 
-direct from the definition of $C(U)$:
+We start by stating the completeness of $C(U)$ by the following completeness theorem that 
+arises naturally from the definition of $C(U)$:
 \begin{theorem}[Completeness Theorem] \label{thm:completeness-context-category}
     Let $\mathcal{M}$ be the canonical interpretation of a theory $U$ in $C(U)$.
     \begin{enumerate}
@@ -638,6 +641,7 @@ direct from the definition of $C(U)$:
     \end{enumerate}
 \end{theorem}
 
+% TODO: rewrite?
 Now we prove the initiality of $C(U)$, a special case of Voevodsky's initiality conjecture \cite{voevodsky2017}. 
 In order to do it, we need to define interpretation of a theory $U$
 in a contextual category, and see that the canonical interpretation into $C(U)$ is the 
@@ -668,7 +672,7 @@ initial object of the category of interpretations of $U$.
                 t \colon A
             \) then $\mathcal{M}[R_t]$ is section of $\mathcal{M}[R]$.
 
-        \item if $\Gamma \vdash A = A'$ is a derived $T=$rule, then if we name 
+        \item if $\Gamma \vdash A = A'$ is a derived $T{=}$rule, then if we name 
                 $\Gamma \vdash A \type$ as $R$
                 and
                 $\Gamma \vdash A' \type$ as $R'$,
@@ -708,7 +712,7 @@ Now we shall define the concept of homomorphism between interpretations of a the
 So we can define the category $\mathbf{Con}_U$ as the category with pairs of contextual categories and $U$-interpretations
 and their homomorphisms. We can easily see that $(C(U), \mathcal{M})$ is an
 initial object of $\mathbf{Con}_U$. Consider an object $(\mathcal{C}, \mathcal{N})$ of
-$\mathbf{Con}_U$. Let construct a morphism $F \colon ((C(U), \mathcal{M})) \to (\mathcal{C}, \mathcal{N})$, i.e., we have to construct
+$\mathbf{Con}_U$. Let us construct a morphism $F \colon ((C(U), \mathcal{M})) \to (\mathcal{C}, \mathcal{N})$, i.e., we have to construct
 a contextual functor $F \colon C(U) \to \mathcal{C}$ that commutes with the interpretation functions.
 If $[\Gamma]$ an object of $C(U)$, then there is a $T$-rule $R^\Gamma$ such that $\mathcal{M}[R^\Gamma] = \Gamma$. We define 
 $F \Gamma = \mathcal{N}[R^\Gamma]$. 
@@ -727,7 +731,7 @@ The uniqueness of $F$ is rather simple to see, as we cannot assign any other val
 conflicting with the structural conditions of the functor.
 Hence, $(C(U), \mathcal{M})$ is an initial object of $\mathbf{Con}_U$.
 
-Soundness comes from the initiality of $C(U)$, as any model of $U$, i.e., any element of $\mathbf{Con}_U$, 
+Soundness comes from the initiality of $C(U)$, as any model of $U$, i.e., any element of $\mathbf{Con}_U$
 is equivalent to the initial morphism $F$ we just defined.
 
 \section{Expansion Algorithm for GATs}
@@ -742,7 +746,7 @@ Such optimization is discussed in Chapter 3.
 Our problem might be formalized in the following manner:
 Given a theory $U$ and a derived rule of $U$ of the form 
 \[
-    x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type
+    x_1 \colon A_1, \dots, x_n \colon A_n \vdash A \type,
 \]
 we want to find an expression $t$ of $U$ such that the rule 
 \[
@@ -853,11 +857,11 @@ we are also adding its projection.
 Now we will prove that every object and every morphism of $\mathcal{C}_A$ are constructible by expansion.
 Note that as projections are added together with the object, hence by asserting the existence of an object we are implying the existence of its projection.
 But to do so, we will introduce the concept of $\depth$ of an expression in order to 
-prove a the result by induction. This definition is inspired to the one in the next chapter taken from \cite{streicher}.
+prove a the result by induction. This definition is inspired by the one in the next chapter taken from \cite{streicher}.
 
 \begin{definition}
-    By structural induction of expressions we define a function \textit{depth} mapping 
-    the set of expressions and premisses to $\omega$:
+    By structural induction of expressions, we define a function \textit{depth} mapping 
+    the set of expressions and premises to $\omega$:
     \begin{enumerate}
         \item if $x$ is a variable, then $\depth[x] = 1$;
         \item if $A$ is a sort symbol, and $t_1, \dots, t_n$ are expressions, then \[
@@ -910,7 +914,7 @@ prove a the result by induction. This definition is inspired to the one in the n
         [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_1 \colon C_1] \\
         [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_2 \colon C_2[z_1  \leftarrow  t_1]] \\
         &\vdots \\
-        [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]] 
+        [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] &\colon [\Delta'] \to [\Delta', z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]].
     \end{align*}
     And clearly, as \begin{align*}
         \degree[\Delta] &= \degree[\Delta'] + \depth[A(t_1, \dots, t_m)] > \\ 
@@ -934,7 +938,7 @@ prove a the result by induction. This definition is inspired to the one in the n
             As the length of the derivation of $\Delta \vdash t \colon A'$ is at least one \ref{rule:t1} application shorter that the derivation length of $\Delta \vdash t \colon A$, by secondary induction, we have that the section is constructible by expansion.
         \item[\ref{rule:cf1}] Then, there exists an $i$, with $1 \leq i \leq n$, such that $t = x_i$ and $A = A_i$;
             or there exists a $j$, with $1 \leq j \leq m$, such that $t = y_j$ and $A = B_j$.
-            We just prove the first case as the other proof is equivalent. So as $[\Delta]$ is constructible by expansion,
+            We just prove the first case, as the other proof is equivalent. So as $[\Delta]$ is constructible by expansion,
             by applying the expansion rule \ref{rule:variable-duplication} to it, we get that the section \[
                 [\langle y_1, \dots, y_m, x_i \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A]
             \] is constructible by expansion.
@@ -958,7 +962,7 @@ prove a the result by induction. This definition is inspired to the one in the n
                 [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_1 \colon C_1] \\
                 [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_2 \colon C_2[z_1  \leftarrow  t_1]] \\
                 &\vdots \\
-                [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]] 
+                [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta'] &\to [\Delta', z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]].
             \end{align*}
             Then by applying the expansion rule \ref{rule:operator-symbol-intro}, we get that the section \[
                 [\langle y_1, \dots, y_m, t \rangle_\Gamma] \colon [\Delta] \to [\Delta, x \colon A]
@@ -973,7 +977,7 @@ prove a the result by induction. This definition is inspired to the one in the n
     From the last lemma we have that both objects and sections are constructible by expansion.
     We now have to prove that any morphism is constructible by expansion.
     Let $[\langle t_1, \dots, t_m \rangle_\Gamma]: [\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m] \to [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]$
-    be a morphism on $\mathcal{C}_\Gamma$.  We will denote $\Delta \equiv \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$.
+    be a morphism on $\mathcal{C}_\Gamma$.  We denote $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$.
     Then we know that the following rules
     \begin{align*}
         \Delta \vdash t_1 \colon& C_1 \\
@@ -986,7 +990,7 @@ prove a the result by induction. This definition is inspired to the one in the n
         [\langle y_1, \dots, y_m, t_1 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_1 \colon C_1] \\
         [\langle y_1, \dots, y_m, t_2 \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_2 \colon C_2[z_1  \leftarrow  z_2]] \\
         & \vdots \\
-        [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]]
+        [\langle y_1, \dots, y_m, t_w \rangle_\Gamma] \colon [\Delta] &\to [\Delta, z_w \colon C_w[z_1  \leftarrow  t_1, \dots, z_{w-1}  \leftarrow  t_{w-1}]].
     \end{align*} 
 
     Now we show that the morphism 

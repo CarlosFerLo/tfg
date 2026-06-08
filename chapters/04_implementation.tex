@@ -59,10 +59,10 @@ We can write this as a GAT signature as follows:
     &A, B \colon \Prop \vdash (A \to B) \colon \Prop \\
     &A, B \colon \Prop, t \colon \Proof(A \to B), s \colon \Proof(A) \vdash \App(t, s) \colon \Proof(B) \\
     &A, B \colon \Prop \vdash \clk^{A, B} \colon \Proof(A \to B \to A) \\
-    &A, B, C \colon \Prop \vdash \cls^{A, B, C} \colon \Proof((A \to B \to C) \to (A \to B) \to A \to C)
+    &A, B, C \colon \Prop \vdash \cls^{A, B, C} \colon \Proof((A \to B \to C) \to (A \to B) \to A \to C).
 \end{align*}
 This allows us to build upon the construction of $C(U)$ we made for the general case, but this will be rather difficult
-to follow. Hence, we will look for simplification both of the category and the expansion rules.
+to follow. Hence, we look for a simplification of both the category and the expansion rules.
 Consider $\Gamma$ a simple type expression of $\textbf{CL}_\to$, let $A_1, \dots, A_n$ be the type variables appearing on $\Gamma$,
 and let $\Delta$ be the context $A_1 \colon \Prop, \dots, A_n \colon \Prop$. We center our search on the relativization of $C(U)$ by $\Delta$,
 $\mathcal{C}_\Delta$. Although the category $\mathcal{C}_\Delta$ carries a lot of information, i.e., its tree structure, dependent types and pullbacks,
@@ -76,9 +76,9 @@ of type $\Prop$ under context $\Delta$.
 The objects of this category are in 1-1-correspondence with the elements of $\mathcal{T}_\to \cup \{ 1 \}$, hence we note \[
     1 \coloneqq [\Delta] \quad \text{ and } \quad  p \coloneqq [\Delta, x \colon \Proof(p)].
 \]
-In the case of morphisms, we will note them by the term appearing in the $n+1$ component, i.e., each morphism $\langle A_1, \dots, A_n, s \rangle$
+In the case of morphisms, we note them by the term appearing in the $n+1$ component, i.e., each morphism $\langle A_1, \dots, A_n, s \rangle$
 in $\mathcal{C}$ will be noted as just $s$.
-With this notation in mind we define the following rules of expansion: Let $p$ be an element of $\mathcal{T}_\to$,
+With this notation in mind, we define the following rules of expansion: Let $p$ be an element of $\mathcal{T}_\to$:
 \begin{enumerate}
     \item if $p$ is of the form $B \to A$, we add \(
         A \xrightarrow{\clk^{A, B}} p;
@@ -90,7 +90,7 @@ With this notation in mind we define the following rules of expansion: Let $p$ b
         (A \to B \to C) \xrightarrow{\cls^{A, B, C}} p;
     \)
     \item if $p$ is of the form $(A \to B \to C)$, we add \(
-        p \xrightarrow{\cls^{A, B, C}} ((A \to B) \to A \to C);
+        p \xrightarrow{\cls^{A, B, C}} ((A \to B) \to A \to C).
     \)
 \end{enumerate}
 Also, when creating an object $p$, if $p$ is of the form $A \to B \to A$, add the morphism $\clk^{A, B} \colon 1 \to p$, and if $p$ is of
@@ -104,7 +104,7 @@ we developed into \textsc{implica} that is not part of our current definition is
 considered equal, as we just care about having a witness, not the nature of it. In order to add this condition to the 
 GAT signature, it is enough to add the following equation:
 \[
-    p \colon \Prop, t_1, t_2 \colon \Proof(p) \vdash t_1 = t_2
+    p \colon \Prop, t_1, t_2 \colon \Proof(p) \vdash t_1 = t_2.
 \]
 As it is not really part of combinatory logic, we left it out of its formal definition, but for our task it is 
 more efficient to consider it this way.
@@ -208,7 +208,7 @@ from its immediate neighbors, enabling the model to learn both the local feature
 geometry of the network. Because of this unique architecture, GNNs are highly effective for node classification 
 (assigning specific labels to individual nodes), graph classification (categorizing the entire network structure as a 
 single entity), and graph embedding (translating complex graph structures into lower-dimensional vectors for easier 
-processing in downstream machine learning tasks). \cite{wu2021} \cite{zhou2020}
+processing in downstream machine learning tasks) \cite{wu2021, zhou2020}.
 
 The core of our expansion algorithm leverages these GNN capabilities to process the graph structures that emerge from 
 the categorical semantics presented in previous chapters. The system operates alongside a GNN trained for node classification. 
@@ -227,7 +227,7 @@ high baseline complexity, generating a sufficient volume of training data for an
 prohibitive. Similar constraints have been noted in \cite{wang2020}.
 
 To overcome this, we rely on an unsupervised learning framework known as the Teacher-Student or Conjecturer-Prover model 
-\cite{matiisen2017} \cite{sukhbaatar2018} \cite{dong2025}. This involves a two-headed model sharing a common GNN body:
+\cite{dong2025, matiisen2017, sukhbaatar2018}. This involves a two-headed model sharing a common GNN body:
 \begin{itemize}
     \item \textbf{Conjecturer (Teacher):} Proposes a challenge ---in our case, a specific type for which a term must be found.
     \item \textbf{Prover (Student):} Acts as the GNN labeler, attempting to construct the term using the partial expansion algorithm.
