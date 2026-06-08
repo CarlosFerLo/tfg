@@ -2,25 +2,29 @@
 \addcontentsline{toc}{chapter}{Conclusion}
 \chapter*{Conclusion}
 
-This thesis develops a categorical approach to autonomous 
-theorem proving, grounded on the translation of type 
-inhabitation problems into geometric graph exploration 
-problems over term models.
+This thesis started as a problem proposed by one of my supervisors, Dr. Joost J. Joosten, that consisted in generating 
+terms of specific types in simply typed combinatory logic $\textbf{CL}_\to$.
+Our initial work building a language model to generate those terms made the limitations of this models very clear.
+First, linear generation forces the model to overcommit too soon to certain solution paths, resulting in unsatisfactory results, this was noted by researchers in Logical Intelligence in \cite{logicalintelligence}.
+Second, that syntax does not hold all the information the model needed to generate the desired terms.
 
-Our investigation began with the study of Lafforgue's 
-framework \cite{lafforgue2022, lafforgue2024} connecting Topos Theory \cite{lawvere1971} with Artificial 
-Intelligence. While toposes offered a compelling 
-theoretical foundation, they proved too abstract for direct 
-application. This led us to Cartmell's Generalized Algebraic
-Theories and contextual categories \cite{cartmell1978, cartmell1986}, whose term models
+Our study of Lafforgue's framework \cite{lafforgue2022, lafforgue2024} 
+connecting Topos Theory \cite{lawvere1971} with Artificial 
+Intelligence, lead us to consider working with categorical representations 
+of our type theory in order to leverage its geometrical properties to 
+give the model a complete picture of the semantics of the theory.
+
+The first representation we found promising Cartmell's Generalized Algebraic
+Theories and Contextual Categories \cite{cartmell1978, cartmell1986}, whose term models
 sit close enough to the syntax of a theory to be
 computationally manageable, while still carrying the 
 geometric structure needed for a GNN-based approach. 
-We proved the initiality conjecture for GATs in Section \ref{sect:relevance-of-the-context-category}, 
-establishing $C(U)$ as the canonical categorical representation 
-of the semantics of a theory, and designed the Expansion Algorithm 
-to construct sections within it, equivalent to generating terms 
-of a given type.
+In Section \ref{sect:relevance-of-the-context-category} we revised the definition of model of a GAT, that originally is thought as a mapping to the category of sets, families of sets, families of families of sets, \dots;
+but we thought it was more natural to think of an interpretation as a mapping directly to a contextual category.
+With this revised notion of model, we proposed a new proof for the initiality conjecture for GATs.
+Then we designed the Expansion Algorithm to construct sections within the term model, equivalent to generating terms of a given type.
+This model was thought to work together with a GNN in order to surpass the 
+complexity barrier.
 
 To handle a more expressive type theory, we turned to Streicher's 
 work on the Calculus of Constructions and Doctrines of Constructions \cite{streicher}, 
@@ -28,8 +32,9 @@ which provided both a proof of the initiality conjecture for CoC
 and a framework for extending type theories beyond GATs. 
 In Section \ref{sect:extending-calculus-of-constructions-and-its-interpretation}, we extended this framework 
 to CoC enriched with a GAT signature, constructed the corresponding 
-term model, and proved its initiality following ideas 
-from \cite{bezem2021}. We then extended the Expansion Algorithm to this 
+term model, following ideas 
+from \cite{bezem2021}, and proposed an outline of the proof of its initiality based on the original proof.
+We then extended the Expansion Algorithm to this 
 richer setting. To do this, we extended the concept of relativization to Doctrines of Constructions. 
 In the course of this work, we also identified a 
 connection between the concept of collections of types in Doctrines 

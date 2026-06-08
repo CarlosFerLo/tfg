@@ -35,9 +35,8 @@ proposed by Laurent Lafforgue \cite{lafforgue2022, lafforgue2024}, which connect
 \cite{lawvere1971} with Artificial Intelligence. 
 While studying this connection, we found that toposes, 
 despite offering a strong theoretical foundation, 
-were too abstract to serve directly as a practical 
-representation for our purposes. This led us to categorical 
-semantics as a more tractable alternative. 
+were too far from the syntax to be practical for our application.
+This led us to categorical semantics as a more tractable alternative. 
 Our central idea is to leverage the categorical semantics 
 of type theories to reframe autonomous theorem proving as a 
 structural graph exploration problem. By translating the 
@@ -73,17 +72,17 @@ autonomous theorem proving.
 
 \section*{Objectives}
 
-The main goals of this work are the following.
-We first aim to provide a proof of the initiality conjecture for GATs, together with an extension of Streicher's
-proof for CoC together with a GAT signature.
-Then, once established the mathematical significance of objects and morphisms in the term model,
-we present the expansion algorithm, an algorithm to construct any object or morphism in a Contextual 
-Category or Contextual Doctrine, which is designed to work together with a graph neural network to efficiently
-solve the problem at hand.
-In order to do this, we extend the concept of relativization from Context Categories to Doctrines of Constructions.
-Then we implement the expansion algorithm for simply typed combinatory logic, as a manageable example to provide intuition
-about how the expansion process works. 
-Finally, we design a proposal of a GNN-based model designed to optimize term generation.
+We develop an alternative formulation of the notion of model of a Generalized Algebraic Theory, 
+departing from Cartmell's original presentation, and establish a proof of the initiality of the term 
+model in this setting. Building on this, we extend the Calculus of Constructions to accommodate a GAT signature, 
+define the corresponding term model, and outline how Streicher's initiality proof generalizes to this richer framework.
+Then we introduce the Expansion Algorithm, a deterministic procedure for generating terms within the term models described above, 
+specifically designed to interface with a Graph Neural Network so as to guide the search and counteract the combinatorial 
+explosion inherent to exhaustive term construction. 
+To ground this algorithm and build intuition, we provide a full implementation for Simply Typed Combinatory Logic ($\textbf{CL}_{\to}$)
+---a tractable yet representative system--- using \textsc{implica}, a custom graph engine written in Rust. 
+Finally, we present a design proposal for the GNN-based model, including a novel unsupervised Conjecturer-Prover training paradigm intended to optimize 
+the expansion process toward efficient, autonomous theorem proving.
 
 \section*{Prerequisites}
 
@@ -104,17 +103,16 @@ to the practical implementation of AI-guided theorem proving:
         presented by Streicher in \cite{streicher}.
         Then we provide a concept of model of a GAT together with a proof of the initiality of the term model.
         Finally, we define the problem of type inhabitation in categorical terms, and present the foundational Expansion Algorithm.
-    \item \textbf{Chapter 2: Calculus of Constructions.} We step up the complexity to the Calculus of 
-        Constructions (CoC), introducing product types and the universe of propositions. 
-        We present the definition of CoC together with the construction 
+    \item \textbf{Chapter 2: Calculus of Constructions.} 
+        We present the syntactical definition of CoC together with the construction 
         of Doctrines of Constructions as models for CoC, given by Streicher in \cite{streicher}.
-        We extend the definition of CoC to include a GAT signature, define the new term model and prove its initiality.
+        We extend the definition of CoC to include a GAT signature, define the new term model and outline a proof of its initiality.
         Finally, we extend our categorical problem definition and 
         Expansion Algorithm to handle this richer syntax.
-    \item \textbf{Chapter 3: Implementation of the Expansion Algorithm.} We bring the theory into 
-        practice. We demonstrate the raw Expansion Algorithm generating terms of Simply Typed Combinatory 
+    \item \textbf{Chapter 3: Implementation of the Expansion Algorithm.} 
+        We demonstrate the raw Expansion Algorithm generating terms of Simply Typed Combinatory 
         Logic ($\textbf{CL}_\to$) using \textsc{implica}, a custom Rust-based graph engine written by the author (consists of $\sim 7.000$ lines of Rust code). 
         Finally, we outline the architecture for integrating Graph Neural Networks
-        using a novel unsupervised "Conjecturer-Prover" training paradigm to optimize the expansion process.
+        using a novel unsupervised `Conjecturer-Prover' training paradigm to optimize the expansion process.
 \end{itemize}
 

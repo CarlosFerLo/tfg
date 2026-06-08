@@ -370,7 +370,7 @@ $f = \langle t_1, \dots, t_m \rangle \colon \Gamma \to \Gamma'$ in $R(U)$,
     \Gamma \arrow[r, "f"] & \Gamma'
 \end{tikzcd}
 \]
-is a pullback diagram in $R(U)$, where % TODO: revise if should substitute x_1, \dots, x_n by \Gamma
+is a pullback diagram in $R(U)$, where
 \begin{align*}
     f^*\Delta &= x_1 \colon A_1, \dots, x_n \colon A_n, \\
     &\quad y_{m+1} \colon B_{m+1}[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m], \dots, y_{m+w} \colon B_{m+w}[y_1 \leftarrow t_1, \dots, y_m \leftarrow t_m]
@@ -521,7 +521,7 @@ In the case where $A = B$, we take $p(B, A) = \id_A$.
 Notation: $B \openrightarrow A$. % TODO: fix notation?
 
 In type theory, proving a theorem often requires working under a set of assumptions (a context).
-In categorical semantics, "assuming a context $A$" corresponds to taking the relativization of $\mathcal{C}$
+In categorical semantics, `assuming a context $A$' corresponds to taking the relativization of $\mathcal{C}$
 to $A$, noted as $\mathcal{C}_A$.
 More formally:
 \begin{definition}
@@ -607,7 +607,7 @@ the categorical equivalent of a term of type $B$ under context $\langle x_1 \col
 The context category is the first example of what it is called a \textit{term model}.
 This means that it is a category built directly from the syntax of a theory 
 without picking any particular mathematical interpretation. 
-This gives us the "most generic" model of that theory.
+This gives us the `most generic' model of that theory.
 The three main properties of these models are the following:
 \begin{enumerate}
     \item \textbf{Soundness}: Any model of such theory corresponds to a structure preserving 
@@ -650,7 +650,6 @@ arises naturally from the definition of $C(U)$:
     \end{enumerate}
 \end{theorem}
 
-% TODO: rewrite?
 Now we prove the initiality of $C(U)$, a special case of Voevodsky's initiality conjecture \cite{voevodsky2017}. 
 In order to do it, we need to define interpretation of a theory $U$
 in a contextual category, and see that the canonical interpretation into $C(U)$ is the 
@@ -843,7 +842,7 @@ of $G_n$:
             \colon [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]
             \to [\Gamma, y_1 \colon B_1, \dots, y_{m-1} \colon B_{m-1}]
         \]
-        we construct the corresponding pullback in $G_{n+1}$:% TODO: properly align this
+        we construct the corresponding pullback in $G_{n+1}$:
         \[
             \begin{tikzcd}[column sep=large]
                 {\begin{array}{c}

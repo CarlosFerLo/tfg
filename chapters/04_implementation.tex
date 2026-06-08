@@ -163,7 +163,7 @@ Now, to perform one expansion iteration we execute the following code:
         .execute()
     )
 \end{minted}
-In the first line, we set an attribute "existed" to true in order to distinguish between new nodes and nodes already present at the beginning.
+In the first line, we set an attribute `existed' to true in order to distinguish between new nodes and nodes already present at the beginning.
 It is important to state the $.limit$ modifier on the second query, because this expansion rule creates, or tries to create
 a new node for each pair of nodes in the graph, hence it makes complexity explode. To solve this we use the modifier $.limit$
 to cap the number of creations per original node to $10$. Feel free to remove this line. 
@@ -203,7 +203,7 @@ optimizations for the general case.
 \section{Graph Neural Networks}
 
 Graph Neural Networks (GNNs) process complex data structures by leveraging relationships between individual 
-data points (nodes) and their connections (edges) through a mechanism known as "message passing". 
+data points (nodes) and their connections (edges) through a mechanism known as \textit{message passing}. 
 During this process, each node iteratively updates its own representation by gathering and aggregating information 
 from its immediate neighbors, enabling the model to learn both the local features of the data and the broader structural 
 geometry of the network. Because of this unique architecture, GNNs are highly effective for node classification 
@@ -275,7 +275,7 @@ We break down the architecture into four primary components:
         concatenated with the target node's embedding before passing it to this component.
 \end{itemize}
 
-A significant hurdle in training this model is the "cold start" problem. Initially, the system starts 
+A significant hurdle in training this model is the \textit{cold start} problem. Initially, the system starts 
 with an empty graph, and an untrained Conjecturer will yield nonsensical challenges. 
 To pre-train the model before initiating the unsupervised loop, we seed it with a highly solvable 
 target type (e.g., $A \to A$), ensuring the expansion finds a term in very few iterations. The resulting 
