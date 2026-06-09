@@ -15,12 +15,14 @@ of our type theory in order to leverage its geometrical properties to
 give the model a complete picture of the semantics of the theory.
 
 This motivated the development of \textsc{implica}, discussed in Section \ref{sect:implica}. 
-Although it served to showcase the base concepts behind the expansion algorithm, its design
-helped to make future versions of this engines more efficient.
-One design mistake we made was to make the API too general, similar to Cypher \cite{francis2018}, 
-but it ended up making everything too slow and we did not take any advantage of this general API.
+Although it served its purpose of showcasing the base concepts behind the expansion algorithm,
+for future iteration of this architecture we must critically re-evaluate fundamental design trade-offs.
+The initial implementation prioritized a highly general, Cypher-like \cite{francis2018}, API
+to facilitate broad pattern matching and generalized graph querying. While computationally
+versatile, this abstraction layer introduced computational overhead and made the backtracking algorithm,
+which is essential for computing the optimal target labels for our GNN, prohibitively difficult and computationally unwieldy.
 
-The first representation we found promising Cartmell's Generalized Algebraic
+In our effort to extend this ideas to the general case, the first representation we found promising Cartmell's Generalized Algebraic
 Theories and Contextual Categories \cite{cartmell1978, cartmell1986}, whose term models
 sit close enough to the syntax of a theory to be
 computationally manageable, while still carrying the 
@@ -48,8 +50,14 @@ of Constructions and the topos-theoretic notion of subobject
 classifier \cite{maclane1992}, which we leave as a direction for further 
 investigation.
 
-Several directions remain open. On the theoretical side, 
-it remains to formally extend the term model construction
+While Cartmell's original formulation of contextual categories provided the necessary foundational scaffolding to model 
+the expansion algorithm, scaling the semantic interpretation requires transitioning to more modern paradigms.
+Future research should systematically reconstruct the underlying categorical models utilizing Voevodsky's C-systems \cite{voevodsky2016} and Categories with Families (CwFs) \cite{dybjer96}.
+By transitioning away from early contextual categories and adopting these streamlined, modern frameworks, 
+the underlying geometry of the automated expansion algorithm will achieve greater mathematical elegance and absolute 
+alignment with the current state-of-the-art in type-theoretic research.
+
+It remains to formally extend the term model construction
 and prove the initiality conjecture for Doctrines of 
 Constructions with $\Sigma$-types, identity types, and a universe 
 hierarchy, as described in \cite{streicher}, and ultimately for the full 

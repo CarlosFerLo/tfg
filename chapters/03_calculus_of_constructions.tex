@@ -66,10 +66,9 @@ syntactically different variables and $A_1, \dots, A_n$ are pre-type-expressions
 Contexts are ranged over by capital greek letters.
 We define $\Var(\Gamma)$ as the set of variables declared in $\Gamma$.
 We will not distinguish expressions which are equivalent up to renaming of variables
-($\alpha$-conversion), to do this we will be using \textit{deBruijn indices}.
-These are a method to refer to declarations not by name (variables)
-but by numbers which tell how far one has to go back into the current context of an expression
-to find the declaration of the thing it refers to.
+($\alpha$-conversion), to do this we will be using \textit{de Bruijn indices}.
+De Bruijn indices eliminate the necessity for explicit variable names by replacing them with natural 
+numbers representing the exact lexical depth between a variable's localized occurrence and its binding context.
 We define a \textit{pre-judgment} to be a syntactic expression of one of the following forms:
 \[
 \begin{array}{ll}

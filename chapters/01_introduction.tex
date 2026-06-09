@@ -5,8 +5,8 @@
 
 Our ultimate goal in this thesis is to translate the syntactical problem of theorem proving into a geometrical graph-exploration problem.
 
-The idea of generating mathematical reasoning computationally
-is one of the most profound challenges in computer science.
+The automated generation of formal mathematical reasoning remains a profound 
+challenge at the intersection of proof theory and logic.
 At the core of this pursuit lies the Curry-Howard correspondence,
 an isomorphism between logic and computation \cite{howard}:
 mathematical propositions are interpreted as types, and the proofs
@@ -33,16 +33,15 @@ and the linear nature of language model generation forces early commitments
 that can prevent a proof from ever being found. Similar limitations 
 have been observed by the Logical Intelligence team in \cite{logicalintelligence}.
 
-We were working with Topos Theory \cite{lawvere1971} at the time, in an attempt 
-to understand the framework proposed by Laurent Lafforgue \cite{lafforgue2022,lafforgue2024}, which connects
-Topos Theory with Artificial Intelligence. 
-It became clear that we needed to leverage the categorical semantics 
-of type theories to reframe autonomous theorem proving as a 
-structural graph exploration problem.
-Then we developed the \textsc{implica} graph engine together with the first version of the 
-expansion algorithm.
+Our study of Topos Theory ---initially motivated by Lafforgue's framework 
+connecting it with Artificial Intelligence \cite{lafforgue2022,lafforgue2024}--- led to a pivotal realization: 
+to overcome purely syntactic limitations, we needed to leverage the categorical semantics of type 
+theories. This allowed us to rigorously reframe autonomous theorem proving as a structural graph exploration problem. 
+To empirically test this geometric approach prior to adopting the full complexity 
+of our subsequent categorical framework, we developed the \textsc{implica} graph engine alongside the first 
+iteration of the expansion algorithm.
 
-Then with the aim of expanding outside Minimal Implicational Combinatory Logic, we 
+Subsequently, with the aim of expanding outside Minimal Implicational Combinatory Logic, we 
 started our research about Generalized Algebraic Theories (GATs) \cite{cartmell1978,cartmell1986} and the Calculus of Constructions \cite{coquand1988}.
 They both offered a way of translating the syntax into categorical structures 
 ---namely Contextual Categories and Doctrines of Constructions \cite{streicher}--- 

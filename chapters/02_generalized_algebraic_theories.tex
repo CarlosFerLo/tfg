@@ -390,7 +390,7 @@ This motivates the definition of Contextual Categories.
         \item a function $\parent \colon \Ob \mathcal{C} \to \Ob \mathcal{C}$ 
               such that $(\Ob \mathcal{C}, \parent)$ is a tree, and $1$ is the root of the tree, 
               i.e., $\parent (1) = 1$;
-        \item for each object $A$ of $\mathcal{C}$ different from $1$, a morphism $p(A) \colon A \to \parent A$,
+        \item for each object $A$ of $\mathcal{C}$ different from $1$, a morphism $p(A) \colon A \to \parent(A)$,
               called \textit{canonical projection of $A$}, which we write as $A \openrightarrow \parent(A)$;
         \item for all objects $A, B$ in $\mathcal{C}$ with $A \lhd B$ and all morphisms $f \colon C \to A$, 
               an object $f^*B$ of $\mathcal{C}$ such that $C \lhd f^*B$, and a morphism $q(f, B) \colon f^*B \to B$
@@ -543,7 +543,8 @@ More formally:
 
 Now we see that any morphism $f \colon B \to A$ in $\mathcal{C}$ induces a pullback functor 
 $f^* \colon \mathcal{C}_A \to \mathcal{C_B}$ which is a contextual functor. 
-This functor can be thought as a way of embedding the knowledge over the context $A$ onto the context $B$.
+This functor can be thought as a way of embedding the knowledge over the context $A$ onto the context $B$,
+and also is used as a form of variable substitution.
 The proofs of the following theorems are included in \cite{streicher}.
 
 \begin{lemma}
