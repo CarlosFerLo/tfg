@@ -1,7 +1,8 @@
 % !TEX root = ../main.tex
-\addcontentsline{toc}{chapter}{Introduction}
+
 \chapter*{Introduction}
-% TODO: Abstract appears in the header!!
+\markboth{Introduction}{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
 
 Our ultimate goal in this thesis is to translate the syntactical problem of theorem proving into a geometrical graph-exploration problem.
 
@@ -49,8 +50,8 @@ to obtain term models that carry a rich geometric graph structure.
 The soundness of this translation is guaranteed by the term 
 model being the initial object of the category of models of 
 the underlying type theory, this is known as the Initiality Conjecture. 
-The initiality of the term model for GATs was originally established by Cartmell \cite{cartmell1978,cartmell1986},
-And the initiality of the term model for CoC was established by Streicher \cite{streicher}.
+The initiality of the term model for GATs was originally established by Cartmell \cite{cartmell1978,cartmell1986};
+the initiality of the term model for CoC was established by Streicher \cite{streicher}.
 The modern Initiality Conjecture, championed by Voevodsky \cite{voevodsky2017}, pertains to the much more complex Martin-L\"of Type Theory, 
 which remains beyond the scope of our current engine, and that was proven by Brunerie and Lumsdaine \cite{bruneire2020}.
 
@@ -108,7 +109,7 @@ to the practical implementation of AI-guided theorem proving:
     \item \textbf{Chapter 2: Calculus of Constructions.} 
         We present the syntactical definition of CoC together with the construction 
         of Doctrines of Constructions as models for CoC, given by Streicher in \cite{streicher}.
-        We extend the definition of CoC to include a GAT signature, define the new term model and outline a proof of its initiality.
+        We extend the definition of CoC to include a GAT signature and define the new term model.
         Finally, we extend our categorical problem definition and 
         Expansion Algorithm to handle this richer syntax.
     \item \textbf{Chapter 3: Implementation of the Expansion Algorithm.} 

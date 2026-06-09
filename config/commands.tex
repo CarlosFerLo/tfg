@@ -310,3 +310,23 @@
 \appto{\normalsize}{\tightdisplayskips}
 \appto{\small}{\tightdisplayskips}
 \appto{\footnotesize}{\tightdisplayskips}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%% Misc Reference formatting %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\xpatchbibdriver{misc}
+  {\usebibmacro{title}} % Find where the title is printed
+  {\usebibmacro{title}%  % Replace it with the title...
+   \newunit\newblock
+   \usebibmacro{series+number}} % ...followed by the series and number
+  {}{}
+
+%%%%%%%%%%%%%% Misc Reference formatting %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\xpatchbibdriver{article}
+  {\usebibmacro{finentry}} % Find the end of the reference
+  {\newunit\newblock       % Add standard spacing/punctuation
+   \printfield{annotation}% % Print the annotation field
+   \usebibmacro{finentry}} % Put the final period back
+  {}{}

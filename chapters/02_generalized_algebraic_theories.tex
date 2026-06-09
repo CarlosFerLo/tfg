@@ -715,7 +715,7 @@ Now we shall define the concept of homomorphism between interpretations of a the
     homomorphism} is a contextual functor $F \colon \mathcal{C} \to \mathcal{C}'$ such that:
     \begin{enumerate}
         \item if $R$ is a $T$-rule, then $F \mathcal{M_C}[R] = \mathcal{M_{C'}}[R]$;
-        \item if $R_t$ is a $\in$-rule, then $F \mathcal{M_C}[R_t] = \mathcal{M_{C'}}[R_t]$.
+        \item if $R_t$ is an $\in$-rule, then $F \mathcal{M_C}[R_t] = \mathcal{M_{C'}}[R_t]$.
     \end{enumerate}
 \end{definition}
 So we define the category $\mathbf{Con}_U$ as the category with pairs of contextual categories and $U$-interpretations
@@ -736,8 +736,8 @@ is a contextual functor.
 Hence, given a section $s = [\langle x_1, \dots, x_n, t \rangle]$ of $[x_1 \colon A_1, \dots, x_n \colon A_n, x \colon A]$,
 by definition there exists a derived $\in$-rule $R_t$ such that $\mathcal{M}[R_t] = s$, so we can define
 $F s = \mathcal{N}[R_t]$.
-The uniqueness of $F$ is rather simple to see, as we cannot assign any other values to any object or morphism of $C(P)$ without 
-conflicting with the structural conditions of the functor.
+The uniqueness of $F$ follows from the structure preservation conditions, as $F$ is uniquely determined by 
+the image of the introductory rules of sort and operator symbols.
 Hence, $(C(U), \mathcal{M})$ is an initial object of $\mathbf{Con}_U$.
 
 Soundness comes from the initiality of $C(U)$, as any model of $U$, i.e., any element of $\mathbf{Con}_U$
@@ -939,7 +939,7 @@ prove a the result by induction. This definition is inspired by the one in the n
     is a derived rule of $U$. We have that $\degree[\langle y_1, \dots, y_m, t \rangle_\Gamma] = \degree[\Delta] + \depth[t]$, hence 
     by induction hypothesis $[\Delta]$ is constructible by expansion. 
     We now study how the rule \eqref{eq:underlying-rule-operator} was derived. 
-    As it is a $\in$-rule, it must have been derived by either \ref{rule:t1}, \ref{rule:cf1} or \ref{rule:cf2a}.
+    As it is an $\in$-rule, it must have been derived by either \ref{rule:t1}, \ref{rule:cf1} or \ref{rule:cf2a}.
     We treat each case separately:
     \begin{enumerate}
         \item[\ref{rule:t1}] Then, there exists an expression $A'$ such that both $\Delta \vdash t \colon A'$ and $\Delta \vdash A = A'$ are derived rules of $U$.
