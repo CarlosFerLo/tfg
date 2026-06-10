@@ -27,8 +27,8 @@ combinatorial explosion of the search space.
 
 Traditionally, term generation has been approached from a purely
 syntactic perspective, and more recently through Large Language Models (LLMs).
-Generating terms in Minimal Implicational Combinatory Logic using LLMs
-was the starting point of our research, a problem proposed by Dr. Joost J. Joosten.
+The starting point of our research was a problem proposed by Dr. Joost J. Joosten:
+how could we use LLMs to terms in Minimal Implicational Combinatory Logic.
 However, generating terms from syntax alone is difficult to guide heuristically,
 and the linear nature of language model generation forces early commitments 
 that can prevent a proof from ever being found. Similar limitations 
@@ -37,10 +37,10 @@ have been observed by the Logical Intelligence team in \cite{logicalintelligence
 Our study of Topos Theory \cite{lawvere1971}, initially motivated by Lafforgue's framework 
 connecting it with Artificial Intelligence \cite{lafforgue2022,lafforgue2024}, led to a pivotal realization: 
 to overcome purely syntactic limitations, we needed to leverage the categorical semantics of type 
-theories. This allowed us to rigorously reframe autonomous theorem proving as a structural graph exploration problem. 
+theories. Therefore, we reframed autonomous theorem proving as a structural graph exploration problem. 
 To empirically test this geometric approach prior to adopting the full complexity 
-of our subsequent categorical framework, we developed the \textsc{implica} graph engine alongside the first 
-iteration of the expansion algorithm.
+of our subsequent categorical framework, we developed the \textsc{implica} graph engine (consisting of $\sim 7.000$ lines of code) 
+alongside the first iteration of the expansion algorithm.
 
 Subsequently, with the aim of expanding outside Minimal Implicational Combinatory Logic, we 
 started our research about Generalized Algebraic Theories (GATs) \cite{cartmell1978,cartmell1986} and the Calculus of Constructions \cite{coquand1988}.
@@ -53,10 +53,10 @@ the underlying type theory. This is known as the Initiality Conjecture.
 The initiality of the term model for GATs was originally established by Cartmell \cite{cartmell1978,cartmell1986};
 the initiality of the term model for CoC was established by Streicher \cite{streicher}.
 The modern Initiality Conjecture, stated by Voevodsky \cite{voevodsky2017}, pertains to the much more complex Martin-L\"of Type Theory, 
-which remains beyond the scope of our current engine, and that was proven by Brunerie and Lumsdaine \cite{bruneire2020}.
+which remains beyond the scope of our current work, and that was proven by Brunerie and Lumsdaine \cite{bruneire2020}.
 
 In this categorical framework, the problem of finding a proof
-translates to finding a specific section ---a specific morphism--- 
+translates to finding a specific morphism
 within a relativized contextual category. 
 With this idea in mind of using categories and neural networks, we formalized 
 an expansion algorithm 
@@ -76,9 +76,9 @@ autonomous theorem proving.
 
 \section*{Objectives}
 
-We provide an explicit geometric formulation of Cartmell's term models, adapting them to be computationally navigable by a GNN.
+We provide a reformulation of Cartmell's models of GATs, so it fits more naturally with later extensions.
 Building on this, we extend the Calculus of Constructions to accommodate a GAT signature, 
-define the corresponding term model, and outline how Streicher's initiality proof generalizes to this richer framework.
+define the corresponding term model.
 Then we introduce the Expansion Algorithm, a deterministic procedure for generating terms within the term models described above, 
 specifically designed to interface with a Graph Neural Network so as to guide the search and counteract the combinatorial 
 explosion inherent to exhaustive term construction. 
