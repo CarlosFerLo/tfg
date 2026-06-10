@@ -34,8 +34,8 @@ and the linear nature of language model generation forces early commitments
 that can prevent a proof from ever being found. Similar limitations 
 have been observed by the Logical Intelligence team in \cite{logicalintelligence}.
 
-Our study of Topos Theory ---initially motivated by Lafforgue's framework 
-connecting it with Artificial Intelligence \cite{lafforgue2022,lafforgue2024}--- led to a pivotal realization: 
+Our study of Topos Theory \cite{lawvere1971}, initially motivated by Lafforgue's framework 
+connecting it with Artificial Intelligence \cite{lafforgue2022,lafforgue2024}, led to a pivotal realization: 
 to overcome purely syntactic limitations, we needed to leverage the categorical semantics of type 
 theories. This allowed us to rigorously reframe autonomous theorem proving as a structural graph exploration problem. 
 To empirically test this geometric approach prior to adopting the full complexity 
@@ -49,10 +49,10 @@ They both offered a way of translating the syntax into categorical structures
 to obtain term models that carry a rich geometric graph structure. 
 The soundness of this translation is guaranteed by the term 
 model being the initial object of the category of models of 
-the underlying type theory, this is known as the Initiality Conjecture. 
+the underlying type theory. This is known as the Initiality Conjecture. 
 The initiality of the term model for GATs was originally established by Cartmell \cite{cartmell1978,cartmell1986};
 the initiality of the term model for CoC was established by Streicher \cite{streicher}.
-The modern Initiality Conjecture, championed by Voevodsky \cite{voevodsky2017}, pertains to the much more complex Martin-L\"of Type Theory, 
+The modern Initiality Conjecture, stated by Voevodsky \cite{voevodsky2017}, pertains to the much more complex Martin-L\"of Type Theory, 
 which remains beyond the scope of our current engine, and that was proven by Brunerie and Lumsdaine \cite{bruneire2020}.
 
 In this categorical framework, the problem of finding a proof
@@ -93,8 +93,8 @@ This thesis bridges type theory, categorical semantics, and machine learning.
 While specialized categorical structures ---such as Contextual Categories and Doctrines of Constructions--- are introduced and defined within the text, 
 a basic familiarity with the fundamental concepts of category theory (e.g., categories, functors, and pullbacks) is assumed. 
 For readers seeking an introduction or a refresher on this foundational material, Awodey's \textit{Category Theory} \cite{awodey2010} is an excellent and highly recommended reference, 
-particularly for its focus on logic and computer science. 
-As a more classical reference there is Mac Lane's \textit{Categories for the Working Mathematician} \cite{maclane1992}.
+particularly due to its focus on logic and computer science. 
+As a more classical reference, there is Mac Lane's \textit{Categories for the Working Mathematician} \cite{maclane1992}.
 
 \section*{Thesis Outline}
 This thesis is structured to guide the reader from the abstract categorical foundations
@@ -114,7 +114,7 @@ to the practical implementation of AI-guided theorem proving:
         Expansion Algorithm to handle this richer syntax.
     \item \textbf{Chapter 3: Implementation of the Expansion Algorithm.} 
         We demonstrate the raw Expansion Algorithm generating terms of Simply Typed Combinatory 
-        Logic ($\textbf{CL}_\to$) using \textsc{implica}, a custom Rust-based graph engine written by the author (consists of $\sim 7.000$ lines of Rust code). 
+        Logic ($\textbf{CL}_\to$) using \textsc{implica}, a custom Rust-based graph engine written by the author (consisting of $\sim 7.000$ lines of Rust code). 
         Finally, we outline the architecture for integrating Graph Neural Networks
         using a novel unsupervised `Conjecturer-Prover' training paradigm to optimize the expansion process.
 \end{itemize}

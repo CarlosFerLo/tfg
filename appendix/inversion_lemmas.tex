@@ -1,13 +1,14 @@
 % !TEX root = ../main.tex
 \chapter{Proof of Inversion Lemmas} \label{app:inversion-lemmas}
 
-Now we proof the inversion lemmas by simultaneous structural induction on derivation height.
+Now we prove the inversion lemmas by simultaneous structural induction on derivation height.
 \trulecases*
 \begin{proof}
     The four cases are mutually exclusive by the unique outermost constructor of pre-type-expressions 
     (the BNF grammar for $E$ is unambiguous). We proceed by induction on $|\pi|$, with case analysis on 
     the last rule applied.
-
+    
+    \newpage
     \noindent
     \textbf{Group I: Direct Type Formation Rules} \\
     These immediately yield the required form and witnesses.
@@ -74,8 +75,8 @@ Now we proof the inversion lemmas by simultaneous structural induction on deriva
 
 \inrulecases*
 \begin{proof}
-    By simultaneous induction on $|\pi|$ with Lemma \ref{lemma:t-rule-cases}.
-
+    By simultaneous induction on $|\pi|$ with Lemma \ref{lemma:t-rule-cases}. \\[0.2em]
+    
     \noindent
     \textbf{Group I: Direct Term Introduction Rules}
     \begin{itemize}
@@ -102,6 +103,7 @@ Now we proof the inversion lemmas by simultaneous structural induction on deriva
         \item[\ref{rule:sub}] Apply the induction hypothesis to $\Gamma,y\colon B,\Delta \vdash t\colon A$. Substitution is transparent to the outermost constructor of $t$. If $t = x = y$, then $t[y\leftarrow s] = s$. Extend $\Gamma \vdash s\colon B$ by \ref{rule:thin} and apply the induction hypothesis to $\Gamma \vdash s\colon B$ (smaller height) to recursively determine the form of $s$.
     \end{itemize}
 
+    \newpage
     \noindent
     \textbf{Group III: Type-Conversion and Equality Rules}
     \begin{itemize}

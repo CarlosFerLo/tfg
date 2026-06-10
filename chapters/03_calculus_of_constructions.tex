@@ -15,7 +15,7 @@ The primary additions in CoC, compared to Generalized Algebraic Theories (GATs),
     \item \textbf{Product Types (\boldmath$\Pi$-types):} These are first-class citizens,
         meaning dependent function types exist at the base level rather than just
         in the theory's signature.
-    \item \textbf{The Universe of Propositions ($\Prop$):} A type universe whose terms are themselves
+    \item \textbf{The Universe of Propositions (\boldmath$\Prop$):} A type universe whose terms are themselves
         types, allowing for higher-order logic and universal quantification over types.
 \end{enumerate}
 
@@ -162,8 +162,8 @@ It follows from the definition that substitution preserves functional abstractio
 
 Notice that in any contextual category with products of families of types, the following equations hold:
 \begin{align*}
-    \qquad & \mathrm{eval}_B \circ p(A)^*\mathrm{curry}(s) = s \tag{$\beta$} \\[1em]
-    \qquad & \mathrm{curry}(\mathrm{eval}_B \circ p(A)^*t) = t \tag{$\eta$}
+    \qquad & \mathrm{eval}_B \circ p(A)^*\mathrm{curry}(s) = s; \tag{$\beta$} \\[1em]
+    \qquad & \mathrm{curry}(\mathrm{eval}_B \circ p(A)^*t) = t. \tag{$\eta$}
 \end{align*}
 The first equation corresponds to the $\beta$-rule of typed $\lambda$-calculi 
 and the second equation corresponds to the $\eta$-rule of typed $\lambda$-calculi.
@@ -173,7 +173,7 @@ Contextual Categories with products correspond to $\lambda$-calculus with depend
     Let $\mathcal{C}, \mathcal{C}'$ be two contextual categories with products of families of types,
     we a contextual functor $F \colon \mathcal{C} \to \mathcal{C}'$ \textit{preserves products of families
     of types} if for $1 \lhd A \lhd B$ in $\mathcal{C}$, \[
-        F\Pi(B) = \Pi(F B) \quad \text{ and } \quad F \eval_B = \eval_{F B}
+        F\Pi(B) = \Pi(F B) \quad \text{ and } \quad F \eval_B = \eval_{F B}.
     \]
 \end{definition}
 
@@ -305,7 +305,7 @@ by the following clauses:
           \) \\
           provided that $\mathcal{M}[\Gamma ; t]$, $\mathcal{M}[\Gamma; s]$, $\mathcal{M}[\Gamma, x \colon A; B]$
           are defined, and $\mathcal{M}[\Gamma; s]$ is a section of $\mathcal{M}[\Gamma; A]$
-          and $\mathcal{M}[\Gamma; t]$ is a section of $\Pi(\mathcal{M}[\Gamma, x \colon A; B])$
+          and $\mathcal{M}[\Gamma; t]$ is a section of $\Pi(\mathcal{M}[\Gamma, x \colon A; B])$;
     \item $\mathcal{M}[\Gamma; (\forall x \colon A) p] = s$
           if $\mathcal{M}[\Gamma, x \colon A ; p]$ is a section of $p(\mathcal{M}[\Gamma; A], 1)^*\Prop$
           and $s$ is the unique section of $p(\mathcal{M}[\Gamma], 1)$ such that 
@@ -486,7 +486,7 @@ that $C_I$ does not interpret or identify more objects or terms that those that 
     \end{enumerate}
 \end{theorem}
 \begin{proof}
-    Proof included in \cite{streicher}.
+    A proof is included in \cite{streicher}.
 \end{proof}
 
 It can be also shown that $\mathcal{C}_I$ is the initial object of the category of doctrines of constructions and 
@@ -779,7 +779,7 @@ Now we define the expansion rules. If $\Delta$ is a context, then:
             \to [ \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m, x \colon \Prop]
         \end{align*}
         \[
-            [\Delta, x \colon \Proof(p)]
+            [\Delta, x \colon \Proof(p)].
         \]
     \ruleitem{E7}{application-2}
         If $\Delta = \Gamma, v_1 \colon B_1, \dots, v_m \colon B_m$, 
@@ -804,7 +804,7 @@ Now we prove the exhaustivity theorem. In order to do it we will have to prove s
 
 First, we introduce inversion (or generation) lemmas: given a derivable sequent, they characterize the syntactic form of its principal expression. The proof method is simultaneous structural induction on derivation height, and is detailed in Appendix \ref{app:inversion-lemmas}.
 \begin{restatable}{lemma}{trulecases} \label{lemma:t-rule-cases}
-    Given a derivable sequent of the form $\Gamma \vdash A \type$ there are 4 possible cases:
+    Given a derivable sequent of the form $\Gamma \vdash A \type$ there are four possible cases:
     \begin{enumerate}
         \item $A$ is equal to $\Prop$;
         \item $A$ is equal to $\Proof(p)$ for some pre-object-expression $p$ and $\Gamma \vdash p \colon \Prop$ is derivable;
@@ -821,7 +821,7 @@ First, we introduce inversion (or generation) lemmas: given a derivable sequent,
 \end{restatable}
 
 \begin{restatable}{lemma}{inrulecases} \label{lemma:in-rule-cases}
-    Given a derivable sequent of the form $\Gamma \vdash t \colon A$ there are 5 possible cases:
+    Given a derivable sequent of the form $\Gamma \vdash t \colon A$ there are five possible cases:
     \begin{enumerate}
         \item there exists a variable $x$ in $\Var(\Gamma)$, such that $t$ equals $x$;
         \item $t$ is equal to $(\lambda x \colon B) s$ and $A$ is equal to $(\Pi x \colon B) C$ for some pre-type-expressions $B, C$, a pre-object-expression $s$ and variable $x$;

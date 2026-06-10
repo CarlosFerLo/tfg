@@ -6,8 +6,9 @@
 
 This thesis started as a problem proposed by one of my supervisors, Dr. Joost J. Joosten, that consisted in generating 
 terms of specific types in simply typed combinatory logic $\textbf{CL}_\to$.
-Our initial work building a language model to generate those terms made the limitations of this models very clear.
-First, linear generation forces the model to overcommit too soon to certain solution paths, resulting in unsatisfactory results, this was noted by researchers in Logical Intelligence in \cite{logicalintelligence}.
+Our initial work building a language model to generate those terms made the limitations of language models very clear.
+First, linear generation forces the model to overcommit too soon to certain solution paths, resulting in unsatisfactory results. 
+This was also noted by researchers in Logical Intelligence in \cite{logicalintelligence}.
 Second, that syntax does not hold all the information the model needed to generate the desired terms.
 
 Our study of Lafforgue's framework \cite{lafforgue2022, lafforgue2024} 
@@ -19,12 +20,12 @@ give the model a complete picture of the semantics of the theory.
 This motivated the development of \textsc{implica}, discussed in Section \ref{sect:implica}. 
 Although it served its purpose of showcasing the base concepts behind the expansion algorithm,
 for future iteration of this architecture we must critically re-evaluate fundamental design trade-offs.
-The initial implementation prioritized a highly general, Cypher-like \cite{francis2018}, API
+The initial implementation prioritized a highly general, Cypher-like \cite{francis2018}, programming interface
 to facilitate broad pattern matching and generalized graph querying. While computationally
 versatile, this abstraction layer introduced computational overhead and made the backtracking algorithm,
 which is essential for computing the optimal target labels for our GNN, prohibitively difficult and computationally unwieldy.
 
-In our effort to extend this ideas to the general case, the first representation we found promising Cartmell's Generalized Algebraic
+In our effort to extend these ideas to the general case, the first representation we found promising was Cartmell's Generalized Algebraic
 Theories and Contextual Categories \cite{cartmell1978, cartmell1986}, whose term models
 sit close enough to the syntax of a theory to be
 computationally manageable, while still carrying the 
@@ -38,12 +39,12 @@ complexity barrier.
 
 To handle a more expressive type theory, we turned to Streicher's 
 work on the Calculus of Constructions and Doctrines of Constructions \cite{streicher}, 
-which provided both a proof of the initiality conjecture for CoC 
+which provided both a proof of the Initiality Conjecture for CoC 
 and a framework for extending type theories beyond GATs. 
 In Section \ref{sect:extending-calculus-of-constructions-and-its-interpretation}, we extended this framework 
-to CoC enriched with a GAT signature, constructed the corresponding 
-term model, following ideas from \cite{bezem2021}, 
-the proofs of completeness and initiality of this term model are still open for future work.
+to CoC enriched with a GAT signature and constructed the corresponding 
+term model, following ideas from \cite{bezem2021}. 
+The proofs of completeness and initiality of this term model are still open for future work.
 We then extended the Expansion Algorithm to this 
 richer setting. To do this, we extended the concept of relativization to Doctrines of Constructions. 
 In the course of this work, we also identified a 
@@ -60,11 +61,11 @@ the underlying geometry of the automated expansion algorithm will achieve greate
 alignment with the current state-of-the-art in type-theoretic research.
 
 It remains to formally extend the term model construction
-and prove the initiality conjecture for Doctrines of 
+and prove the Initiality Conjecture for Doctrines of 
 Constructions with $\Sigma$-types, identity types, and a universe 
 hierarchy, as described in \cite{streicher}, and ultimately for the full 
 Calculus of Inductive Constructions \cite{coquand1990,paulin-mohring1993} and the Lean type 
-theory \cite{demoura2015}. The initiality conjecture for full Martin-L\"of type theory 
+theory \cite{demoura2015}. The Initiality Conjecture for full Martin-L\"of type theory 
 has been formalized in Agda by Brunerie and Lumsdaine \cite{bruneire2020}, 
 and a similar formalization effort for our extended setting 
 would be a natural next step.

@@ -210,7 +210,7 @@ Now we can define the building blocks of a rule:
         \item $T{=}$conclusion: defined by a pair of expressions $(A_1, A_2)$
               and written as `$A_1 = A_2$'.
         \item $\in=$conclusion: defined by a triple of expressions $(t_1, t_2, A)$
-              and written as `$t_1 = t_2 \colon A$'
+              and written as `$t_1 = t_2 \colon A$'.
     \end{enumerate}
     Finally a \textit{rule} is determined by a premise $P$ and a
     conclusion $C$, and is written as $P \vdash C$.
@@ -260,17 +260,17 @@ Now we tackle the problem of well-formedness of rules.
             \begin{equation*}
                 x_1 \colon A_1, \dots, x_{n-1}\colon A_{n-1} \vdash A_n \type
             \end{equation*}
-            is a derived rule such that $x_n$ is distinct from all of $x_1, \dots, x_{n-1}$.
+            is a derived rule such that $x_n$ is distinct from all of $x_1, \dots, x_{n-1}$;
         \item \begin{enumerate}
             \item the rule $\Gamma \vdash A \type$
-                  is \textit{well-formed} if the premise $\Gamma$ is a context.
+                  is \textit{well-formed} if the premise $\Gamma$ is a context;
             \item the rule $\Gamma \vdash t \colon A$
                   is \textit{well-formed} if $\Gamma \vdash A \type$
-                  is a derived rule of $U$.
+                  is a derived rule of $U$;
             \item the rule $\Gamma \vdash A = A'$
                   is \textit{well-formed} if $\Gamma \vdash A \type$
                   and $\Gamma \vdash A' \type$
-                  are derived rules of $U$.
+                  are derived rules of $U$;
             \item the rule $\Gamma \vdash t = t' \colon A$
                   is \textit{well-formed} if $\Gamma \vdash t \colon A$
                   and $\Gamma \vdash t' \colon A$
@@ -603,6 +603,8 @@ matches the notion of \textit{global element} of $B$.
 The concept of section of a context $\langle x_1 \colon A_1, \dots, x_n \colon A_n, y \colon B \rangle$ is 
 the categorical equivalent of a term of type $B$ under context $\langle x_1 \colon A_1, \dots, x_n \colon A_n \rangle$.
 
+\newpage
+
 \section{Relevance of the Context Category} \label{sect:relevance-of-the-context-category}
 
 The context category is the first example of what it is called a \textit{term model}.
@@ -651,7 +653,7 @@ arises naturally from the definition of $C(U)$:
     \end{enumerate}
 \end{theorem}
 
-Now we prove the initiality of $C(U)$, a special case of Voevodsky's initiality conjecture \cite{voevodsky2017}. 
+Now we prove the initiality of $C(U)$, a special case of Voevodsky's Initiality Conjecture \cite{voevodsky2017}. 
 In order to do it, we need to define interpretation of a theory $U$
 in a contextual category, and see that the canonical interpretation into $C(U)$ is the 
 initial object of the category of interpretations of $U$.
@@ -690,8 +692,8 @@ initial object of the category of interpretations of $U$.
                 $\Gamma \vdash t \colon A$ as $R_t$,
                 $\Gamma \vdash t' \colon A$ as $R_{t'}$ and
                 $\Gamma \vdash A \type$ as $R$,
-            then both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$.
-            and $\mathcal{M}[R_t] = \mathcal{M}[R_{t'}]$
+            then both $\mathcal{M}[R_t]$ and $\mathcal{M}[R_{t'}]$ are sections of $\mathcal{R}$,
+            and $\mathcal{M}[R_t] = \mathcal{M}[R_{t'}]$.
     \end{enumerate}
 \end{definition}
 
@@ -708,10 +710,10 @@ There is a \textit{canonical interpretation} $\mathcal{M}$ of $U$ in $\mathcal{C
 \end{enumerate}
 The Completeness Theorem \ref{thm:completeness-context-category} guarantees that $\mathcal{M}$ is well defined.
 
-Now we shall define the concept of homomorphism between interpretations of a theory $U$.
+Now we define the concept of homomorphism between interpretations of a theory $U$.
 \begin{definition}
     Let $\mathcal{C}$, $\mathcal{C}'$ be two contextual categories, and let $\mathcal{M_C}$ and $\mathcal{M_{C'}}$
-    be two $U$-interpretations in $\mathcal{C}$ and $\mathcal{C}'$ respectively. Then, an \textit{interpretation 
+    be two $U$-interpretations in $\mathcal{C}$ and $\mathcal{C}'$ respectively. An \textit{interpretation 
     homomorphism} is a contextual functor $F \colon \mathcal{C} \to \mathcal{C}'$ such that:
     \begin{enumerate}
         \item if $R$ is a $T$-rule, then $F \mathcal{M_C}[R] = \mathcal{M_{C'}}[R]$;
@@ -745,7 +747,7 @@ is equivalent to the initial morphism $F$ we just defined.
 
 \section{Expansion Algorithm for GATs}
 
-In this section, we give formal definition of our 
+In this section, we give a formal definition of our 
 problem, proposed at the beginning of the thesis,
 and reformulate it to an equivalent problem easier to solve.
 Then we propose an algorithm to solve such problem,
@@ -784,7 +786,7 @@ as $\langle t_{n+1}, \dots, t_{n+m} \rangle_\Gamma$.
 
 Now we define the \textit{expansion algorithm}
 that will be responsible of finding $\langle t \rangle_\Gamma$
-in $\mathcal{C}_\Gamma$:
+in $\mathcal{C}_\Gamma$.
 
 First, consider a finite subcategory $G$ of $\mathcal{C}_\Gamma$ which 
 contains \[
@@ -835,7 +837,7 @@ of $G_n$:
         \end{align*}
         then we add the section
         \[
-            [\langle y_1, \dots, y_m, F(t_1, \dots, t_w) \rangle_\Gamma] \colon [\Delta] \to [\Delta, z \colon C[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]]
+            [\langle y_1, \dots, y_m, F(t_1, \dots, t_w) \rangle_\Gamma] \colon [\Delta] \to [\Delta, z \colon C[z_1 \leftarrow t_1, \dots, z_w \leftarrow t_w]].
         \]
     \ruleitem{E4}{pullback} For every morphism
         \[
@@ -863,9 +865,9 @@ Finally, we complete $G_{n+1}$ by adding the compositions of all of its morphism
 When we say we add a morphism, it is implied that we also add both endpoints, and when adding an object,
 we are also adding its projection.
 
-Now we will prove that every object and every morphism of $\mathcal{C}_A$ are constructible by expansion.
+Now we prove that every object and every morphism of $\mathcal{C}_A$ are constructible by expansion.
 Note that as projections are added together with the object, hence by asserting the existence of an object we are implying the existence of its projection.
-But to do so, we will introduce the concept of $\depth$ of an expression in order to 
+But to do so, we introduce the concept of $\depth$ of an expression in order to 
 prove a the result by induction. This definition is inspired by the one in the next chapter taken from \cite{streicher}.
 
 \begin{definition}
@@ -896,10 +898,10 @@ prove a the result by induction. This definition is inspired by the one in the n
         \]
         \item if $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$ is a context and 
             $[\langle y_1, \dots, y_m, t \rangle_\Gamma]$ is a section of $[\Delta, x \colon A]$, then \[
-                \degree[\langle y_1, \dots, y_m, t \rangle_\Gamma] = \degree[\Delta] + \depth[t].
+                \degree[\langle y_1, \dots, y_m, t \rangle_\Gamma] = \degree[\Delta] + \depth[t],
             \]
     \end{enumerate}
-    Together with a secondary induction on derivation length.
+    together with a secondary induction on derivation length.
 
     Consider then a context $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$. We want to see that $[\Delta]$ is constructible by expansion.
     As $\Delta$ is a context, we have that \[
@@ -987,7 +989,7 @@ prove a the result by induction. This definition is inspired by the one in the n
     We now have to prove that any morphism is constructible by expansion.
     Let $[\langle t_1, \dots, t_m \rangle_\Gamma]: [\Gamma, y_1 \colon B_1, \dots, y_m \colon B_m] \to [\Gamma, z_1 \colon C_1, \dots, z_w \colon C_w]$
     be a morphism on $\mathcal{C}_\Gamma$.  We denote $\Delta = \Gamma, y_1 \colon B_1, \dots, y_m \colon B_m$.
-    Then we know that the following rules
+    Then we know that the rules
     \begin{align*}
         \Delta \vdash t_1 \colon& C_1 \\
         \Delta \vdash t_2 \colon& C_2 [z_1  \leftarrow  t_1] \\ 
@@ -1015,7 +1017,7 @@ prove a the result by induction. This definition is inspired by the one in the n
     \]
     are constructible by expansion, then so is
     \[
-        [\langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma] \colon [\Delta] \to [\Delta, z_1 \colon C_1, \dots, z_j \colon C_j]
+        [\langle y_1, \dots, y_m, t_1, \dots, t_j \rangle_\Gamma] \colon [\Delta] \to [\Delta, z_1 \colon C_1, \dots, z_j \colon C_j].
     \]
     By the previous lemma, the object $[\Delta, z_1 \colon C_1, \dots, z_j \colon C_j]$ is constructible by expansion,
     and by applying the expansion rule \ref{rule:pullback} on it, the following diagram is constructible by expansion:
