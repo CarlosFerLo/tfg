@@ -23,7 +23,7 @@ for future iteration of this architecture we must critically re-evaluate fundame
 The initial implementation prioritized a highly general, Cypher-like \cite{francis2018}, programming interface
 to facilitate broad pattern matching and generalized graph querying. While computationally
 versatile, this abstraction layer introduced computational overhead and made the backtracking algorithm,
-which is essential for computing the optimal target labels for our GNN, prohibitively difficult and computationally unwieldy.
+which is essential for computing the optimal target labels for our GNN, prohibitively difficult to implement.
 
 In our effort to extend these ideas to the general case, the first representation we found promising was Cartmell's Generalized Algebraic
 Theories and Contextual Categories \cite{cartmell1978, cartmell1986}, whose term models
@@ -55,13 +55,14 @@ investigation.
 
 While Cartmell's original formulation of contextual categories provided the necessary foundational scaffolding to model 
 the expansion algorithm, scaling the semantic interpretation requires transitioning to more modern paradigms.
-Future research should systematically reconstruct the underlying categorical models utilizing Voevodsky's C-systems \cite{voevodsky2016} and Categories with Families (CwFs) \cite{dybjer96}.
+Future research should systematically reconstruct the underlying categorical models utilizing Voevodsky's 
+C-systems \cite{voevodsky2016} and Categories with Families (CwFs) \cite{dybjer96}.
 By transitioning away from early contextual categories and adopting these streamlined, modern frameworks, 
-the underlying geometry of the automated expansion algorithm will achieve greater mathematical elegance and absolute 
+the underlying geometry of the automated expansion algorithm will achieve greater mathematical elegance and 
 alignment with the current state-of-the-art in type-theoretic research.
 
-It remains to formally extend the term model construction
-and prove the Initiality Conjecture for Doctrines of 
+It remains to formally extend the term model construction, 
+prove the Initiality Conjecture and extend the Expansion Algorithm for Doctrines of 
 Constructions with $\Sigma$-types, identity types, and a universe 
 hierarchy, as described in \cite{streicher}, and ultimately for the full 
 Calculus of Inductive Constructions \cite{coquand1990,paulin-mohring1993} and the Lean type 
