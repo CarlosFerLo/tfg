@@ -122,6 +122,29 @@
       transform: scale(1.5);
     }
  
+    /* ── Camera button ── */
+    .capture-btn {
+      position: fixed;
+      top: 16px; right: 18px;
+      z-index: 10;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(63,81,181,0.3);
+      color: #3f51b5;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      backdrop-filter: blur(4px);
+    }
+    .capture-btn:hover {
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(63,81,181,0.55);
+      box-shadow: 0 2px 10px rgba(63,81,181,0.18);
+    }
+ 
     /* ── Loading ── */
     .loader {
       position: absolute;
@@ -149,6 +172,8 @@
     <div class="graph-slide" id="slide-2"><div class="loader">Loading…</div></div>
     <div class="graph-slide" id="slide-3"><div class="loader">Loading…</div></div>
   </div>
+ 
+  <button class="capture-btn" id="capture-btn" title="Download as PNG">&#128247;</button>
  
   <div class="nav">
     <button class="nav-btn" id="prev-btn" disabled>&#8592;</button>
@@ -182,7 +207,7 @@
       {
         title: "Graph 2",
         data: {
-          "nodes": [{"id": "8beaf6b804e223a10c8ce3e41ffecf30f34a8f73018f3bf30b67f7e27d62f329", "label": "(A -> ((A -> A) -> (A -> A)))", "group": 0}, {"id": "3bded9eb0b3c0e27f396de8d07d4d320ff323df216abfc2ca3b0402c90bdba4a", "label": "(((A -> A) -> (A -> A)) -> A)", "group": 0}, {"id": "4e2d080429ed38b5d83aa7a3d8a7d17b71a54eeeb3d28357e6a1a1803b7eaf02", "label": "((A -> A) -> ((A -> A) -> (A -> A))):K", "group": 1}, {"id": "4ac3ab23cc10f3401ac07649af1d6f2c891e87a859db1219cd595e9dacae00d2", "label": "(A -> A)", "group": 0}, {"id": "7bac6fd60caf5cfef4d85f3ee80ee77997c468ea19339e6861a95ab86b59b423", "label": "((A -> A) -> A)", "group": 0}, {"id": "e7f24fe3effb2e317d3e60e793fbf0cb7ee34a0d4dbcd77205e9965786e36e01", "label": "A", "group": 0}, {"id": "f40ffc0a3f6fd79a061c716416519c994952c635c15fd0bbefdd0286d2ba54fe", "label": "(A -> (A -> A)):K", "group": 1}, {"id": "5a8e28a4344b4a6bb629c4988d0188749603da928a1492a3f4ba851171568be8", "label": "(((A -> A) -> A) -> ((A -> A) -> A)):(S (S K))", "group": 1}, {"id": "0ab194397940cbc068f9c4d5c94a73d29ec2c993360bed6cd90dc616f3b97db2", "label": "(((A -> A) -> (A -> A)) -> ((A -> A) -> (A -> A)))", "group": 0}, {"id": "f6bc5455a8c70f636da6f9c5132252f85afd4694c7b3de9384add24b548e7038", "label": "((A -> A) -> (A -> A)):(S K)", "group": 1}, {"id": "2c306c79f91d7762722be8642bd9c757476ed86e0768974653ec8eda33f865de", "label": "(((A -> A) -> (A -> A)) -> (A -> A))", "group": 0}], 
+          "nodes": [{"id": "8beaf6b804e223a10c8ce3e41ffecf30f34a8f73018f3bf30b67f7e27d62f329", "label": "(A -> ((A -> A) -> (A -> A))):(K (S K))", "group": 1}, {"id": "3bded9eb0b3c0e27f396de8d07d4d320ff323df216abfc2ca3b0402c90bdba4a", "label": "(((A -> A) -> (A -> A)) -> A)", "group": 0}, {"id": "4e2d080429ed38b5d83aa7a3d8a7d17b71a54eeeb3d28357e6a1a1803b7eaf02", "label": "((A -> A) -> ((A -> A) -> (A -> A))):K", "group": 1}, {"id": "4ac3ab23cc10f3401ac07649af1d6f2c891e87a859db1219cd595e9dacae00d2", "label": "(A -> A)", "group": 0}, {"id": "7bac6fd60caf5cfef4d85f3ee80ee77997c468ea19339e6861a95ab86b59b423", "label": "((A -> A) -> A)", "group": 0}, {"id": "e7f24fe3effb2e317d3e60e793fbf0cb7ee34a0d4dbcd77205e9965786e36e01", "label": "A", "group": 0}, {"id": "f40ffc0a3f6fd79a061c716416519c994952c635c15fd0bbefdd0286d2ba54fe", "label": "(A -> (A -> A)):K", "group": 1}, {"id": "5a8e28a4344b4a6bb629c4988d0188749603da928a1492a3f4ba851171568be8", "label": "(((A -> A) -> A) -> ((A -> A) -> A)):(S (S K))", "group": 1}, {"id": "0ab194397940cbc068f9c4d5c94a73d29ec2c993360bed6cd90dc616f3b97db2", "label": "(((A -> A) -> (A -> A)) -> ((A -> A) -> (A -> A))):(K (S K))", "group": 1}, {"id": "f6bc5455a8c70f636da6f9c5132252f85afd4694c7b3de9384add24b548e7038", "label": "((A -> A) -> (A -> A)):(S K)", "group": 1}, {"id": "2c306c79f91d7762722be8642bd9c757476ed86e0768974653ec8eda33f865de", "label": "(((A -> A) -> (A -> A)) -> (A -> A))", "group": 0}], 
           "links": [{"source": "f6bc5455a8c70f636da6f9c5132252f85afd4694c7b3de9384add24b548e7038", "target": "4e2d080429ed38b5d83aa7a3d8a7d17b71a54eeeb3d28357e6a1a1803b7eaf02", "label": "K"}, {"source": "e7f24fe3effb2e317d3e60e793fbf0cb7ee34a0d4dbcd77205e9965786e36e01", "target": "7bac6fd60caf5cfef4d85f3ee80ee77997c468ea19339e6861a95ab86b59b423", "label": "K"}, {"source": "4ac3ab23cc10f3401ac07649af1d6f2c891e87a859db1219cd595e9dacae00d2", "target": "f6bc5455a8c70f636da6f9c5132252f85afd4694c7b3de9384add24b548e7038", "label": "K"}, {"source": "e7f24fe3effb2e317d3e60e793fbf0cb7ee34a0d4dbcd77205e9965786e36e01", "target": "3bded9eb0b3c0e27f396de8d07d4d320ff323df216abfc2ca3b0402c90bdba4a", "label": "K"}, {"source": "e7f24fe3effb2e317d3e60e793fbf0cb7ee34a0d4dbcd77205e9965786e36e01", "target": "4ac3ab23cc10f3401ac07649af1d6f2c891e87a859db1219cd595e9dacae00d2", "label": "K"}, {"source": "f6bc5455a8c70f636da6f9c5132252f85afd4694c7b3de9384add24b548e7038", "target": "5a8e28a4344b4a6bb629c4988d0188749603da928a1492a3f4ba851171568be8", "label": "S"}, {"source": "f6bc5455a8c70f636da6f9c5132252f85afd4694c7b3de9384add24b548e7038", "target": "8beaf6b804e223a10c8ce3e41ffecf30f34a8f73018f3bf30b67f7e27d62f329", "label": "K"}, {"source": "4ac3ab23cc10f3401ac07649af1d6f2c891e87a859db1219cd595e9dacae00d2", "target": "f40ffc0a3f6fd79a061c716416519c994952c635c15fd0bbefdd0286d2ba54fe", "label": "K"}, {"source": "f6bc5455a8c70f636da6f9c5132252f85afd4694c7b3de9384add24b548e7038", "target": "0ab194397940cbc068f9c4d5c94a73d29ec2c993360bed6cd90dc616f3b97db2", "label": "K"}, {"source": "f40ffc0a3f6fd79a061c716416519c994952c635c15fd0bbefdd0286d2ba54fe", "target": "f6bc5455a8c70f636da6f9c5132252f85afd4694c7b3de9384add24b548e7038", "label": "S"}, {"source": "4ac3ab23cc10f3401ac07649af1d6f2c891e87a859db1219cd595e9dacae00d2", "target": "2c306c79f91d7762722be8642bd9c757476ed86e0768974653ec8eda33f865de", "label": "K"}]
         }
       },
@@ -207,6 +232,7 @@
       1: "#C62828",  // crimson  — types / propositions
       2: "#00796B",  // teal     — base / identity nodes
       3: "#F57F17",  // amber    — universe / prop nodes
+      4: "#696969"
     };
     const LINK_COLOR  = "#546E7A";   // blue-grey, legible on light bg
     const ARROW_COLOR = "#37474F";
@@ -224,15 +250,15 @@
       el.innerHTML = "";
       const { data } = GRAPHS[index];
  
-      const Graph = ForceGraph3D({ rendererConfig: { alpha: true, antialias: true } })(el)
+      const Graph = ForceGraph3D({ rendererConfig: { alpha: true, antialias: true, preserveDrawingBuffer: true } })(el)
         .graphData(data)
         .nodeId("id")
         .nodeLabel(node =>
-            `<span style="color:#1a237e;font-weight:600;
-                background:rgba(255,255,255,0.9);
-                padding:2px 8px;border-radius:3px;">
-                ${node.label}
-            </span>`
+          `<span style="color:#1a237e;font-weight:600;
+            background:rgba(255,255,255,0.9);
+            padding:2px 8px;border-radius:3px;">
+            ${node.label}
+          </span>`
         )
         .nodeColor(node => NODE_COLORS[node.group] || "#5c6bc0")
         .nodeOpacity(0.95)
@@ -241,11 +267,11 @@
         .linkDirectionalArrowRelPos(1)
         .linkDirectionalArrowColor(() => ARROW_COLOR)
         .linkLabel(link =>
-            `<span style="color:#37474f;
-                background:rgba(255,255,255,0.9);
-                padding:2px 8px;border-radius:3px;">
-                ${link.label}
-            </span>`
+          `<span style="color:#37474f;
+            background:rgba(255,255,255,0.9);
+            padding:2px 8px;border-radius:3px;">
+            ${link.label}
+          </span>`
         )
         .linkOpacity(0.65)
         .backgroundColor("rgba(0,0,0,0)")
@@ -272,6 +298,18 @@
       document.getElementById("slide-" + current).classList.add("active");
       initGraph(current);
     }
+ 
+    // ── Screenshot capture ────────────────────────────────────────
+    function captureGraph() {
+      const canvas = document.querySelector("#slide-" + current + " canvas");
+      if (!canvas) return;
+      const link = document.createElement("a");
+      link.download = "graph-" + (current + 1) + ".png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+ 
+    document.getElementById("capture-btn").addEventListener("click", captureGraph);
  
     document.getElementById("prev-btn").addEventListener("click", () => goTo(current - 1));
     document.getElementById("next-btn").addEventListener("click", () => goTo(current + 1));
@@ -309,3 +347,4 @@
   </script>
 </body>
 </html>
+ 
